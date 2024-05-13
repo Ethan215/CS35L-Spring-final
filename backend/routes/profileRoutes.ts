@@ -5,7 +5,7 @@ const {
     createProfile,
     deleteProfile,
     updateProfile,
-} = require("../controllers/workoutController");
+} = require("../controllers/profileController");
 
 const router = express.Router();
 
