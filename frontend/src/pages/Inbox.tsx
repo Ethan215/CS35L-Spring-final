@@ -19,7 +19,7 @@ interface Message {
 const messages = [
   {
     id: 1,
-    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
     title: 'Friend Request from John',
     body: 'Hi, I would like to add you as a friend.',
     fullBody: 'Hi, I would like to add you as a friend on this platform so we can continue playing in the future.'
@@ -33,14 +33,14 @@ const messages = [
   },
   {
     id: 3,
-    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
     title: 'Friend Request from Bob',
     body: 'Hi, I would like to add you as a friend.',
     fullBody: 'Hi, I would like to add you as a friend on this platform so we can continue playing in the future.'
   },
   {
     id: 4,
-    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+    senderPic: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
     title: 'Friend Request from Joe',
     body: 'Hi, I would like to add you as a friend.',
     fullBody: 'Hi, I would like to add you as a friend on this platform so we can continue playing in the future.'
@@ -58,30 +58,28 @@ const messages = [
 // displays pfp, message subject, brief message
 // when a messageBox component is clicked, onClick set to true and updates the selected message in Inbox component
 const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
-    return (
-      <div
-        onClick={onClick}
-        style={{
-          padding: '10px',
-          borderBottom: '1px solid #eee',
-          cursor: 'pointer',
-          backgroundColor: isSelected ? '#f0f0f0' : '#fff'
-        }}
-      >
-        <img src={message.senderPic} alt="Sender Profile Picture" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-        <h4>{message.title}</h4>
-        <p>{message.body}</p>
-      </div>
-    );
-  };
+  return (
+    <div
+      onClick={onClick}
+      className={`p-8 border-b cursor-pointer ${isSelected ? 'bg-gray-200' : 'bg-white'}`}>
+      <img
+        src={message.senderPic}
+        alt="Sender Profile Picture"
+        className="w-14 h-14 rounded-full mb-4"
+      />
+      <h4 className="font-bold">{message.title}</h4>
+      <p>{message.body}</p>
+    </div>
+  );
+};
   
   // main component that manages state of the selected message
   // displays full pfp, full message, message subject (game invite, friend request, etc)
   const Inbox: React.FC = () => {
     const [selectedMessage, setSelectedMessage] = useState<Message>(messages[0]);
     return (
-      <div style={{ display: 'flex' }}>
-        <div style={{ width: '30%', borderRight: '1px solid #ccc' }}>
+      <div className="flex">
+        <div className="w-3/12 border-r border-gray-300">
           {messages.map((message) => (
             <MessageBox
               key={message.id}
@@ -91,9 +89,9 @@ const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
             />
           ))}
         </div>
-        <div style={{ width: '70%', padding: '20px' }}>
-          <h2>{selectedMessage.title}</h2>
-          <img src={selectedMessage.senderPic} alt="Sender Profile Picture" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+        <div className="w-2/3 p-5">
+          <h2 className="font-bold text-3xl">{selectedMessage.title}</h2>
+          <img src={selectedMessage.senderPic} alt="Sender Profile Picture" className="w-24 h-24 rounded-full mb-5 mt-5" />
           <p>{selectedMessage.fullBody}</p>
         </div>
       </div>
