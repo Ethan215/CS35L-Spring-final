@@ -1,8 +1,9 @@
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-const express = require("express");
-const mongoose = require("mongoose");
-const profileRoutes = require("./routes/profileRoutes");
+import express from "express";
+import mongoose from "mongoose";
+import profileRoutes from "./routes/profileRoutes";
 
 //express app
 const app = express();
@@ -11,7 +12,7 @@ const app = express();
 app.use(express.json()); //sees if request body if so parses it as json
 
 // TODO: remove, log incoming requests
-app.use((req, res, next) => {
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 	console.log(req.path, req.method);
 	next();
 });
@@ -21,9 +22,12 @@ app.use((req, res, next) => {
 // route /api/profiles to profileRoutes
 app.use("/api/profiles", profileRoutes);
 
+// log mongo uri
+console.log(process.env.MONGO_URI);
+
 //connect to db
 mongoose
-	.connect(process.env.MONGO_URI)
+	.connect(process.env.MONGO_URI!)
 	.then(() => {
 		console.log("connected to db");
 
