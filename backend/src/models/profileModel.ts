@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IProfileDocument } from '../../../common/profile';
+import { ProfileDocument } from '../../../common/profile';
 
 const Schema = mongoose.Schema;
 
@@ -34,7 +34,7 @@ Sample JSON profile for the schema below:
 
 */
 
-const profileSchema = new Schema<IProfileDocument>({
+const profileSchema = new Schema<ProfileDocument>({
 	profilePicture: {
 		type: String,
 		required: true,
@@ -77,6 +77,6 @@ const profileSchema = new Schema<IProfileDocument>({
 }, { timestamps: true });
 
 // create a model with the Schema
-export const Profile = mongoose.model<IProfileDocument>('Profile', profileSchema);
+export const Profile = mongoose.model<ProfileDocument>('Profile', profileSchema);
 
 export default Profile;

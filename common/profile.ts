@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface IProfile {
+export interface ProfileData {
 	profilePicture: string;
 	name: string;
 	bio: string;
@@ -14,4 +14,4 @@ export interface IProfile {
 	}];
 };
 
-export interface IProfileDocument extends IProfile, Document {}
+export interface ProfileDocument extends ProfileData, Document {}
