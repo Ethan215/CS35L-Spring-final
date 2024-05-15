@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IProfileDocument } from '../../common/profile';
+import { IProfileDocument } from '../../../common/profile';
 
 const Schema = mongoose.Schema;
 

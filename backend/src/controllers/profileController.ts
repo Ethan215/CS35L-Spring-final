@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IProfileDocument } from '../../common/profile';
+import { IProfileDocument } from '../../../common/profile';
 import Profile from '../models/profileModel';
 
 const getProfiles = async (req: Request, res: Response): Promise<void> => {

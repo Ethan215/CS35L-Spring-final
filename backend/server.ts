@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
-import profileRoutes from "./routes/profileRoutes";
+import profileRoutes from "./src/routes/profileRoutes";
 
 //express app
 const app = express();
