@@ -41,13 +41,11 @@ export interface IProfile {
 	region: string;
 	language: string;
 	stars: number;
-	games: [
-		{
-			title: string;
-			rank: string;
-			tags: [string];
-		},
-	];
+	games: [{ 
+		title: string; 
+		rank: string; 
+		tags: string[]; 
+	}];
 };
 
 export interface IProfileDocument extends IProfile, Document {}
