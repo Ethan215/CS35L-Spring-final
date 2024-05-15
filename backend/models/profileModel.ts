@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -49,7 +50,9 @@ export interface IProfile {
 	];
 };
 
-const profileSchema = new Schema<IProfile>({
+export interface IProfileDocument extends IProfile, Document {}
+
+const profileSchema = new Schema<IProfileDocument>({
 	profilePicture: {
 		type: String,
 		required: true,
@@ -92,6 +95,6 @@ const profileSchema = new Schema<IProfile>({
 }, { timestamps: true });
 
 // create a model with the Schema
-export const Profile = mongoose.model<IProfile>('Profile', profileSchema);
+export const Profile = mongoose.model<IProfileDocument>('Profile', profileSchema);
 
 export default Profile;
