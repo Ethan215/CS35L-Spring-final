@@ -2,15 +2,10 @@ import express from "express";
 import { Router } from "express";
 import profileController from "../controllers/profileController";
 
-const {
-  getProfiles,
-  getProfile,
-  createProfile,
-  deleteProfile,
-  updateProfile,
-} = profileController;
+const { getProfiles, getProfile, createProfile, deleteProfile, updateProfile } =
+	profileController;
 
-const router : Router = express.Router();
+const router: Router = express.Router();
 
 //GET all profiles
 router.get("/", getProfiles);

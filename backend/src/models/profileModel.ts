@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { ProfileDocument } from '../../../common/profile';
+import mongoose from "mongoose";
+import { ProfileDocument } from "../../../common/profile";
 
 const Schema = mongoose.Schema;
 
@@ -34,49 +34,55 @@ Sample JSON profile for the schema below:
 
 */
 
-const profileSchema = new Schema<ProfileDocument>({
-	profilePicture: {
-		type: String,
-		required: true,
-	},
-	name: {
-		type: String,
-		required: true,
-	},
-	bio: {
-		type: String,
-		required: true,
-	},
-	region: {
-		type: String,
-		required: true,
-	},
-	language: {
-		type: String,
-		required: true,
-	},
-	stars: {
-		type: Number,
-		required: true,
-	},
-	games: [
-		{
-			title: {
-				type: String,
-				required: true,
-			},
-			rank: {
-				type: String,
-			},
-			tags: {
-				type: [String],
-				required: true,
-			},
+const profileSchema = new Schema<ProfileDocument>(
+	{
+		profilePicture: {
+			type: String,
+			required: true,
 		},
-	],
-}, { timestamps: true });
+		name: {
+			type: String,
+			required: true,
+		},
+		bio: {
+			type: String,
+			required: true,
+		},
+		region: {
+			type: String,
+			required: true,
+		},
+		language: {
+			type: String,
+			required: true,
+		},
+		stars: {
+			type: Number,
+			required: true,
+		},
+		games: [
+			{
+				title: {
+					type: String,
+					required: true,
+				},
+				rank: {
+					type: String,
+				},
+				tags: {
+					type: [String],
+					required: true,
+				},
+			},
+		],
+	},
+	{ timestamps: true }
+);
 
 // create a model with the Schema
-export const Profile = mongoose.model<ProfileDocument>('Profile', profileSchema);
+export const Profile = mongoose.model<ProfileDocument>(
+	"Profile",
+	profileSchema
+);
 
 export default Profile;
