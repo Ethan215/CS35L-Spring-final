@@ -3,10 +3,17 @@ dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
+
+//CORS
+import cors from "cors";
+
 import profileRoutes from "./src/routes/profileRoutes";
 
 //express app
 const app = express();
+
+// CORS
+app.use(cors());
 
 //middleware
 app.use(express.json()); //sees if request body if so parses it as json
