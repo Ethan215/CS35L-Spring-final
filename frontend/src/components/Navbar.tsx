@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+// Define the type of props received by the Navbar component.
+interface NavbarProps {
+	 // handleLogout is a function type with no arguments and no return value.
+	handleLogout: () => void; 
+}
+
+// Navbar component
+const Navbar : React.FC<NavbarProps> = ({ handleLogout }) => {
 	return (
 		<header>
 			<nav className="bg-gray-800 p-4">
@@ -27,11 +34,14 @@ const Navbar = () => {
 						<Link to="/inbox" className="text-white hover:text-gray-400">
 							Inbox
 						</Link>
+						<button onClick={handleLogout} className="text-white hover:text-gray-400">
+							Logout
+						</button>
 					</div>
 				</div>
 			</nav>
 		</header>
 	);
-};
+}
 
 export default Navbar;
