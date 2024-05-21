@@ -18,7 +18,7 @@ const userSchema = new Schema<UserDocument>(
             required: true,
             unique: true,
             lowercase: true,
-            match: [/\S+@\S+\.\S+/, "is invalid"],
+            match: [/\S+@\S+\.\S+/, "Recieved invalid email address"],
         },
         password: {
             type: String,
