@@ -36,7 +36,7 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 		const profile: ProfileDocument = new Profile({
 			userId: req.user!.userId,
 			profilePicture: req.body.profilePicture,
-			name: req.body.name,
+			username: req.user!.username,
 			bio: req.body.bio,
 			region: req.body.region,
 			language: req.body.language,
@@ -55,7 +55,9 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 const deleteProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
 		//check if exists
-		const profile: ProfileDocument | null = await Profile.findOneAndDelete({ userId: req.user!.userId });
+		const profile: ProfileDocument | null = await Profile.findOneAndDelete({
+			userId: req.user!.userId,
+		});
 
 		if (!profile) {
 			res.status(404).json({ error: "Profile not found" });
@@ -70,13 +72,23 @@ const deleteProfile = async (req: Request, res: Response): Promise<void> => {
 
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const updatedProfile: ProfileDocument | null = await Profile.findOneAndUpdate({ userId: req.user!.userId }, req.body, { new: true });
+		const { username, userId, ...otherFields } = req.body;
 
-        if (!updatedProfile) {
+		const updatedProfile: ProfileDocument | null =
+			await Profile.findOneAndUpdate(
+				{ userId: req.user!.userId },
+				{
+					username: req.user!.username,
+					userId: req.user!.userId,
+					...otherFields,
+				},
+				{ new: true }
+			);
+
+		if (!updatedProfile) {
 			res.status(404).json({ error: "Profile not found" });
 			return;
 		}
-
 
 		res.status(201).json({ profile: updatedProfile });
 	} catch (error) {

@@ -18,9 +18,10 @@ const profileSchema = new Schema<ProfileDocument>(
 			type: String,
 			required: true,
 		},
-		name: {
+		username: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		bio: {
 			type: String,
