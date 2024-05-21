@@ -46,12 +46,12 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		}
 
 		// Create a JWT token
-		const token = sign({ userId: user._id, email: user.email }, secretKey, {
+		const token = sign({ userId: user._id, username: user.username, email: user.email }, secretKey, {
 			expiresIn: "1h",
 		});
 
 		res.cookie('token', token, { httpOnly: true, secure: true });
-        res.status(200).json({ userId: user._id, token: token });
+        res.status(200).json({ userId: user._id, username: user.username, token: token });
 	} catch (error) {
 		res.status(500).json({ error: "Authentication failed try Again" });
 	}
