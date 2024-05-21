@@ -1,6 +1,5 @@
-import { Document } from 'mongoose';
-
 export interface ProfileData {
+	userId: string;
 	profilePicture: string;
 	name: string;
 	bio: string;
@@ -13,5 +12,3 @@ export interface ProfileData {
 		tags: string[]; 
 	}];
 };
-
-export interface ProfileDocument extends ProfileData, Document {}

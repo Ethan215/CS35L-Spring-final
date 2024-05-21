@@ -2,6 +2,8 @@ import express from "express";
 import { Router } from "express";
 import profileController from "../controllers/profileController";
 
+import { authenticateUser } from "../middleware/authenticateUser";
+
 const { getProfiles, getProfile, createProfile, deleteProfile, updateProfile } =
 	profileController;
 
@@ -14,12 +16,12 @@ router.get("/", getProfiles);
 router.get("/:id", getProfile);
 
 //POST a new profile
-router.post("/", createProfile);
+router.post("/", authenticateUser, createProfile);
 
 //DELETE a profile
-router.delete("/:id", deleteProfile);
+router.delete("/", authenticateUser, deleteProfile);
 
 //UPDATE a profile
-router.patch("/:id", updateProfile);
+router.patch("/", authenticateUser, updateProfile);
 
 export default router;
