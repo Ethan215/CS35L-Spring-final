@@ -10,7 +10,7 @@ config();
 
 const secretKey: string = process.env.SECRET_KEY!;
 
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { username, email, password } = req.body;
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -75,6 +75,22 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
+export const checkLogin = async (req: Request, res: Response): Promise<void> => {
+	try {
+		// if somehow user is null then return 401 status code, this shouldn't happen
+		if (!(req.user)) {
+			res.status(401).json({ error: "Authentication failed try Again" });
+			return;
+		}
+
+		// return decoded user information from the authenticateUser middleware
+		res.status(200).json(req.user);
+	}
+	catch (error) {
+		res.status(500).json({ error: "Authentication failed try Again" });
+	}
+}
+
 export const logoutUser = async (
 	req: Request,
 	res: Response
@@ -83,4 +99,4 @@ export const logoutUser = async (
 	res.status(200).json({ message: "Logged out" });
 };
 
-export default { register, loginUser, logoutUser };
+export default { signup, loginUser, logoutUser };
