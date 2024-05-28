@@ -63,7 +63,7 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
         FINDUO
       </h1>
 			<div className="w-full max-w-sm p-6 bg-gray-800 rounded-lg shadow-md">
-				<h2 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 mb-6">
+				<h2 className="text-2xl font-bold text-center text-transparent bg-clip-text from-purple-400 via-pink-500 to-red-500  mb-6">
 					Login
 				</h2>
 				{error && (
@@ -82,7 +82,7 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 							id="usernameOrEmail"
 							ref={usernameOrEmailRef}
 							required
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring from-pink-500 to-blue-500 focus:border-transparent bg-gray-700 text-white"
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring from-purple-400 via-pink-500 to-red-500 focus:border-transparent bg-gray-700 text-white"
 						/>
 					</div>
 					<div>
@@ -97,13 +97,13 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 							id="password"
 							ref={passwordRef}
 							required
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring from-pink-500 to-blue-500 focus:border-transparent bg-gray-700 text-white"
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring from-purple-400 via-pink-500 to-red-500  focus:border-transparent bg-gray-700 text-white"
 						/>
 					</div>
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full py-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 font-semibold rounded-md hover:from-pink-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring focus:ring-offset-2"
+						className="w-full py-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500  font-semibold rounded-md hover:from-pink-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring focus:ring-offset-2"
 					>
 						Log In
 					</button>
@@ -111,14 +111,14 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 				<div className="mt-6 text-sm text-center">
 					<Link
 						to="/forgot-password"
-						className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600"
+						className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500  hover:from-pink-600 hover:to-blue-600"
 					>
 						Forgot Password?
 					</Link>
 					<br />
 					<Link
 						to="/signup"
-						className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600"
+						className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500  hover:from-pink-600 hover:to-blue-600"
 					>
 						Need an account? Sign Up
 					</Link>
