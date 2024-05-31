@@ -3,7 +3,7 @@ import { ProfileData, GameData } from '@common/profile';
 
 const Feed: React.FC = () => {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
-  const [userData, setUserData] = useState<ProfileData[]>([]); // Adjusted type to any[] since the structure is not defined
+  const [userData, setUserData] = useState<ProfileData[]>([]); 
 
   const handleGameClick = (gameTitle: string) => {
     setSelectedGame(selectedGame === gameTitle ? null : gameTitle);
