@@ -1,97 +1,139 @@
-import React, { useState, useEffect } from 'react';
-import { ProfileData, GameData } from '@common/profile';
+import React, { useState, useEffect } from "react";
+import { ProfileData, GameData } from "@common/profile";
 
 const Feed: React.FC = () => {
-  const [selectedGame, setSelectedGame] = useState<string | null>(null);
-  const [userData, setUserData] = useState<ProfileData[]>([]); 
+	const [selectedGame, setSelectedGame] = useState<string | null>(null);
+	const [userData, setUserData] = useState<ProfileData[]>([]);
 
-  const handleGameClick = (gameTitle: string) => {
-    setSelectedGame(selectedGame === gameTitle ? null : gameTitle);
-  };
+	const handleGameClick = (gameTitle: string) => {
+		setSelectedGame(gameTitle);
+	};
 
-  const handleContactClick = (userId: string) => {
-    console.log(`Contacting user with ID ${userId}`);
-    // Implement contact logic here
-  };
+	const handleContactClick = (userId: string) => {
+		console.log(`Contacting user with ID ${userId}`);
+		// TODO Implement contact logic here
+	};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/profiles');
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch("/api/profiles");
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
+				if (!response.ok) {
+					throw new Error("Failed to fetch data");
+				}
 
-        const data = await response.json();
-        setUserData(data.profiles); // Setting only the profiles array to userData state
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+				const data = await response.json();
+				setUserData(data.profiles); // Setting only the profiles array to userData state
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		};
 
-    fetchData();
-  }, []);
+		fetchData();
+	}, []);
 
-  // Extracting unique game titles
-  const uniqueGameTitles = Array.from(
-    new Set(userData.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
-  );
+	// Extracting unique game titles
+	const uniqueGameTitles = Array.from(
+		new Set(
+			userData.flatMap((user: ProfileData) =>
+				user.games.map((game: GameData) => game.title)
+			)
+		)
+	);
 
-  return (
-    <div className="flex">
-      <div className="w-1/4" style={{ width: '60vw', height: '50vh', padding: '10px' }}>
-        {uniqueGameTitles.map((gameTitle, index) => (
-          <div
-            key={index}
-            onClick={() => handleGameClick(gameTitle)}
-            className={`p-10 border-b cursor-pointer ${selectedGame === gameTitle ? 'bg-black-200' : 'bg-gray-600'}`}
-          >
-            <h4 className="font-bold">{gameTitle}</h4>
-          </div>
-        ))}
-      </div>
+	return (
+		<div className="flex flex-col min-h-screen w-full bg-gray-900">
+			<div className="p-4">
+				<div className="flex flex-row p-1 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-auto">
+					{uniqueGameTitles.map((gameTitle, index) => (
+						<div
+							key={index}
+							onClick={() => handleGameClick(gameTitle)}
+							className={`relative p-10 first-line:marker:cursor-pointer bg-gray-800 ${
+								selectedGame === gameTitle
+									? "overflow-hidden text-white"
+									: " text-gray-100"
+							}`}
+						>
+							<div
+								className={`absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-b from-slate-500 to-slate-800 ${
+									selectedGame === gameTitle ? "opacity-30" : "opacity-0"
+								}`}
+							></div>
+							<div className="relative">
+								<h4 className="font-bold">{gameTitle}</h4>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
 
-      <div className="w-2/3 p-10" style={{ backgroundImage: `url(https://displays.riotgames.com/static/content-original-championillustrations-group-slashes-9828cf13cecf88fb9f21ee17afa6874e.jpg)`, color: '#fff', backgroundSize: 'cover', backgroundAttachment: 'fixed'}}>
-        {selectedGame !== null && (
-          <div>
-            <h2 className="font-bold text-3xl">Players for {selectedGame}</h2>
-            {userData.map((user: ProfileData) => (
-              user.games.filter((game: GameData) => game.title === selectedGame).map((game: GameData) => (
-                <div key={game._id} className="rounded-lg bg-gray-800 bg-opacity-75 p-2 m-6">
-                  <div className="flex justify-center items-center mb-4">
-                    <img src={user.profilePicture} alt="Profile" className="w-16 h-16 rounded-full mr-4" />
-                    <div>
-                      <h1 className="text-l font-bold">{user.username}</h1>
-                      <p className="text-white">{user.bio}</p>
-                      <p className="text-white">Region: {user.region}</p>
-                      <p className="text-white">Language: {user.language}</p>
-                      <p className="text-white">Stars: {user.stars}</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <img src={user.region} alt={`GIF for ${user.username}`} />
-                    <div className="w-1/2">
-                      <div className="bg-gray-800 p-0.1 m-3 border border-gray-200 rounded">
-                        <h2 className="text-xl font-bold">{game.title}</h2>
-                        {game.rank && <p className="text-white-700">Rank: {game.rank}</p>}
-                        <p className="text-white-700">Tags: {game.tags.join(", ")}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex justify-center mt-4">
-                    <button onClick={() => handleContactClick(user._id)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                      Contact Me
-                    </button>
-                  </div>
-                </div>
-              ))
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+			<div className="p-10 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+				{selectedGame !== null && (
+					<div className="flex flex-col">
+						<h2 className="font-bold text-3xl text-white pb-3">
+							Players for{" "}
+							<span className="relative inline-block pb-1.5">
+								{selectedGame}
+								<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
+							</span>
+						</h2>
+						{userData.map((user: ProfileData) =>
+							user.games
+								.filter((game: GameData) => game.title === selectedGame)
+								.map((game: GameData) => (
+									<div
+										key={game._id}
+										className="relative flex flex-col text-gray-300"
+									>
+										<div className="relative group p-2 m-1 rounded-lg overflow-hidden border-2 border-transparent hover:border-slate-800">
+											<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
+											<div className="relative">
+												<div className="flex flex-row">
+													<img
+														src={user.profilePicture}
+														alt="Profile"
+														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
+													/>
+													<div className="flex-3">
+														<h1 className="text-xl font-bold text-white">
+															{user.username}
+														</h1>
+														<p className="text-sm">{user.bio}</p>
+														<p className="text-sm">Region: {user.region}</p>
+														<p className="text-sm">Language: {user.language}</p>
+														<p className="text-sm">Stars: {user.stars}</p>
+														<div className="mt-4">
+															<button
+																onClick={() => handleContactClick(user._id)}
+																className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+															>
+																Contact Me
+															</button>
+														</div>
+													</div>
+													<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
+														{game.tags.map((tag, index) => (
+															<span
+																key={index}
+																className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
+															>
+																{tag}
+															</span>
+														))}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								))
+						)}
+					</div>
+				)}
+			</div>
+		</div>
+	);
 };
 
 export default Feed;
