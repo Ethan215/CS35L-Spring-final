@@ -15,11 +15,15 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
+import Loading from './pages/Loading';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);  // User login status
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+
     // Assuming that there is a function to check the user's login status here
     const checkLoginStatus = async () => {
       // send a request to the backend to check the login status (GET /api/user/login)
@@ -32,6 +36,8 @@ function App() {
       else {
         setUserLoggedIn(false);
       }
+
+      setIsLoading(false);
     };
 
     checkLoginStatus();
@@ -52,6 +58,10 @@ function App() {
 
     logout();
   };
+
+  if (isLoading) {
+    return <Loading></Loading>; // Or your loading spinner
+  }
 
   return (
     <div className="App">
