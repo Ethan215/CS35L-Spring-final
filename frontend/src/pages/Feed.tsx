@@ -31,6 +31,8 @@ const Feed: React.FC = () => {
 		};
 
 		fetchData();
+		//set the default game to the first in the list
+		setSelectedGame(userData[0]?.games[0]?.title);
 	}, []);
 
 	// Extracting unique game titles
@@ -41,6 +43,9 @@ const Feed: React.FC = () => {
 			)
 		)
 	);
+	if (uniqueGameTitles.length !== 0 && (selectedGame === null || selectedGame === undefined)) {
+		setSelectedGame(uniqueGameTitles[0]);
+	}
 
 	return (
 		<div className="flex flex-col min-h-screen w-full bg-gray-900">
@@ -72,8 +77,8 @@ const Feed: React.FC = () => {
 			<div className="p-10 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
 				{selectedGame !== null && (
 					<div className="flex flex-col">
-						<h2 className="font-bold text-3xl text-white pb-3">
-							Players for{" "}
+						<h2 className="font-bold text-3xl text-white pb-6">
+							Duos for{" "}
 							<span className="relative inline-block pb-1.5">
 								{selectedGame}
 								<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
@@ -100,14 +105,23 @@ const Feed: React.FC = () => {
 														<h1 className="text-xl font-bold text-white">
 															{user.username}
 														</h1>
-														<p className="text-sm">{user.bio}</p>
-														<p className="text-sm">Region: {user.region}</p>
-														<p className="text-sm">Language: {user.language}</p>
-														<p className="text-sm">Stars: {user.stars}</p>
+														<p className="text-sm mb-1">{user.bio}</p>
+														<p className="text-sm">
+															<span className="font-bold">Region:</span>{" "}
+															{user.region}
+														</p>
+														<p className="text-sm">
+															<span className="font-bold">Language:</span>{" "}
+															{user.language}
+														</p>
+														<p className="text-sm">
+															<span className="font-bold">Stars:</span>{" "}
+															{user.stars}
+														</p>
 														<div className="mt-4">
 															<button
 																onClick={() => handleContactClick(user._id)}
-																className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Contact Me
 															</button>
