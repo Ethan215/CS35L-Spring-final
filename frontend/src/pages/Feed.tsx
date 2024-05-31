@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { ProfileData, GameData } from '@common/profile';
 
 const Feed: React.FC = () => {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
-  const [userData, setUserData] = useState<any[]>([]); // Adjusted type to any[] since the structure is not defined
+  const [userData, setUserData] = useState<ProfileData[]>([]); // Adjusted type to any[] since the structure is not defined
 
   const handleGameClick = (gameTitle: string) => {
     setSelectedGame(selectedGame === gameTitle ? null : gameTitle);
@@ -34,7 +35,7 @@ const Feed: React.FC = () => {
 
   // Extracting unique game titles
   const uniqueGameTitles = Array.from(
-    new Set(userData.flatMap((user: any) => user.games.map((game: any) => game.title)))
+    new Set(userData.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
   );
 
   return (
@@ -55,8 +56,8 @@ const Feed: React.FC = () => {
         {selectedGame !== null && (
           <div>
             <h2 className="font-bold text-3xl">Players for {selectedGame}</h2>
-            {userData.map((user: any) => (
-              user.games.filter((game: any) => game.title === selectedGame).map((game: any) => (
+            {userData.map((user: ProfileData) => (
+              user.games.filter((game: GameData) => game.title === selectedGame).map((game: GameData) => (
                 <div key={game._id} className="rounded-lg bg-gray-800 bg-opacity-75 p-2 m-6">
                   <div className="flex justify-center items-center mb-4">
                     <img src={user.profilePicture} alt="Profile" className="w-16 h-16 rounded-full mr-4" />

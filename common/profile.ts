@@ -1,4 +1,5 @@
 export interface ProfileData {
+	_id: string;
 	userId: string;
 	profilePicture: string;
 	username: string;
@@ -6,9 +7,12 @@ export interface ProfileData {
 	region: string;
 	language: string;
 	stars: number;
-	games: [{ 
-		title: string; 
-		rank: string; 
-		tags: string[]; 
-	}];
+	games: GameData[];
+};
+
+export interface GameData {
+	_id: string;
+	title: string;
+	rank: string;
+	tags: string[];
 };

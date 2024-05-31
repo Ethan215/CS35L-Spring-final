@@ -1,7 +1,7 @@
 // App is the main component of the application
 // it is responsible for routing and rendering the different pages and components
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // user context
 import { UserProvider } from './contexts/UserContext';
@@ -63,7 +63,7 @@ function App() {
               <Route path="/login" element={userLoggedIn ? <Navigate replace to="/home" /> : <Login setUserLoggedIn={setUserLoggedIn} />} />
               <Route path="/signup" element={userLoggedIn ? <Navigate replace to="/home" /> : <Signup />} />
               <Route path="/forgot-password" element={userLoggedIn ? <Navigate replace to="/home" /> : <ForgotPassword />} />
-              
+
               <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/login" />} />
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/login" />} />
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/login" />} />
