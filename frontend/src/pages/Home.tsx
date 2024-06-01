@@ -73,7 +73,7 @@ const Home: React.FC<HomeComponentProps> = ({ userLoggedIn }) => {
 					))}
 				</div>
 			</div>
-			<div className="text-center mt-10">
+			<div className="text-center mt-10 animate-bounce">
 				<Link
 					to={userLoggedIn ? "/feed" : "/login"}
 					className="text-lg bg-gradient-to-r from-pink-500 to-blue-500 px-5 py-2 rounded-lg hover:from-pink-600 hover:to-blue-600"
