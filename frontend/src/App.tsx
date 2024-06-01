@@ -74,11 +74,11 @@ function App() {
               <Route path="/signup" element={userLoggedIn ? <Navigate replace to="/home" /> : <Signup />} />
               <Route path="/forgot-password" element={userLoggedIn ? <Navigate replace to="/home" /> : <ForgotPassword />} />
 
-              <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/login" />} />
-              <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/login" />} />
-              <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/login" />} />
-              <Route path="/home" element={userLoggedIn ? <Home /> : <Navigate replace to="/login" />} />
-              <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/login" />} />
+              <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/home" />} />
+              <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
+              <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
+              <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
+              <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
             </Routes>
           </div>
         </BrowserRouter>  
