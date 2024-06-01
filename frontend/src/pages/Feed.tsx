@@ -92,7 +92,7 @@ const Feed: React.FC = () => {
 										key={game._id}
 										className="relative flex flex-col text-gray-300"
 									>
-										<div className="relative group p-2 m-1 rounded-lg overflow-hidden border-2 border-transparent hover:border-slate-800">
+										<div className="relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 											<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 											<div className="relative">
 												<div className="flex flex-row">
