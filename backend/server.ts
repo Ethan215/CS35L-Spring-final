@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 import profileRoutes from "./src/routes/profileRoutes";
+import inviteRoutes from './src/routes/inviteRoutes';
 
 //express app
 const app = express();
@@ -28,6 +29,9 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 
 // route /api/profiles to profileRoutes
 app.use("/api/profiles", profileRoutes);
+
+// route /api/invites to inviteRoutes
+app.use('/api/invites', inviteRoutes);
 
 // log mongo uri
 console.log(process.env.MONGO_URI);
