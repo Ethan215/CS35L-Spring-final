@@ -24,6 +24,10 @@ const userSchema = new Schema<UserDocument>(
             type: String,
             required: true,
         },
+        likedProfiles: [{ 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Profile' 
+        }],
 	},
 	{ timestamps: true }
 );

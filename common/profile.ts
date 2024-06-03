@@ -8,6 +8,7 @@ export interface ProfileData {
 	language: string;
 	stars: number;
 	games: GameData[];
+	likedProfiles: string[];
 };
 
 export interface GameData {

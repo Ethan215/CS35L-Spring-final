@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function Signup() {
 	// Declare the email, password, and password confirm input elements using the useRef hook
+	
 	const emailRef = useRef<HTMLInputElement>(null);
-  const usernameRef = useRef<HTMLInputElement>(null);
+ 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const passwordConfirmRef = useRef<HTMLInputElement>(null);
 	// Declare the error and loading state using the useState hook

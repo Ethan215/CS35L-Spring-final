@@ -1,6 +1,9 @@
-import { UserData } from '@common/user'
+import { UserData } from "@common/user";
 
-export type UserContextType = {
+export interface UserContextType {
     user: UserData | null;
-    setUser: (user: UserData | null) => void;
-};
+    setUser: React.Dispatch<React.SetStateAction<UserData | null>>;
+    likeProfile: (profileId: string) => Promise<void>;
+    unlikeProfile: (profileId: string) => Promise<void>;
+    getLikedProfiles: () => Promise<void>;
+}

@@ -1,10 +1,9 @@
-import mongoose from "mongoose";
 import { ProfileData } from "@common/profile";
-import { Document } from 'mongoose';
+import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface ProfileDocument extends ProfileData, Document {}
+export interface ProfileDocument extends Omit<ProfileData, '_id'>, Document {}
 
 
 const profileSchema = new Schema<ProfileDocument>(

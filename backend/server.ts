@@ -29,7 +29,8 @@ app.use(cookieParser());
 
 // TODO: remove, log incoming requests
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-	console.log(req.path, req.method);
+	// console.log(req.path, req.method);
+	console.log(`Incoming request: ${req.method} ${req.path}`);
 	next();
 });
 
@@ -50,9 +51,13 @@ mongoose
 	.then(() => {
 		console.log("connected to db");
 
+		// //listen for requests
+		// app.listen(process.env.PORT, () => {
+		// 	console.log(`listening for requests on port ${process.env.PORT}`);
+		// });
 		//listen for requests
-		app.listen(process.env.PORT, () => {
-			console.log(`listening for requests on port ${process.env.PORT}`);
+		app.listen(4000, () => {
+			console.log(`listening for requests on port 4000`);
 		});
 	})
 	.catch((err) => {
