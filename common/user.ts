@@ -4,5 +4,5 @@ export interface UserData {
     username: string;
     email: string;
     password: string;
-    likedProfiles: mongoose.Types.ObjectId[]; // 用于存储用户喜欢的用户ID
+    likedProfiles: mongoose.Types.ObjectId[]; // Used to store the user's preferred user ID
 };

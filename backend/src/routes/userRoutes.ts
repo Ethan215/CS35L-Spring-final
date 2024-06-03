@@ -1,3 +1,5 @@
+// userRoutes.ts
+
 import express from "express";
 import { Router } from "express";
 import userController, { checkLogin } from "../controllers/userController";

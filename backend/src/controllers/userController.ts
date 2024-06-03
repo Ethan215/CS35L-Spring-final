@@ -102,8 +102,6 @@ export const logoutUser = async (
 
 
 export const likeProfile = async (req: Request, res: Response): Promise<void> => {
-	console.log(`likeProfile called with profileId: ${req.params.profileId}`);
-
 	if (!req.user) {
         res.status(401).json({ message: 'Unauthorized' });
         return; 
@@ -131,14 +129,14 @@ export const likeProfile = async (req: Request, res: Response): Promise<void> =>
         await user.save();
         await profile.save();
 
-        res.status(200).json({ message: "Profile liked", user }); // 返回最新的用户数据
+        res.status(200).json({ message: "Profile liked", user }); // Returns the latest user data
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
 };
 
 export const unlikeProfile = async (req: Request, res: Response): Promise<void> => {
-	console.log(`unlikeProfile called with profileId: ${req.params.profileId}`);	if (!req.user) {
+	if (!req.user) {
 		res.status(401).json({ message: 'Unauthorized' });
 		return; 
 	}
@@ -173,7 +171,6 @@ export const unlikeProfile = async (req: Request, res: Response): Promise<void> 
 
 // Get liked profiles
 export const getLikedProfiles = async (req: Request, res: Response): Promise<void> => {
-	console.log(`getLikedProfiles called for userId: ${req.user?.userId}`);
 	if (!req.user) {
 		res.status(401).json({ message: 'Unauthorized' });
 		return; 

@@ -68,7 +68,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             const response = await fetch('/api/user/liked-profiles');
             if (response.ok) {
                 const data = await response.json();
-				console.log("Fetched liked profiles:", data.likedProfiles); // 添加日志输出
                 setUser(prevUser => {
                     if (prevUser) {
                         return {
@@ -76,7 +75,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                             likedProfiles: data.likedProfiles
                         };
                     }
-                    return prevUser; // 处理 prevUser 可能为 null 的情况
+                    return prevUser; // Handle the case where prevUser may be null.
                 });
             } else {
                 console.error('Failed to fetch liked profiles');

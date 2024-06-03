@@ -22,9 +22,9 @@ const Feed: React.FC = () => {
       setLikedProfiles(likedProfiles.filter((id) => id !== userId));
     } else {
       await likeProfile(userId);
-      setLikedProfiles([...likedProfiles, userId]);
-    }
-	console.log("Updated liked profiles:", likedProfiles); // 添加日志输出
+      const newLikedProfiles = [...likedProfiles, userId];
+      setLikedProfiles(newLikedProfiles);
+      console.log("Updated liked profiles:", newLikedProfiles);    }
   };
  
   useEffect(() => {
@@ -36,7 +36,7 @@ const Feed: React.FC = () => {
         }
         const data = await response.json();
         setUserData(data.profiles);
-		const likedResponse = await fetch("/api/user/liked-profiles");
+        const likedResponse = await fetch("/api/user/liked-profiles");
         const likedData = await likedResponse.json();
         setLikedProfiles(likedData.likedProfiles.map((profile: ProfileData) => profile._id));
       } catch (error) {

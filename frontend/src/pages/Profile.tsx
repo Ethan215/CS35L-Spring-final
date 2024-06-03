@@ -11,7 +11,6 @@ const Profile: React.FC = () => {
             try {
                 await getLikedProfiles();
                 if (user && user.likedProfiles) {
-                    console.log("User liked profiles:", user.likedProfiles); // 添加日志输出
                     setLikedProfiles(user.likedProfiles);
                 }
             } catch (error) {
