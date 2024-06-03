@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ProfileData, GameData } from "@common/profile";
+import { gameIconDictionary } from "../assets/gameIconDictionary";
 
 const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
@@ -36,7 +37,7 @@ const Feed: React.FC = () => {
 		};
 
 		fetchData();
-		//set the default game to the first in the list
+		// Set the default game to the first in the list
 		setSelectedGame(userData[0]?.games[0]?.title);
 	}, []);
 
@@ -52,7 +53,7 @@ const Feed: React.FC = () => {
 		setSelectedGame(uniqueGameTitles[0]);
 	}
 
-	// Filter user data based on search 
+	// Filter user data based on search query
 	const filteredUserData = userData.filter(user =>
 		user.username.toLowerCase().includes(searchUser.toLowerCase())
 	);
@@ -65,7 +66,7 @@ const Feed: React.FC = () => {
 						<div
 							key={index}
 							onClick={() => handleGameClick(gameTitle)}
-							className={`relative p-10 first-line:marker:cursor-pointer bg-gray-800 ${
+							className={`relative p-10 cursor-pointer bg-gray-800 ${
 								selectedGame === gameTitle
 									? "overflow-hidden text-white"
 									: " text-gray-100"
@@ -76,7 +77,12 @@ const Feed: React.FC = () => {
 									selectedGame === gameTitle ? "opacity-30" : "opacity-0"
 								}`}
 							></div>
-							<div className="relative">
+							<div className="relative flex items-center">
+								<img
+									src={gameIconDictionary[gameTitle]}
+									alt={gameTitle}
+									className="w-8 h-8 mr-2"
+								/>
 								<h4 className="font-bold">{gameTitle}</h4>
 							</div>
 						</div>
