@@ -1,4 +1,4 @@
-import React, { useRef, useState, FormEvent } from "react";
+import React, { useRef, useState, FormEvent, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // Define the LoginProps type
@@ -15,7 +15,6 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 	const [error, setError] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
 	const navigate = useNavigate(); // useNavigate hooks to get navigation functions
-
 	//  Define the handleSubmit function, which is used to handle form submissions.
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault(); // Block the default submit behavior of the form
@@ -52,7 +51,7 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
             setLoading(false);
             // update the login status and jump to the home page.
             setUserLoggedIn(true);
-            localStorage.setItem("loggedIn", "true"); // Update local storage to maintain login status
+
             navigate("/home"); // Navigating to the home page using the navigate function
         }
 	}
