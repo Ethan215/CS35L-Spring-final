@@ -4,6 +4,7 @@ import { ProfileData, GameData } from "@common/profile";
 const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [userData, setUserData] = useState<ProfileData[]>([]);
+	const [searchUser, setSearchUser] = useState<string>("");
 
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
@@ -12,6 +13,10 @@ const Feed: React.FC = () => {
 	const handleContactClick = (userId: string) => {
 		console.log(`Contacting user with ID ${userId}`);
 		// TODO Implement contact logic here
+	};
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchUser(e.target.value);
 	};
 
 	useEffect(() => {
@@ -47,6 +52,11 @@ const Feed: React.FC = () => {
 		setSelectedGame(uniqueGameTitles[0]);
 	}
 
+	// Filter user data based on search 
+	const filteredUserData = userData.filter(user =>
+		user.username.toLowerCase().includes(searchUser.toLowerCase())
+	);
+
 	return (
 		<div className="flex flex-col min-h-screen w-full bg-gray-900">
 			<div className="p-4">
@@ -72,6 +82,15 @@ const Feed: React.FC = () => {
 						</div>
 					))}
 				</div>
+				<div className="mt-4">
+					<input
+						type="text"
+						placeholder="Search by username"
+						value={searchUser}
+						onChange={handleSearchChange}
+						className="w-full p-2 rounded bg-gray-800 text-white"
+					/>
+				</div>
 			</div>
 
 			<div className="p-10 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
@@ -84,7 +103,7 @@ const Feed: React.FC = () => {
 								<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
 							</span>
 						</h2>
-						{userData.map((user: ProfileData) =>
+						{filteredUserData.map((user: ProfileData) =>
 							user.games
 								.filter((game: GameData) => game.title === selectedGame)
 								.map((game: GameData) => (
