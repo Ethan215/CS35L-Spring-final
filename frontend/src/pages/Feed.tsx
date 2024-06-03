@@ -101,7 +101,7 @@ const Feed: React.FC = () => {
 														alt="Profile"
 														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
 													/>
-													<div className="flex-3">
+													<div className="flex-grow">
 														<h1 className="text-xl font-bold text-white">
 															{user.username}
 														</h1>
@@ -127,7 +127,7 @@ const Feed: React.FC = () => {
 															</button>
 														</div>
 													</div>
-													<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
+													<div className="flex flex-wrap flex-none justify-end items-end mt-2">
 														{game.tags.map((tag, index) => (
 															<span
 																key={index}
