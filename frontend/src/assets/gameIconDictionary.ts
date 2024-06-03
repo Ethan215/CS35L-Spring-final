@@ -1,5 +1,5 @@
-import MinecraftIcon from "../../public/assets/icons/Minecraft.png";
-import LeagueIcon from "../../public/assets/icons/League of Legends.png";
+import MinecraftIcon from "./icons/Minecraft.png";
+import LeagueIcon from "./icons/League of Legends.png";
 
 interface GameIconDictionary {
 	[key: string]: string;
