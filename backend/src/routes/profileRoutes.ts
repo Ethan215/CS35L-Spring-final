@@ -9,8 +9,8 @@ const { getProfiles, getProfile, createProfile, deleteProfile, updateProfile } =
 
 const router: Router = express.Router();
 
-//GET all profiles
-router.get("/", getProfiles);
+//GET all profile
+router.get("/", authenticateUser, getProfiles);
 
 //GET a single profile
 router.get("/:id", getProfile);

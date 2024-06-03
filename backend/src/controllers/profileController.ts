@@ -17,9 +17,9 @@ const getProfiles = async (req: Request, res: Response): Promise<void> => {
 
 const getProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const profile: ProfileDocument | null = await Profile.findById(
-			req.params.id
-		);
+		const profile: ProfileDocument | null = await Profile.findOne({
+			userId: req.params.id,
+		});
 		if (!profile) {
 			res.status(404).json({ error: "Profile not found" });
 			return;
