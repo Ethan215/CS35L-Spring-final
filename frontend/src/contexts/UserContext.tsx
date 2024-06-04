@@ -85,6 +85,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    // Update user profile data
     const updateProfile = async (profileData: Partial<UserData>): Promise<void> => {
         try {
             const response = await fetch('/api/profiles', {
@@ -98,6 +99,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             if (response.ok) {
                 const updatedUser = await response.json();
                 setUser(updatedUser);
+                await fetchUserData(); //  Ensure that up-to-date user data is recaptured
             } else {
                 console.error('Failed to update profile');
             }

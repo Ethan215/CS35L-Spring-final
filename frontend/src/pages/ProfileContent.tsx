@@ -1,17 +1,30 @@
-import React, { useContext, useState, ChangeEvent, FormEvent } from 'react';
+import React, { useContext, useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
 
 const ProfileContent: React.FC = () => {
-    const { user, updateProfile } = useContext(UserContext)!;
+    const { user, setUser } = useContext(UserContext)!;
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({
-        username: user?.username || '',
-        email: user?.email || '',
-        bio: user?.bio || '',
-        region: user?.region || '',
-        language: user?.language || '',
-        stars: user?.stars || 0,
+        username: '',
+        email: '',
+        bio: '',
+        region: '',
+        language: '',
+        stars: 0,
     });
+
+    useEffect(() => {
+        if (user && !editMode) {
+            setFormData({
+                username: user.username,
+                email: user.email,
+                bio: user.bio || '',
+                region: user.region || '',
+                language: user.language || '',
+                stars: user.stars || 0,
+            });
+        }
+    }, [user, editMode]);
 
     const handleEdit = () => {
         setEditMode(true);
@@ -19,8 +32,27 @@ const ProfileContent: React.FC = () => {
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await updateProfile(formData);
-        setEditMode(false);
+        try {
+            console.log('Updating profile with data:', formData);
+            const response = await fetch('/api/profiles', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                console.log('Updated user data:', updatedUser);
+                setUser(updatedUser);
+                setEditMode(false);
+            } else {
+                console.error('Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
