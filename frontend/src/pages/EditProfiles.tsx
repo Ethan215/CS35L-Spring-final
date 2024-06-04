@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ProfileData } from "@common/profile";
+import { GameData, ProfileData } from "@common/profile";
 import Loading from "./Loading";
 
 import { gameIconDictionary } from "../assets/gameIconDictionary";
@@ -11,6 +11,11 @@ const EditProfile: React.FC = () => {
 
 	const fetchedProfile = useRef<ProfileData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+
+	// Initialize games state
+	const [games, setGames] = useState<GameData[]>(
+		fetchedProfile.current?.games || []
+	);
 
 	useEffect(() => {
 		const fetchProfile = async () => {
@@ -28,8 +33,8 @@ const EditProfile: React.FC = () => {
 			} catch (error) {
 				console.error("Error fetching profile data:", error);
 			}
-
 			setIsLoading(false);
+			setGames(fetchedProfile.current?.games || []);
 		};
 		fetchProfile();
 	}, []);
@@ -37,12 +42,13 @@ const EditProfile: React.FC = () => {
 	const handleSave = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-        const formData = new FormData(e.currentTarget);
-        const updatedProfile: Partial<ProfileData> = {
-            region: formData.get('region') as string,
-            language: formData.get('language') as string,
-            bio: formData.get('bio') as string,
-        };
+		const formData = new FormData(e.currentTarget);
+		const updatedProfile: Partial<ProfileData> = {
+			region: formData.get("region") as string,
+			language: formData.get("language") as string,
+			bio: formData.get("bio") as string,
+			games: games,
+		};
 
 		try {
 			console.log("Updating profile with data:", updatedProfile);
@@ -56,6 +62,7 @@ const EditProfile: React.FC = () => {
 
 			if (response.ok) {
 				console.log("Profile updated successfully");
+                navigate("/profile");
 			} else {
 				console.error("Failed to update profile");
 			}
@@ -68,26 +75,24 @@ const EditProfile: React.FC = () => {
 		return <Loading />;
 	}
 
-	// Initialize games state
-	// const [games, setGames] = useState(fetchedProfile.current?.games || []);
+	function handleAddGame() {
+		// Create a new game with default values
+		const newGame: Partial<GameData> = {
+			title: "",
+			rank: "",
+			tags: [],
+		};
 
-	// function handleAddGame() {
-	// 	// Create a new game with default values
-	// 	const newGame = {
-	// 		_id: "",
-	// 		title: "",
-	// 		rank: "",
-	// 		tags: [],
-	// 	};
+		// Add the new game to the games array
+		setGames((prevGames) => [...prevGames, newGame as GameData]);
+	}
 
-	// 	// Add the new game to the games array
-	// 	setGames((prevGames) => [...prevGames, newGame]);
-	// }
-
-    // function handleRemoveGame(gameIndex : number) {
-    //     // Remove the game at the specified index from the games array
-    //     setGames(prevGames => prevGames.filter((_, index) => index !== gameIndex));
-    // }
+	function handleRemoveGame(gameIndex: number) {
+		// Remove the game at the specified index from the games array
+		setGames((prevGames) =>
+			prevGames.filter((_, index) => index !== gameIndex)
+		);
+	}
 
 	return (
 		<div className="flex flex-col items-center min-h-screen w-screen bg-gray-900 text-white">
@@ -123,7 +128,7 @@ const EditProfile: React.FC = () => {
 							className="flex-none h-full w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600 overflow-auto resize-none"
 						/>
 					</div>
-					{fetchedProfile.current?.games.map((game, gameIndex) => (
+					{games.map((game, gameIndex) => (
 						<div
 							key={game._id}
 							className="relative flex flex-col text-gray-300"
@@ -140,12 +145,22 @@ const EditProfile: React.FC = () => {
 														name={`game-${gameIndex}-title`}
 														defaultValue={game.title || ""}
 														className="text-xl font-bold text-white w-full bg-slate-700"
+														onChange={(e) => {
+															const newGames = [...games];
+															newGames[gameIndex].title = e.target.value;
+															setGames(newGames);
+														}}
 													/>
-												</div>  
+												</div>
 												<img
 													src={gameIconDictionary[game.title]}
 													alt={`${game.title} icon`}
 													className="w-8 h-8"
+													onError={(e) => {
+														const imageElement = e.target as HTMLImageElement;
+														imageElement.src = "";
+														imageElement.onerror = null;
+													}}
 												/>
 											</div>
 											<div className="text-sm">
@@ -155,29 +170,52 @@ const EditProfile: React.FC = () => {
 													name={`game-${gameIndex}-rank`}
 													defaultValue={game.rank || ""}
 													className="w-full bg-slate-700 text-white"
+													onChange={(e) => {
+														const newGames = [...games];
+														newGames[gameIndex].rank = e.target.value;
+														setGames(newGames);
+													}}
 												/>
 											</div>
 										</div>
-										<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
-											{game.tags.map((tag, tagIndex) => (
-												<div
-													key={tagIndex}
-													className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
+										<div className="flex flex-col flex-1">
+											<div>
+												<button
+													type="button"
+													onClick={() => handleRemoveGame(gameIndex)}
+													className="px-2 py-1 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
 												>
-													<input
-														type="text"
-														name={`game-${gameIndex}-tag-${tagIndex}`}
-														defaultValue={tag || ""}
-														className="w-full bg-slate-700 text-white"
-													/>
-												</div>
-											))}
+													Remove Game
+												</button>
+											</div>
+											<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
+												{game.tags.map((tag, tagIndex) => (
+													<div
+														key={tagIndex}
+														className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
+													>
+														<input
+															type="text"
+															name={`game-${gameIndex}-tag-${tagIndex}`}
+															defaultValue={tag || ""}
+															className="w-full bg-slate-700 text-white"
+														/>
+													</div>
+												))}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					))}
+					<button
+						type="button"
+						onClick={handleAddGame}
+						className="px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+					>
+						Add Game
+					</button>
 					<button
 						type="submit"
 						className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
