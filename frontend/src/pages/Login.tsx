@@ -2,6 +2,7 @@ import React, { useRef, useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { UserData } from "@common/user";
 
 // Define the LoginProps type
 interface LoginProps {
@@ -60,7 +61,8 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 			if (response.ok) {
 				setUserLoggedIn(true);
 				const data = await response.json();
-				setUser({"_id": data.userId, "username": data.username, "email" : "", "password": "" });
+				const partialUserData : Partial<UserData> = { _id: data.userId, username: data.username };
+				setUser(partialUserData);
             	setUserLoggedIn(true);
 			}			
         }
