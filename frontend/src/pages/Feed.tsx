@@ -6,6 +6,10 @@ const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [userData, setUserData] = useState<ProfileData[]>([]);
 	const [searchUser, setSearchUser] = useState<string>("");
+	const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+	const [selectedRank, setSelectedRank] = useState<string | null>(null);
+	const [regions, setRegions] = useState<string[]>([]);
+	const [ranks, setRanks] = useState<string[]>([]);
 
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
@@ -20,6 +24,14 @@ const Feed: React.FC = () => {
 		setSearchUser(e.target.value);
 	};
 
+	const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedRegion(e.target.value);
+	};
+
+	const handleRankChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedRank(e.target.value);
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -29,40 +41,65 @@ const Feed: React.FC = () => {
 					throw new Error("Failed to fetch data");
 				}
 
-				const data = await response.json();
+				const data: { profiles: ProfileData[] } = await response.json();
 				setUserData(data.profiles); // Setting only the profiles array to userData state
+
+				if (data.profiles.length > 0) {
+					// Extract unique game titles and set the first one as selected by default
+					const uniqueTitles = Array.from(
+						new Set(data.profiles.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
+					);
+
+					if (uniqueTitles.length !== 0) {
+						setSelectedGame(uniqueTitles[0]);
+					}
+				}
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
 		};
 
 		fetchData();
-		// Set the default game to the first in the list
-		setSelectedGame(userData[0]?.games[0]?.title);
 	}, []);
 
-	// Extracting unique game titles
-	const uniqueGameTitles = Array.from(
-		new Set(
-			userData.flatMap((user: ProfileData) =>
-				user.games.map((game: GameData) => game.title)
-			)
-		)
-	);
-	if (uniqueGameTitles.length !== 0 && (selectedGame === null || selectedGame === undefined)) {
-		setSelectedGame(uniqueGameTitles[0]);
-	}
+	useEffect(() => {
+		if (selectedGame) {
+			const gameSpecificProfiles = userData.filter(user =>
+				user.games.some(game => game.title === selectedGame)
+			);
 
-	// Filter user data based on search query
-	const filteredUserData = userData.filter(user =>
-		user.username.toLowerCase().includes(searchUser.toLowerCase())
+			// Extract unique regions for the selected game
+			const uniqueRegions = Array.from(new Set(gameSpecificProfiles.map((user: ProfileData) => user.region)));
+			setRegions(uniqueRegions);
+
+			// Extract unique ranks for the selected game
+			const uniqueRanks = Array.from(new Set(gameSpecificProfiles.flatMap((user: ProfileData) =>
+				user.games
+					.filter(game => game.title === selectedGame && game.rank) 
+					.map((game: GameData) => game.rank)
+			)));
+			setRanks(uniqueRanks);
+		}
+	}, [selectedGame, userData]);
+
+	// Filter user data based on search query, selected region, and selected rank
+	const filteredUserData = userData.filter(user => {
+		const matchesSearch = user.username.toLowerCase().includes(searchUser.toLowerCase());
+		const matchesRegion = selectedRegion ? user.region === selectedRegion : true;
+		const matchesRank = selectedRank ? user.games.some((game: GameData) => game.rank === selectedRank && game.title === selectedGame) : true;
+		return matchesSearch && matchesRegion && matchesRank;
+	});
+
+	// Extract unique game titles directly from userData
+	const uniqueGameTitles = Array.from(
+		new Set(userData.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
 	);
 
 	return (
 		<div className="flex flex-col min-h-screen w-full bg-gray-900">
 			<div className="p-4">
 				<div className="flex flex-row p-1 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-auto">
-					{uniqueGameTitles.map((gameTitle, index) => (
+					{uniqueGameTitles.map((gameTitle: string, index: number) => (
 						<div
 							key={index}
 							onClick={() => handleGameClick(gameTitle)}
@@ -96,6 +133,26 @@ const Feed: React.FC = () => {
 						onChange={handleSearchChange}
 						className="w-full p-2 rounded bg-gray-800 text-white"
 					/>
+					<select
+						value={selectedRegion || ""}
+						onChange={handleRegionChange}
+						className="w-full p-2 mt-2 rounded bg-gray-800 text-white"
+					>
+						<option value="">All Regions</option>
+						{regions.map((region, index) => (
+							<option key={index} value={region}>{region}</option>
+						))}
+					</select>
+					<select
+						value={selectedRank || ""}
+						onChange={handleRankChange}
+						className="w-full p-2 mt-2 rounded bg-gray-800 text-white"
+					>
+						<option value="">All Ranks</option>
+						{ranks.map((rank, index) => (
+							<option key={index} value={rank}>{rank}</option>
+						))}
+					</select>
 				</div>
 			</div>
 
