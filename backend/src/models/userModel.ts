@@ -27,11 +27,6 @@ export interface UserDocument extends Omit<UserData, '_id' | 'friends'>, mongoos
         type: String,
         required: true,
       },
-      friends: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: [],
-      }],
     },
     { timestamps: true }
   );

@@ -2,10 +2,14 @@ import { Request, Response } from "express";
 
 import { FriendDocument, Friend } from "../models/friendModel";
 import { UserDocument, User } from "../models/userModel";
+import { Profile, ProfileDocument } from "../models/profileModel";
 
-export const getFriends = async (req: Request, res: Response) : Promise<void> => {
+export const getFriends = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const user = req.user!;
-  
+
 	const friendProfiles = await Promise.all(
 		(
 			await Friend.find({
@@ -19,19 +23,15 @@ export const getFriends = async (req: Request, res: Response) : Promise<void> =>
 						? friend.toUserId
 						: friend.fromUserId;
 
-				const friendUserDocument: UserDocument | null = await User.findById(
-					friendUser
-				);
+				const friendProfileDocument: ProfileDocument | null = await Profile.findOne({
+					userId: friendUser,
+				});
 
-				if (!friendUserDocument) {
+				if (!friendProfileDocument) {
 					return null;
 				}
 
-				return {
-					id: friendUserDocument._id,
-					username: friendUserDocument.username,
-					email: friendUserDocument.email,
-				};
+				return friendProfileDocument; // return the entire profile document
 			})
 			.filter(Boolean)
 	);
@@ -39,13 +39,16 @@ export const getFriends = async (req: Request, res: Response) : Promise<void> =>
 	res.status(200).json(friendProfiles);
 };
 
-export const getFriendRequests = async (req: Request, res: Response) : Promise<void> => {
+export const getFriendRequests = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const user = req.user!;
 
 	const friendProfiles = await Promise.all(
 		(
 			await Friend.find({
-				$or: [{ fromUserId: user.userId }, { toUserId: user.userId }],
+				toUserId: user.userId,
 				status: "pending",
 			})
 		)
@@ -55,19 +58,15 @@ export const getFriendRequests = async (req: Request, res: Response) : Promise<v
 						? friend.toUserId
 						: friend.fromUserId;
 
-				const friendUserDocument: UserDocument | null = await User.findById(
-					friendUser
-				);
+				const friendProfileDocument: ProfileDocument | null = await Profile.findOne({
+					userId: friendUser,
+				});
 
-				if (!friendUserDocument) {
+				if (!friendProfileDocument) {
 					return null;
 				}
 
-				return {
-					id: friendUserDocument._id,
-					username: friendUserDocument.username,
-					email: friendUserDocument.email,
-				};
+				return friendProfileDocument; // return the entire profile document
 			})
 			.filter(Boolean)
 	);
@@ -75,7 +74,10 @@ export const getFriendRequests = async (req: Request, res: Response) : Promise<v
 	res.status(200).json(friendProfiles);
 };
 
-export const sendRequest = async (req: Request, res: Response) : Promise<void> => {
+export const sendRequest = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 
@@ -105,7 +107,10 @@ export const sendRequest = async (req: Request, res: Response) : Promise<void> =
 	}
 };
 
-export const acceptRequest = async (req: Request, res: Response) : Promise<void> => {
+export const acceptRequest = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 
@@ -126,7 +131,10 @@ export const acceptRequest = async (req: Request, res: Response) : Promise<void>
 	}
 };
 
-export const declineRequest = async (req: Request, res: Response) : Promise<void> => {
+export const declineRequest = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 
