@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { ProfileData } from "@common/profile";
 import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 
-// use interface for type safety
+interface Action {
+	name: string;
+	perform: () => void;
+}
+
 interface Message {
-	id: string;
+	id: number;
+	senderId: string;
 	profilePic: string;
 	title: string;
 	body: string;
+	actions: Action[];
 }
 
 interface MessageBox {
@@ -21,7 +27,11 @@ interface MessageBox {
 // left panel contains a list of messageBox components
 // displays pfp, message subject, brief message
 // when a messageBox component is clicked, onClick set to true and updates the selected message in Inbox component
-const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
+const MessageBox: React.FC<MessageBox> = ({
+	message,
+	onClick,
+	isSelected,
+}) => {
 	return (
 		<div
 			onClick={onClick}
@@ -55,19 +65,39 @@ const Inbox: React.FC = () => {
 	const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
 	const [friendRequests, setFriendRequests] = useState<ProfileData[]>([]);
+	
+	const fetchFriendRequests = async () => {
+		const response = await fetch("/api/friends/requests");
+		// get array of profiles from response
+		const data: ProfileData[] = await response.json();
+
+		setFriendRequests(data);
+	};
 
 	// get profiles of incoming Friend Requests
 	useEffect(() => {
-		const fetchFriendRequests = async () => {
-			const response = await fetch("/api/friends/requests");
-			// get array of profiles from response
-			const data: ProfileData[] = await response.json();
-
-			setFriendRequests(data);
-		};
-
 		fetchFriendRequests();
 	}, []);
+
+	const handleAcceptRequest = async (userId: string) => {
+		const response = await fetch(`/api/friends/accept/${userId}`, {
+			method: "PATCH",
+		});
+		const data = await response.json();
+		fetchFriendRequests();
+		console.log(data);
+	};
+
+	const handleDeclineRequest = async (userId: string) => {
+		const response = await fetch(`/api/friends/decline/${userId}`, {
+			method: "DELETE",
+		});
+		const data = await response.json();
+		fetchFriendRequests();
+		console.log(data);
+	};
+
+	let unusedMessageIdx = 0;
 
 	return (
 		<div className="flex bg-gray-900 text-white min-h-screen">
@@ -79,11 +109,24 @@ const Inbox: React.FC = () => {
 				)}
 				{friendRequests.map((friendRequest) => {
 					const message: Message = {
-						id: friendRequest.userId,
+						id: unusedMessageIdx,
+						senderId: friendRequest.userId,
 						profilePic: friendRequest.profilePicture,
 						title: `Friend Request from ${friendRequest.username}`,
 						body: `${friendRequest.username} wants to be your friend!`,
+						actions: [
+							{
+								name: "Accept",
+								perform: () => handleAcceptRequest(friendRequest.userId),
+							},
+							{
+								name: "Decline",
+								perform: () => handleDeclineRequest(friendRequest.userId),
+							},
+						],
 					};
+
+					unusedMessageIdx++;
 
 					return (
 						<MessageBox
@@ -113,6 +156,17 @@ const Inbox: React.FC = () => {
 						}}
 					/>
 					<p>{selectedMessage.body}</p>
+					<div>
+						{selectedMessage.actions.map((action) => (
+							<button
+								key={action.name}
+								onClick={action.perform}
+								className="bg-blue-500 text-white px-3 py-1 mt-3"
+							>
+								{action.name}
+							</button>
+						))}
+					</div>
 				</div>
 			)}
 		</div>
