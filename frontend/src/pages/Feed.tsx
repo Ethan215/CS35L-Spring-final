@@ -18,6 +18,7 @@ const Feed: React.FC = () => {
 
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
+		setSelectedRank(null);
 	};
 
 	const handleContactClick = (userId: string) => {
