@@ -74,6 +74,35 @@ export const getFriendRequests = async (
 	res.status(200).json(friendProfiles);
 };
 
+export const getFriendStatus = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	const user = req.user!;
+	const otherUserId = req.params.otherUserId;
+
+	const friend = await Friend.findOne({
+		$or: [
+			{ fromUserId: user.userId, toUserId: otherUserId },
+			{ fromUserId: otherUserId, toUserId: user.userId },
+		],
+	});
+
+	console.log(friend);
+
+	if (friend) {
+		console.log(friend.status);
+		if(friend.status === "accepted") {
+			res.status(200).json({ status: "accepted" });
+		}
+		else {
+			res.status(200).json({ status: (friend.fromUserId.toString() === user.userId ? "sent" : "pending") });
+		}
+	} else {
+		res.status(200).json({ status: "not sent" });
+	}
+}
+
 export const sendRequest = async (
 	req: Request,
 	res: Response
@@ -87,6 +116,8 @@ export const sendRequest = async (
 			{ fromUserId: otherUserId, toUserId: user.userId },
 		],
 	});
+
+	console.log(existingRequest);
 
 	if (existingRequest) {
 		if (existingRequest.fromUserId.toString() === otherUserId) {
@@ -156,6 +187,7 @@ export const declineRequest = async (
 export default {
 	getFriends,
 	getFriendRequests,
+	getFriendStatus,
 	sendRequest,
 	acceptRequest,
 	declineRequest,
