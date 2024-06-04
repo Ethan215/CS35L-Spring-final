@@ -1,5 +1,7 @@
 import React, { useRef, useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
 // Define the LoginProps type
 interface LoginProps {
@@ -15,6 +17,9 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 	const [error, setError] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
 	const navigate = useNavigate(); // useNavigate hooks to get navigation functions
+
+	const { setUser } = useContext(UserContext)!;
+
 	//  Define the handleSubmit function, which is used to handle form submissions.
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault(); // Block the default submit behavior of the form
@@ -50,9 +55,14 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
         else {
             setLoading(false);
             // update the login status and jump to the home page.
-            setUserLoggedIn(true);
-
-            navigate("/home"); // Navigating to the home page using the navigate function
+			
+			const response = await fetch("/api/user/login");
+			if (response.ok) {
+				setUserLoggedIn(true);
+				const data = await response.json();
+				setUser({"_id": data.userId, "username": data.username, "email" : "", "password": "" });
+            	setUserLoggedIn(true);
+			}			
         }
 	}
 
