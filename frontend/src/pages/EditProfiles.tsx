@@ -1,13 +1,22 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, {
+	FormEvent,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GameData, ProfileData } from "@common/profile";
 import Loading from "./Loading";
 
 import { gameIconDictionary } from "../assets/gameIconDictionary";
+import UserContext from "../contexts/UserContext";
 
 const EditProfile: React.FC = () => {
 	const navigate = useNavigate();
+
+	const { user } = useContext(UserContext)!;
 
 	const fetchedProfile = useRef<ProfileData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +25,8 @@ const EditProfile: React.FC = () => {
 	const [games, setGames] = useState<GameData[]>(
 		fetchedProfile.current?.games || []
 	);
+
+	const profileFoundRef = useRef<boolean>(false);
 
 	useEffect(() => {
 		const fetchProfile = async () => {
@@ -26,9 +37,18 @@ const EditProfile: React.FC = () => {
 					const data = await response.json();
 					console.log("Profile data:", data);
 					fetchedProfile.current = data.profile;
+					profileFoundRef.current = true;
 				} else {
-					console.error("Failed to fetch profile data");
-					navigate("/");
+					console.error("Failed to fetch profile data, loading starter profile");
+					const starterProfile: Partial<ProfileData> = {
+						username: user!.username,
+						profilePicture: "default_profile_icon.jpg",
+						bio: "This user has not yet created a bio",
+						region: "North America",
+						language: "English",
+                        stars: 0,
+					};
+					fetchedProfile.current = starterProfile as ProfileData;
 				}
 			} catch (error) {
 				console.error("Error fetching profile data:", error);
@@ -44,6 +64,8 @@ const EditProfile: React.FC = () => {
 
 		const formData = new FormData(e.currentTarget);
 		const updatedProfile: Partial<ProfileData> = {
+			userId: user!._id,
+			username: user!.username,
 			region: formData.get("region") as string,
 			language: formData.get("language") as string,
 			bio: formData.get("bio") as string,
@@ -53,7 +75,7 @@ const EditProfile: React.FC = () => {
 		try {
 			console.log("Updating profile with data:", updatedProfile);
 			const response = await fetch("/api/profiles", {
-				method: "PATCH",
+				method: profileFoundRef.current ? "PATCH" : "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
