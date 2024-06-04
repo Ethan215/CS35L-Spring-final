@@ -17,7 +17,6 @@ const profileSchema = new Schema<ProfileDocument>(
 		},
 		profilePicture: {
 			type: String,
-			required: true,
 		},
 		username: {
 			type: String,
@@ -26,19 +25,15 @@ const profileSchema = new Schema<ProfileDocument>(
 		},
 		bio: {
 			type: String,
-			required: true,
 		},
 		region: {
 			type: String,
-			required: true,
 		},
 		language: {
 			type: String,
-			required: true,
 		},
 		stars: {
 			type: Number,
-			required: true,
 		},
 		games: [
 			{

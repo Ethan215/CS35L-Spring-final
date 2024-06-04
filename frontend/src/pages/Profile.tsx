@@ -58,7 +58,7 @@ const Profile: React.FC = () => {
 						alt={profile.username}
 						className="flex-none w-36 h-36 object-cover rounded-full mr-5 bg-slate-100 z-10"
 					/>
-					<div className="z-10">
+					<div className="z-10 flex-grow">
 						<div className="flex flex-row items-center">
 							<div className="flex-grow">
 								<h1 className="text-4xl mb-2">{profile.username}</h1>
