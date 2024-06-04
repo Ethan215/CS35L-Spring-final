@@ -4,9 +4,10 @@ import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface UserDocument extends Omit<UserData, '_id'>, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-  }
+export interface UserDocument extends Omit<UserData, '_id' | 'likedProfiles'>, mongoose.Document {
+  _id: mongoose.Types.ObjectId;
+  likedProfiles: mongoose.Types.ObjectId[];
+}
   
   const userSchema = new Schema<UserDocument>(
     {
@@ -26,6 +27,11 @@ export interface UserDocument extends Omit<UserData, '_id'>, mongoose.Document {
         type: String,
         required: true,
       },
+      likedProfiles: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Profile' 
+     }],
+      
     },
     { timestamps: true }
   );
