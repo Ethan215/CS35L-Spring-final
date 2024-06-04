@@ -3,6 +3,8 @@ import { ProfileData, GameData } from "@common/profile";
 import { gameIconDictionary } from "../assets/gameIconDictionary";
 import { useNavigate } from "react-router-dom";
 
+import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
+
 const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [userData, setUserData] = useState<ProfileData[]>([]);
@@ -185,6 +187,10 @@ const Feed: React.FC = () => {
 														src={user.profilePicture}
 														alt="Profile"
 														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
+														onError={(e) => {
+															(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+															(e.target as HTMLImageElement).src = defaultProfileIcon;
+														}}
 													/>
 													<div className="flex-grow">
 														<h1 className="text-xl font-bold text-white">

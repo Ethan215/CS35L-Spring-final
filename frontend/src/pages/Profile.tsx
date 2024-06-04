@@ -8,6 +8,8 @@ import Loading from "./Loading";
 
 import { gameIconDictionary } from "../assets/gameIconDictionary";
 
+import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
+
 const Profile: React.FC = () => {
 	const { id } = useParams();
 
@@ -57,6 +59,10 @@ const Profile: React.FC = () => {
 						src={profile.profilePicture}
 						alt={profile.username}
 						className="flex-none w-36 h-36 object-cover rounded-full mr-5 bg-slate-100 z-10"
+						onError={(e) => {
+							(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+							(e.target as HTMLImageElement).src = defaultProfileIcon;
+						}}
 					/>
 					<div className="z-10 flex-grow">
 						<div className="flex flex-row items-center">
