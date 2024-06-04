@@ -18,6 +18,7 @@ const Feed: React.FC = () => {
 
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
+		setSelectedRank(null);
 	};
 
 	const handleContactClick = (userId: string) => {
@@ -200,6 +201,10 @@ const Feed: React.FC = () => {
 														<p className="text-sm">
 															<span className="font-bold">Region:</span>{" "}
 															{user.region}
+														</p>
+														<p className = "text-sm">
+															<span className="font-bold">Rank:</span>{" "}
+															{game.rank || "N/A"}
 														</p>
 														<p className="text-sm">
 															<span className="font-bold">Language:</span>{" "}
