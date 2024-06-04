@@ -62,7 +62,7 @@ const EditProfile: React.FC = () => {
 
 			if (response.ok) {
 				console.log("Profile updated successfully");
-                navigate("/profile");
+				navigate("/profile");
 			} else {
 				console.error("Failed to update profile");
 			}
@@ -108,6 +108,7 @@ const EditProfile: React.FC = () => {
 							type="text"
 							name="region"
 							defaultValue={fetchedProfile.current?.region || ""}
+                            required={true}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -117,6 +118,7 @@ const EditProfile: React.FC = () => {
 							type="text"
 							name="language"
 							defaultValue={fetchedProfile.current?.language || ""}
+                            required={true}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -125,6 +127,7 @@ const EditProfile: React.FC = () => {
 						<textarea
 							name="bio"
 							defaultValue={fetchedProfile.current?.bio || ""}
+                            required={true}
 							className="flex-none h-full w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600 overflow-auto resize-none"
 						/>
 					</div>
@@ -144,6 +147,7 @@ const EditProfile: React.FC = () => {
 														type="text"
 														name={`game-${gameIndex}-title`}
 														defaultValue={game.title || ""}
+                                                        required={true}
 														className="text-xl font-bold text-white w-full bg-slate-700"
 														onChange={(e) => {
 															const newGames = [...games];
@@ -169,6 +173,7 @@ const EditProfile: React.FC = () => {
 													type="text"
 													name={`game-${gameIndex}-rank`}
 													defaultValue={game.rank || ""}
+                                                    required={true}
 													className="w-full bg-slate-700 text-white"
 													onChange={(e) => {
 														const newGames = [...games];
@@ -183,25 +188,50 @@ const EditProfile: React.FC = () => {
 												<button
 													type="button"
 													onClick={() => handleRemoveGame(gameIndex)}
-													className="px-2 py-1 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
+													className="px-2 py-1 w-10 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
 												>
-													Remove Game
+													X
 												</button>
 											</div>
 											<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
 												{game.tags.map((tag, tagIndex) => (
 													<div
 														key={tagIndex}
-														className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
+														className="inline-flex items-center bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
 													>
 														<input
 															type="text"
 															name={`game-${gameIndex}-tag-${tagIndex}`}
 															defaultValue={tag || ""}
 															className="w-full bg-slate-700 text-white"
+                                                            required={true}
 														/>
+														<button
+															type="button"
+															onClick={() => {
+																const newGames = [...games];
+																newGames[gameIndex].tags = newGames[
+																	gameIndex
+																].tags.filter((_, index) => index !== tagIndex);
+																setGames(newGames);
+															}}
+															className="ml-2 text-white hover:text-gray-100 w-7 h-5 rounded-full flex items-center justify-center bg-red-500"
+														>
+															X
+														</button>
 													</div>
 												))}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newGames = [...games];
+                                                        newGames[gameIndex].tags.push("");
+                                                        setGames(newGames);
+                                                    }}
+                                                    className="inline-flex items-center bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2 hover:bg-white"
+                                                >
+                                                    Add Tag
+                                                </button>
 											</div>
 										</div>
 									</div>
