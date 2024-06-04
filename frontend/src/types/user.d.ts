@@ -6,4 +6,5 @@ export interface UserContextType {
     likeProfile: (profileId: string) => Promise<void>;
     unlikeProfile: (profileId: string) => Promise<void>;
     getLikedProfiles: () => Promise<void>;
+    updateProfile: (profileData: Partial<UserData>) => Promise<void>;
 }

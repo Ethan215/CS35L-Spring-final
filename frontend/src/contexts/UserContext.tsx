@@ -85,8 +85,29 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const updateProfile = async (profileData: Partial<UserData>): Promise<void> => {
+        try {
+            const response = await fetch('/api/profiles', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(profileData),
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                setUser(updatedUser);
+            } else {
+                console.error('Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
+
     return (
-        <UserContext.Provider value={{ user, setUser, likeProfile, unlikeProfile, getLikedProfiles }}>
+        <UserContext.Provider value={{ user, setUser, likeProfile, unlikeProfile, getLikedProfiles, updateProfile }}>
             {children}
         </UserContext.Provider>
     );
