@@ -7,11 +7,13 @@ import { useState, useEffect, useContext } from 'react';
 import { UserProvider } from './contexts/UserContext';
 
 // pages and components
+import Navbar from './components/Navbar';
+
 import Home from './pages/Home';
 import Feed from './pages/Feed';
 import Inbox from './pages/Inbox';
 import Profile from './pages/Profile';
-import Navbar from './components/Navbar';
+import EditProfile from './pages/EditProfiles';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
@@ -69,7 +71,7 @@ function App() {
   };
 
   if (isLoading) {
-    return <Loading></Loading>; // Or your loading spinner
+    return <Loading/>; // Or your loading spinner
   }
 
   return (
@@ -86,6 +88,7 @@ function App() {
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/profile/:id" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
+              <Route path="/edit-profile" element={userLoggedIn ? <EditProfile /> : <Navigate replace to="/home" />} />
               <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
               <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
             </Routes>
