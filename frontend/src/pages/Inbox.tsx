@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ProfileData } from "@common/profile";
+import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 
 // use interface for type safety
 interface Message {
-	id: number;
-	senderPic: string;
+	id: string;
+	profilePic: string;
 	title: string;
 	body: string;
 }
@@ -15,27 +17,6 @@ interface MessageBox {
 }
 
 // dummy messages
-const messages = [
-  {
-    id: 1,
-    senderPic: "https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg",
-    title: "Friend Request from John",
-    body: "Hi, I would like to add you as a friend on this platform so we can continue playing in the future. Blah blah really long message here",
-  },
-  {
-    id: 2,
-    senderPic: "https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg",
-    title: "Game Invitation from Jane",
-    body: "Hey, I'm inviting you to join our game tonight at 8pm. Hope to see you there!",
-  },
-  {
-    id: 3,
-    senderPic: "https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg",
-    title: "New Message from Bob",
-    body: "Hello, I saw your profile and I think we have similar interests in games. Would you like to team up for the next tournament?",
-  },
-  
-];
 
 // left panel contains a list of messageBox components
 // displays pfp, message subject, brief message
@@ -55,9 +36,13 @@ const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
 			></div>
 			<div className="relative">
 				<img
-					src={message.senderPic}
+					src={message.profilePic}
 					alt="Sender Profile Picture"
-					className="w-14 h-14 rounded-full mb-4"
+					className="w-14 h-14 rounded-full mb-4 bg-gray-500"
+					onError={(e) => {
+						(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+						(e.target as HTMLImageElement).src = defaultProfileIcon;
+					}}
 				/>
 				<h4 className="font-bold">{message.title}</h4>
 				<p className="text-sm line-clamp-2 overflow-hidden">{message.body}</p>
@@ -69,28 +54,67 @@ const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
 const Inbox: React.FC = () => {
 	const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
+	const [friendRequests, setFriendRequests] = useState<ProfileData[]>([]);
+
+	// get profiles of incoming Friend Requests
+	useEffect(() => {
+		const fetchFriendRequests = async () => {
+			const response = await fetch("/api/friends/requests");
+			// get array of profiles from response
+			const data: ProfileData[] = await response.json();
+
+			setFriendRequests(data);
+		};
+
+		fetchFriendRequests();
+	}, []);
+
 	return (
 		<div className="flex bg-gray-900 text-white min-h-screen">
 			<div className="w-3/12 border-r border-gray-700">
-				{messages.map((message) => (
-					<MessageBox
-						key={message.id}
-						message={message}
-						onClick={() => setSelectedMessage(message)}
-						isSelected={(selectedMessage !== null && selectedMessage !== undefined) && selectedMessage!.id === message.id}
-					/>
-				))}
+				{friendRequests.length === 0 && (
+					<div className="pt-10">
+						<h1 className="text-3xl font-bold text-center">No New Messages</h1>
+					</div>
+				)}
+				{friendRequests.map((friendRequest) => {
+					const message: Message = {
+						id: friendRequest.userId,
+						profilePic: friendRequest.profilePicture,
+						title: `Friend Request from ${friendRequest.username}`,
+						body: `${friendRequest.username} wants to be your friend!`,
+					};
+
+					return (
+						<MessageBox
+							key={friendRequest.username}
+							message={message}
+							onClick={() => setSelectedMessage(message)}
+							isSelected={
+								selectedMessage !== null &&
+								selectedMessage !== undefined &&
+								selectedMessage!.id === message.id
+							}
+						/>
+					);
+				})}
 			</div>
-      
-			{selectedMessage && <div className="w-2/3 p-5">
-				<h2 className="font-bold text-3xl">{selectedMessage.title}</h2>
-				<img
-					src={selectedMessage.senderPic}
-					alt="Sender Profile Picture"
-					className="w-24 h-24 rounded-full mb-5 mt-5"
-				/>
-				<p>{selectedMessage.body}</p>
-			</div>}
+
+			{selectedMessage && (
+				<div className="w-2/3 p-5">
+					<h2 className="font-bold text-3xl">{selectedMessage.title}</h2>
+					<img
+						src={selectedMessage.profilePic}
+						alt="Sender Profile Picture"
+						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
+						onError={(e) => {
+							(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+							(e.target as HTMLImageElement).src = defaultProfileIcon;
+						}}
+					/>
+					<p>{selectedMessage.body}</p>
+				</div>
+			)}
 		</div>
 	);
 };
