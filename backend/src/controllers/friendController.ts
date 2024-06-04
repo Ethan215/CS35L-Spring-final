@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { FriendDocument, Friend } from "../models/friendModel";
 import { UserDocument, User } from "../models/userModel";
 
-export const getFriends = async (req: Request, res: Response) => {
+export const getFriends = async (req: Request, res: Response) : Promise<void> => {
 	const user = req.user!;
   
 	const friendProfiles = await Promise.all(
@@ -39,7 +39,7 @@ export const getFriends = async (req: Request, res: Response) => {
 	res.status(200).json(friendProfiles);
 };
 
-export const getFriendRequests = async (req: Request, res: Response) => {
+export const getFriendRequests = async (req: Request, res: Response) : Promise<void> => {
 	const user = req.user!;
 
 	const friendProfiles = await Promise.all(
@@ -75,7 +75,7 @@ export const getFriendRequests = async (req: Request, res: Response) => {
 	res.status(200).json(friendProfiles);
 };
 
-export const sendRequest = async (req: Request, res: Response) => {
+export const sendRequest = async (req: Request, res: Response) : Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 
@@ -101,11 +101,11 @@ export const sendRequest = async (req: Request, res: Response) => {
 			status: "pending",
 		});
 		await newRequest.save();
-		res.json({ message: "Friend request sent" });
+		res.status(201).json({ message: "Friend request sent" });
 	}
 };
 
-export const acceptRequest = async (req: Request, res: Response) => {
+export const acceptRequest = async (req: Request, res: Response) : Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 
@@ -126,7 +126,7 @@ export const acceptRequest = async (req: Request, res: Response) => {
 	}
 };
 
-export const declineRequest = async (req: Request, res: Response) => {
+export const declineRequest = async (req: Request, res: Response) : Promise<void> => {
 	const user = req.user!;
 	const otherUserId = req.params.otherUserId;
 

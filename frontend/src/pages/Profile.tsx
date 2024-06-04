@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -14,6 +14,9 @@ const Profile: React.FC = () => {
 	const navigate = useNavigate(); // useNavigate hooks to get navigation functions
 
 	const { user } = useContext(UserContext)!;
+
+	const displayCurrentUser : boolean = id === user?._id || !id;
+
 	console.log(user);
 
 	// if id is provided, fetch that profile, otherwise get the current user's profile by requesting the id from the UserContext
@@ -26,7 +29,7 @@ const Profile: React.FC = () => {
 		}
 
 		const fetchProfile = async () => {
-			const response = await fetch(`/api/profiles/${id ? id : user!._id}`);
+			const response = await fetch(`/api/profiles/${displayCurrentUser ?  user!._id : id}`);
 			const data = await response.json();
 			setProfile(data.profile);
 		};
@@ -36,6 +39,14 @@ const Profile: React.FC = () => {
 
 	if (!profile) {
 		return <Loading />;
+	}
+
+	const handleAddFriend = async (otherUserId: string) => {
+		const response = await fetch(`/api/friends/send/${otherUserId}`, {
+			method: "POST"
+		});
+		const data = await response.json();
+		console.log(data);
 	}
 
 	return (
@@ -56,8 +67,10 @@ const Profile: React.FC = () => {
 								<p className="text-md pb-5">Stars: {profile.stars}</p>
 							</div>
 							<div className="flex-none flex justify-end pr-20">
-								<button className="mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500">
-									Add Friend
+								<button className="mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+									onClick={(displayCurrentUser) ? () => navigate("/edit-profile") : () => {handleAddFriend(profile.userId)}}
+								>
+									{(displayCurrentUser) ? "Edit Profile" : "Add Friend"}
 								</button>
 							</div>
 						</div>

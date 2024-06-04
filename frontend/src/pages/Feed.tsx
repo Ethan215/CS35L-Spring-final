@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ProfileData, GameData } from "@common/profile";
 import { gameIconDictionary } from "../assets/gameIconDictionary";
+import { useNavigate } from "react-router-dom";
 
 const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
@@ -11,13 +12,15 @@ const Feed: React.FC = () => {
 	const [regions, setRegions] = useState<string[]>([]);
 	const [ranks, setRanks] = useState<string[]>([]);
 
+	const navigate = useNavigate();
+
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
 	};
 
 	const handleContactClick = (userId: string) => {
 		console.log(`Contacting user with ID ${userId}`);
-		// TODO Implement contact logic here
+		navigate(`/profile/${userId}`); // Redirect to the profile page of the selected user
 	};
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,7 +205,7 @@ const Feed: React.FC = () => {
 														</p>
 														<div className="mt-4">
 															<button
-																onClick={() => handleContactClick(user._id)}
+																onClick={() => handleContactClick(user.userId)}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Contact Me
