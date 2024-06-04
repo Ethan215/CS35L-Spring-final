@@ -17,13 +17,36 @@ const getProfiles = async (req: Request, res: Response): Promise<void> => {
 
 const getProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const profile: ProfileDocument | null = await Profile.findOne({
-			userId: req.params.id,
-		});
-		if (!profile) {
-			res.status(404).json({ error: "Profile not found" });
-			return;
+		const id = req.params.id;
+		const username = req.params.username;
+		let profile : ProfileDocument | null = null;
+		if(id) {
+			profile = await Profile.findOne({
+				userId: id,
+			});
+			if (!profile) {
+				res.status(404).json({ error: `Profile with id ${id} not found` });
+				return;
+			}
 		}
+		else if(username) {
+			profile = await Profile.findOne({
+				username: username,
+			});
+			if (!profile) {
+				res.status(404).json({ error: `Profile with username ${username} not found` });
+				return;
+			}
+		}
+		else {
+			profile = await Profile.findOne({
+				userId: req.user!.userId,
+			});
+			if (!profile) {
+				res.status(404).json({ error: "Profile not found" });
+				return;
+			}
+		}		
 
 		res.status(200).json({ profile });
 	} catch (error) {

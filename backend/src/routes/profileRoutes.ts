@@ -12,8 +12,14 @@ const router: Router = express.Router();
 //GET all profile
 router.get("/", authenticateUser, getProfiles);
 
+//GET own profile
+router.get("/me", authenticateUser, getProfile);
+
+//GET a single profile by username
+router.get("/username/:username", getProfile);
+
 //GET a single profile
-router.get("/:id", getProfile);
+router.get("/id/:id", getProfile);
 
 //POST a new profile
 router.post("/", authenticateUser, createProfile);

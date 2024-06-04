@@ -17,12 +17,22 @@ const Profile: React.FC = () => {
 
 	const { user } = useContext(UserContext)!;
 
-	const displayCurrentUser : boolean = id === user?._id || !id;
+	const displayCurrentUser: boolean = id === user?._id || !id;
 
 	console.log(user);
 
 	// if id is provided, fetch that profile, otherwise get the current user's profile by requesting the id from the UserContext
 	const [profile, setProfile] = useState<ProfileData | null>(null);
+
+	let [friendStatus, setFriendStatus] = useState<string>("not sent");
+
+	const fetchFriendStatus = async () => {
+		const response = await fetch(`/api/friends/status/${id}`);
+		if (response.ok) {
+			const data = await response.json();
+			setFriendStatus(data.status);
+		}
+	};
 
 	useEffect(() => {
 		//check if both id and user are null, if so, navigate to home page
@@ -31,12 +41,18 @@ const Profile: React.FC = () => {
 		}
 
 		const fetchProfile = async () => {
-			const response = await fetch(`/api/profiles/${displayCurrentUser ?  user!._id : id}`);
+			const response = await fetch(
+				`/api/profiles/id/${displayCurrentUser ? user!._id : id}`
+			);
 			const data = await response.json();
 			setProfile(data.profile);
 		};
 
 		fetchProfile();
+
+		if (!displayCurrentUser) {
+			fetchFriendStatus();
+		}
 	}, [id]);
 
 	if (!profile) {
@@ -45,9 +61,19 @@ const Profile: React.FC = () => {
 
 	const handleAddFriend = async (otherUserId: string) => {
 		const response = await fetch(`/api/friends/send/${otherUserId}`, {
-			method: "POST"
+			method: "POST",
 		});
 		const data = await response.json();
+		fetchFriendStatus();
+		console.log(data);
+	};
+
+	const handleDeclineFriend = async (otherUserId: string) => {
+		const response = await fetch(`/api/friends/decline/${otherUserId}`, {
+			method: "DELETE",
+		});
+		const data = await response.json();
+		fetchFriendStatus();
 		console.log(data);
 	}
 
@@ -72,12 +98,45 @@ const Profile: React.FC = () => {
 								<p className="text-md">Language: {profile.language}</p>
 								<p className="text-md pb-5">Stars: {profile.stars}</p>
 							</div>
-							<div className="flex-none flex justify-end pr-20">
-								<button className="mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
-									onClick={(displayCurrentUser) ? () => navigate("/edit-profile") : () => {handleAddFriend(profile.userId)}}
+							<div className="flex-none flex flex-col justify-end pr-20">
+								<button
+									className="flex-grow mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+									onClick={() => {
+										if (displayCurrentUser) {
+											navigate("/edit-profile");
+										} else if (
+											friendStatus === "not sent" ||
+											friendStatus === "pending"
+										) {
+											handleAddFriend(profile.userId);
+										}
+									}}
+									disabled={
+										!displayCurrentUser &&
+										friendStatus !== "not sent" &&
+										friendStatus !== "pending"
+									}
 								>
-									{(displayCurrentUser) ? "Edit Profile" : "Add Friend"}
+									{displayCurrentUser
+										? "Edit Profile"
+										: {
+												"not sent": "Add Friend",
+												pending: "Accept Friend Request",
+												sent: "Request Sent",
+												accepted: "Friends",
+										  }[friendStatus]}
 								</button>
+								{(friendStatus === "accepted" ||
+									friendStatus === "pending") && (
+									<button
+										className="flex-grow mt-4 py-2 px-4 rounded bg-red-500 text-white hover:bg-red-700"
+										onClick={() => handleDeclineFriend(profile.userId)}
+									>
+										{friendStatus === "accepted"
+											? "Remove Friend"
+											: "Decline Request"}
+									</button>
+								)}
 							</div>
 						</div>
 						<p className="text-sm mr-20">{profile.bio}</p>
