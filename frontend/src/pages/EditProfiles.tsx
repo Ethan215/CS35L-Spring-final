@@ -9,7 +9,7 @@ import { gameIconDictionary } from "../assets/gameIconDictionary";
 const EditProfile: React.FC = () => {
 	const navigate = useNavigate();
 
-	const formData = useRef<ProfileData | null>(null);
+	const fetchedProfile = useRef<ProfileData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -20,7 +20,7 @@ const EditProfile: React.FC = () => {
 				if (response.ok) {
 					const data = await response.json();
 					console.log("Profile data:", data);
-					formData.current = data.profile;
+					fetchedProfile.current = data.profile;
 				} else {
 					console.error("Failed to fetch profile data");
 					navigate("/");
@@ -36,14 +36,22 @@ const EditProfile: React.FC = () => {
 
 	const handleSave = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+        const updatedProfile: Partial<ProfileData> = {
+            region: formData.get('region') as string,
+            language: formData.get('language') as string,
+            bio: formData.get('bio') as string,
+        };
+
 		try {
-			console.log("Updating profile with data:", formData);
+			console.log("Updating profile with data:", updatedProfile);
 			const response = await fetch("/api/profiles", {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(formData),
+				body: JSON.stringify(updatedProfile),
 			});
 
 			if (response.ok) {
@@ -60,12 +68,33 @@ const EditProfile: React.FC = () => {
 		return <Loading />;
 	}
 
+	// Initialize games state
+	// const [games, setGames] = useState(fetchedProfile.current?.games || []);
+
+	// function handleAddGame() {
+	// 	// Create a new game with default values
+	// 	const newGame = {
+	// 		_id: "",
+	// 		title: "",
+	// 		rank: "",
+	// 		tags: [],
+	// 	};
+
+	// 	// Add the new game to the games array
+	// 	setGames((prevGames) => [...prevGames, newGame]);
+	// }
+
+    // function handleRemoveGame(gameIndex : number) {
+    //     // Remove the game at the specified index from the games array
+    //     setGames(prevGames => prevGames.filter((_, index) => index !== gameIndex));
+    // }
+
 	return (
 		<div className="flex flex-col items-center min-h-screen w-screen bg-gray-900 text-white">
 			<div className="flex flex-col w-1/2 mt-10 items-center p-5 header-gradient-border relative overflow-hidden">
 				<h1 className="text-4xl font-semibold text-gray-300">Edit Profile</h1>
 				<h2 className="text-2xl font-semibold text-gray-300">
-					{formData.current?.username}
+					{fetchedProfile.current?.username}
 				</h2>
 				<form onSubmit={handleSave} className="flex flex-col space-y-6 w-full">
 					<div className="flex flex-col flex-grow w-full space-y-2">
@@ -73,7 +102,7 @@ const EditProfile: React.FC = () => {
 						<input
 							type="text"
 							name="region"
-							defaultValue={formData.current?.region || ""}
+							defaultValue={fetchedProfile.current?.region || ""}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -82,7 +111,7 @@ const EditProfile: React.FC = () => {
 						<input
 							type="text"
 							name="language"
-							defaultValue={formData.current?.language || ""}
+							defaultValue={fetchedProfile.current?.language || ""}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -90,11 +119,11 @@ const EditProfile: React.FC = () => {
 						<label className="block text-gray-300">Bio</label>
 						<textarea
 							name="bio"
-							defaultValue={formData.current?.bio || ""}
+							defaultValue={fetchedProfile.current?.bio || ""}
 							className="flex-none h-full w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600 overflow-auto resize-none"
 						/>
 					</div>
-					{formData.current?.games.map((game, gameIndex) => (
+					{fetchedProfile.current?.games.map((game, gameIndex) => (
 						<div
 							key={game._id}
 							className="relative flex flex-col text-gray-300"
@@ -112,7 +141,7 @@ const EditProfile: React.FC = () => {
 														defaultValue={game.title || ""}
 														className="text-xl font-bold text-white w-full bg-slate-700"
 													/>
-												</div>
+												</div>  
 												<img
 													src={gameIconDictionary[game.title]}
 													alt={`${game.title} icon`}
