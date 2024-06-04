@@ -108,7 +108,7 @@ const EditProfile: React.FC = () => {
 							type="text"
 							name="region"
 							defaultValue={fetchedProfile.current?.region || ""}
-                            required={true}
+							required={true}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -118,7 +118,7 @@ const EditProfile: React.FC = () => {
 							type="text"
 							name="language"
 							defaultValue={fetchedProfile.current?.language || ""}
-                            required={true}
+							required={true}
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 						/>
 					</div>
@@ -127,7 +127,7 @@ const EditProfile: React.FC = () => {
 						<textarea
 							name="bio"
 							defaultValue={fetchedProfile.current?.bio || ""}
-                            required={true}
+							required={true}
 							className="flex-none h-full w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600 overflow-auto resize-none"
 						/>
 					</div>
@@ -142,13 +142,23 @@ const EditProfile: React.FC = () => {
 									<div className="flex flex-row">
 										<div className="flex-3">
 											<div className="flex justify-between items-center pb-20">
-												<div className="relative inline-block pb-1">
+												<img
+													src={gameIconDictionary[game.title]}
+													alt={`${game.title} icon`}
+													className="w-8 h-8 mr-5"
+													onError={(e) => {
+														const imageElement = e.target as HTMLImageElement;
+														imageElement.src = "";
+														imageElement.onerror = null;
+													}}
+												/>
+												<div className="relative inline-block pb-1 mr-5">
 													<input
 														type="text"
 														name={`game-${gameIndex}-title`}
 														defaultValue={game.title || ""}
-                                                        required={true}
-														className="text-xl font-bold text-white w-full bg-slate-700"
+														required={true}
+														className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 														onChange={(e) => {
 															const newGames = [...games];
 															newGames[gameIndex].title = e.target.value;
@@ -156,16 +166,15 @@ const EditProfile: React.FC = () => {
 														}}
 													/>
 												</div>
-												<img
-													src={gameIconDictionary[game.title]}
-													alt={`${game.title} icon`}
-													className="w-8 h-8"
-													onError={(e) => {
-														const imageElement = e.target as HTMLImageElement;
-														imageElement.src = "";
-														imageElement.onerror = null;
-													}}
-												/>
+												<div>
+													<button
+														type="button"
+														onClick={() => handleRemoveGame(gameIndex)}
+														className="px-2 py-1 w-10 h-10 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+													>
+														X
+													</button>
+												</div>
 											</div>
 											<div className="text-sm">
 												<span className="font-bold">Rank:</span>
@@ -173,8 +182,7 @@ const EditProfile: React.FC = () => {
 													type="text"
 													name={`game-${gameIndex}-rank`}
 													defaultValue={game.rank || ""}
-                                                    required={true}
-													className="w-full bg-slate-700 text-white"
+													className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 													onChange={(e) => {
 														const newGames = [...games];
 														newGames[gameIndex].rank = e.target.value;
@@ -184,15 +192,6 @@ const EditProfile: React.FC = () => {
 											</div>
 										</div>
 										<div className="flex flex-col flex-1">
-											<div>
-												<button
-													type="button"
-													onClick={() => handleRemoveGame(gameIndex)}
-													className="px-2 py-1 w-10 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
-												>
-													X
-												</button>
-											</div>
 											<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
 												{game.tags.map((tag, tagIndex) => (
 													<div
@@ -203,8 +202,8 @@ const EditProfile: React.FC = () => {
 															type="text"
 															name={`game-${gameIndex}-tag-${tagIndex}`}
 															defaultValue={tag || ""}
-															className="w-full bg-slate-700 text-white"
-                                                            required={true}
+															className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
+															required={true}
 														/>
 														<button
 															type="button"
@@ -221,17 +220,17 @@ const EditProfile: React.FC = () => {
 														</button>
 													</div>
 												))}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const newGames = [...games];
-                                                        newGames[gameIndex].tags.push("");
-                                                        setGames(newGames);
-                                                    }}
-                                                    className="inline-flex items-center bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2 hover:bg-white"
-                                                >
-                                                    Add Tag
-                                                </button>
+												<button
+													type="button"
+													onClick={() => {
+														const newGames = [...games];
+														newGames[gameIndex].tags.push("");
+														setGames(newGames);
+													}}
+													className="inline-flex items-center bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2 hover:bg-white"
+												>
+													Add Tag
+												</button>
 											</div>
 										</div>
 									</div>
