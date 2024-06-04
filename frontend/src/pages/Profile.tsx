@@ -39,7 +39,9 @@ const Profile: React.FC = () => {
 		}
 
 		const fetchProfile = async () => {
-			const profileEndpoint = !id ? "/api/profiles/me" : `/api/profiles/${id}`;
+			const profileEndpoint = !id
+				? "/api/profiles/me"
+				: `/api/profiles/id/${id}`;
 			const response = await fetch(profileEndpoint);
 
 			if (!response.ok) {
@@ -121,16 +123,26 @@ const Profile: React.FC = () => {
 								{!displayCurrentUser && (
 									<>
 										<button
-											className="flex-grow mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+											className={`flex-grow mt-4 py-2 px-4 rounded text-white ${
+												!(
+													friendStatus !== "not sent" &&
+													friendStatus !== "pending"
+												)
+													? "bg-slate-700 hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+													: "bg-gradient-to-r from-pink-500 to-blue-500"
+											}`}
 											onClick={() => handleAddFriend(profile.userId)}
 											disabled={
 												friendStatus !== "not sent" &&
 												friendStatus !== "pending"
 											}
 										>
-											{friendStatus === "not sent" || friendStatus === "pending"
-												? "Add Friend"
-												: "Friends"}
+											{{
+												"not sent": "Add Friend",
+												"pending": "Accept Friend Request",
+												"sent": "Request Sent",
+												"accepted": "Friends",
+										  	}[friendStatus]}
 										</button>
 										{(friendStatus === "accepted" ||
 											friendStatus === "pending") && (
