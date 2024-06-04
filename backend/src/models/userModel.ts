@@ -4,9 +4,8 @@ import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface UserDocument extends Omit<UserData, '_id' | 'friends'>, mongoose.Document {
+export interface UserDocument extends Omit<UserData, '_id'>, mongoose.Document {
     _id: mongoose.Types.ObjectId;
-    friends: mongoose.Types.ObjectId[];
   }
   
   const userSchema = new Schema<UserDocument>(
