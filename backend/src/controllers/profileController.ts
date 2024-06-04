@@ -74,17 +74,16 @@ const updateProfile = async (req: Request, res: Response): Promise<void> => {
 		console.log("Received update profile request with body:", req.body);
         const { username, bio, region, language } = req.body;
 
-        const updatedProfile: ProfileDocument | null =
-            await Profile.findOneAndUpdate(
-                { userId: req.user!.userId },
-                {
-                    username: username,
-                    bio: bio,
-                    region: region,
-                    language: language,
-                },
-                { new: true }
-            );
+		const updatedProfile: ProfileDocument | null = await Profile.findOneAndUpdate(
+            { userId: req.params.id }, // 确保这里使用正确的查找参数
+            {
+                username: username,
+                bio: bio,
+                region: region,
+                language: language,
+            },
+            { new: true }
+        );
 
         if (!updatedProfile) {
             res.status(404).json({ error: "Profile not found" });

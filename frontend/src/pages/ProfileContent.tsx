@@ -29,24 +29,27 @@ const ProfileContent: React.FC = () => {
     const handleEdit = () => {
         setEditMode(true);
     };
-
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!user|| !user._id) {
+            console.error('No user data available');
+            return;
+        }
         try {
             console.log('Updating profile with data:', formData);
-            const response = await fetch('/api/profiles', {
+            const response = await fetch(`/api/profiles/${user._id}`, {  // include the profile ID in the URL
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
             });
-
             if (response.ok) {
                 const updatedUser = await response.json();
                 console.log('Updated user data:', updatedUser);
-                setUser(updatedUser);
                 setEditMode(false);
+                setUser(updatedUser);
+                alert('Profile updated successfully!');
             } else {
                 console.error('Failed to update profile');
             }

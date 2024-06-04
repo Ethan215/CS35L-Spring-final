@@ -1,11 +1,9 @@
 import express from "express";
 import { Router } from "express";
 import profileController from "../controllers/profileController";
-
 import { authenticateUser } from "../middleware/authenticateUser";
 
-const { getProfiles, getProfile, createProfile, deleteProfile, updateProfile } =
-	profileController;
+const { getProfiles, getProfile, createProfile, deleteProfile, updateProfile } = profileController;
 
 const router: Router = express.Router();
 
@@ -22,6 +20,6 @@ router.post("/", authenticateUser, createProfile);
 router.delete("/", authenticateUser, deleteProfile);
 
 //UPDATE a profile
-router.patch("/", authenticateUser, updateProfile);
+router.patch("/:id", authenticateUser, updateProfile);
 
 export default router;
