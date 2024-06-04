@@ -18,6 +18,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
 import Loading from './pages/Loading';
+import SendMessage from './pages/SendMessage';
 
 import UserContext from './contexts/UserContext';
 
@@ -89,6 +90,7 @@ function App() {
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/profile/:id" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/edit-profile" element={userLoggedIn ? <EditProfile /> : <Navigate replace to="/home" />} />
+              <Route path="/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
               <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
               <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
             </Routes>
