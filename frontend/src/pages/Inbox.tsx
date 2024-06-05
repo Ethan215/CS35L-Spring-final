@@ -152,12 +152,15 @@ const Inbox: React.FC = () => {
 						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
 					/>
 					<p>{selectedMessage.body}</p>
-					<div>
+					<div className="flex flex-row space-x-4 mt-5">
 						{selectedMessage.actions.map((action) => (
 							<button
 								key={action.name}
-								onClick={action.perform}
-								className="bg-blue-500 text-white px-3 py-1 mt-3"
+								onClick={() => {
+									action.perform;
+									setSelectedMessage(null);
+								}}
+								className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 							>
 								{action.name}
 							</button>
