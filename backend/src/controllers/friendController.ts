@@ -88,8 +88,6 @@ export const getFriendStatus = async (
 		],
 	});
 
-	console.log(friend);
-
 	if (friend) {
 		console.log(friend.status);
 		if(friend.status === "accepted") {
@@ -116,8 +114,6 @@ export const sendRequest = async (
 			{ fromUserId: otherUserId, toUserId: user.userId },
 		],
 	});
-
-	console.log(existingRequest);
 
 	if (existingRequest) {
 		if (existingRequest.fromUserId.toString() === otherUserId) {
