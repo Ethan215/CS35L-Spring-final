@@ -2,7 +2,7 @@
 // it is responsible for routing and rendering the different pages and components
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
-
+import LikeList from './pages/LikeList';
 // user context
 import { UserProvider } from './contexts/UserContext';
 
@@ -91,6 +91,7 @@ function App() {
               <Route path="/profile/:id" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/edit-profile" element={userLoggedIn ? <EditProfile /> : <Navigate replace to="/home" />} />
               <Route path="/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
+              <Route path="/like-list" element={userLoggedIn ? <LikeList /> : <Navigate replace to="/home" />} /> 
               <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
               <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
             </Routes>
