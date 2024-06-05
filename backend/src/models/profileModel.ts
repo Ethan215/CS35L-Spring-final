@@ -1,64 +1,39 @@
 import mongoose from "mongoose";
-import { ProfileDocument } from "../../../common/profile";
+import { ProfileData } from "@common/profile";
+import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-/*
-
-Sample JSON profile for the schema below:
-{
-  "profilePicture": "https://example.com/profile.jpg",
-  "name": "John Doe",
-  "bio": "Passionate gamer looking for friendly casual and competitive gamers, enjoy movies idk etc",
-  "region": "North America",
-  "language": "English",
-  "stars": 25,
-  "games": [
-    {
-      "title": "Overwatch",
-      "rank": "Diamond",
-      "tags": [“Support”, “Tank”, "Competitive"]
-    },
-    {
-      "title": "Minecraft",
-      "rank": null,
-      "tags": ["Building", "Bed Wars"]
-    },
-    {
-      "title": "League of Legends",
-      "rank": "Gold III",
-      "tags": ["Casual", "Jungle"]
-    }
-  ]
+export interface ProfileDocument extends Omit<ProfileData, '_id'>, mongoose.Document {
+	_id: mongoose.Types.ObjectId;
 }
-
-*/
 
 const profileSchema = new Schema<ProfileDocument>(
 	{
+		userId: {
+			type: String,
+			required: true,
+			unique: true,
+		},
 		profilePicture: {
 			type: String,
-			required: true,
 		},
-		name: {
+		username: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		bio: {
 			type: String,
-			required: true,
 		},
 		region: {
 			type: String,
-			required: true,
 		},
 		language: {
 			type: String,
-			required: true,
 		},
 		stars: {
 			type: Number,
-			required: true,
 		},
 		games: [
 			{

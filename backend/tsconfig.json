@@ -1,7 +1,8 @@
 {
     "include": [
         "src/**/*.ts",
-        "../common/**/*.ts"
+        "../common/**/*.ts",
+        "types.d.ts",
     ],
     "compilerOptions": {
         "target": "es6",

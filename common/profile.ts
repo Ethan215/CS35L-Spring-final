@@ -1,17 +1,18 @@
-import { Document } from 'mongoose';
-
 export interface ProfileData {
+	_id: string;
+	userId: string;
 	profilePicture: string;
-	name: string;
+	username: string;
 	bio: string;
 	region: string;
 	language: string;
 	stars: number;
-	games: [{ 
-		title: string; 
-		rank: string; 
-		tags: string[]; 
-	}];
+	games: GameData[];
 };
 
-export interface ProfileDocument extends ProfileData, Document {}
+export interface GameData {
+	_id: string;
+	title: string;
+	rank: string;
+	tags: string[];
+};
