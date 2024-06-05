@@ -57,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
 							className={`text-white hover:text-gray-400 ${isActive('/like-list') ? 'border-b-2 border-pink-500' : ''
 								}`}
 						>
-							LikeList
+							Likes
 						</Link>
 						<button
 							onClick={handleLogout}
