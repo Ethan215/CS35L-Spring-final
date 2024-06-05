@@ -34,3 +34,20 @@ nav.after\:border-gradient:after {
 .animate-marquee {
 	animation: marquee 120s linear infinite;
 }
+
+.header-gradient-border {
+	position: relative;
+}
+
+.header-gradient-border:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(to right, red, blue);
+	z-index: -1;
+	border-radius: inherit;
+	margin: -2px; /* Adjust this value to change the size of the border */
+}

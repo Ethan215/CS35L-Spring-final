@@ -1,17 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { ProfileData, GameData } from "@common/profile";
+import { gameIconDictionary } from "../assets/gameIconDictionary";
+import { useNavigate } from "react-router-dom";
+
+import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 
 const Feed: React.FC = () => {
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [userData, setUserData] = useState<ProfileData[]>([]);
+	const [searchUser, setSearchUser] = useState<string>("");
+	const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+	const [selectedRank, setSelectedRank] = useState<string | null>(null);
+	const [regions, setRegions] = useState<string[]>([]);
+	const [ranks, setRanks] = useState<string[]>([]);
+
+	const navigate = useNavigate();
 
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
+		setSelectedRank(null);
 	};
 
 	const handleContactClick = (userId: string) => {
 		console.log(`Contacting user with ID ${userId}`);
-		// TODO Implement contact logic here
+		navigate(`/profile/${userId}`); // Redirect to the profile page of the selected user
+	};
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchUser(e.target.value);
+	};
+
+	const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedRegion(e.target.value);
+	};
+
+	const handleRankChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedRank(e.target.value);
 	};
 
 	useEffect(() => {
@@ -23,39 +47,69 @@ const Feed: React.FC = () => {
 					throw new Error("Failed to fetch data");
 				}
 
-				const data = await response.json();
+				const data: { profiles: ProfileData[] } = await response.json();
 				setUserData(data.profiles); // Setting only the profiles array to userData state
+
+				if (data.profiles.length > 0) {
+					// Extract unique game titles and set the first one as selected by default
+					const uniqueTitles = Array.from(
+						new Set(data.profiles.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
+					);
+
+					if (uniqueTitles.length !== 0) {
+						setSelectedGame(uniqueTitles[0]);
+					}
+				}
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
 		};
 
 		fetchData();
-		//set the default game to the first in the list
-		setSelectedGame(userData[0]?.games[0]?.title);
 	}, []);
 
-	// Extracting unique game titles
+	useEffect(() => {
+		if (selectedGame) {
+			const gameSpecificProfiles = userData.filter(user =>
+				user.games.some(game => game.title === selectedGame)
+			);
+
+			// Extract unique regions for the selected game
+			const uniqueRegions = Array.from(new Set(gameSpecificProfiles.map((user: ProfileData) => user.region)));
+			setRegions(uniqueRegions);
+
+			// Extract unique ranks for the selected game
+			const uniqueRanks = Array.from(new Set(gameSpecificProfiles.flatMap((user: ProfileData) =>
+				user.games
+					.filter(game => game.title === selectedGame && game.rank) 
+					.map((game: GameData) => game.rank)
+			)));
+			setRanks(uniqueRanks);
+		}
+	}, [selectedGame, userData]);
+
+	// Filter user data based on search query, selected region, and selected rank
+	const filteredUserData = userData.filter(user => {
+		const matchesSearch = user.username.toLowerCase().includes(searchUser.toLowerCase());
+		const matchesRegion = selectedRegion ? user.region === selectedRegion : true;
+		const matchesRank = selectedRank ? user.games.some((game: GameData) => game.rank === selectedRank && game.title === selectedGame) : true;
+		return matchesSearch && matchesRegion && matchesRank;
+	});
+
+	// Extract unique game titles directly from userData
 	const uniqueGameTitles = Array.from(
-		new Set(
-			userData.flatMap((user: ProfileData) =>
-				user.games.map((game: GameData) => game.title)
-			)
-		)
+		new Set(userData.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
 	);
-	if (uniqueGameTitles.length !== 0 && (selectedGame === null || selectedGame === undefined)) {
-		setSelectedGame(uniqueGameTitles[0]);
-	}
 
 	return (
 		<div className="flex flex-col min-h-screen w-full bg-gray-900">
 			<div className="p-4">
 				<div className="flex flex-row p-1 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-auto">
-					{uniqueGameTitles.map((gameTitle, index) => (
+					{uniqueGameTitles.map((gameTitle: string, index: number) => (
 						<div
 							key={index}
 							onClick={() => handleGameClick(gameTitle)}
-							className={`relative p-10 first-line:marker:cursor-pointer bg-gray-800 ${
+							className={`relative p-10 cursor-pointer bg-gray-800 ${
 								selectedGame === gameTitle
 									? "overflow-hidden text-white"
 									: " text-gray-100"
@@ -66,11 +120,45 @@ const Feed: React.FC = () => {
 									selectedGame === gameTitle ? "opacity-30" : "opacity-0"
 								}`}
 							></div>
-							<div className="relative">
+							<div className="relative flex items-center">
+								<img
+									src={gameIconDictionary[gameTitle]}
+									alt={gameTitle}
+									className="w-8 h-8 mr-2"
+								/>
 								<h4 className="font-bold">{gameTitle}</h4>
 							</div>
 						</div>
 					))}
+				</div>
+				<div className="mt-4">
+					<input
+						type="text"
+						placeholder="Search by username"
+						value={searchUser}
+						onChange={handleSearchChange}
+						className="w-full p-2 rounded bg-gray-800 text-white"
+					/>
+					<select
+						value={selectedRegion || ""}
+						onChange={handleRegionChange}
+						className="w-full p-2 mt-2 rounded bg-gray-800 text-white"
+					>
+						<option value="">All Regions</option>
+						{regions.map((region, index) => (
+							<option key={index} value={region}>{region}</option>
+						))}
+					</select>
+					<select
+						value={selectedRank || ""}
+						onChange={handleRankChange}
+						className="w-full p-2 mt-2 rounded bg-gray-800 text-white"
+					>
+						<option value="">All Ranks</option>
+						{ranks.map((rank, index) => (
+							<option key={index} value={rank}>{rank}</option>
+						))}
+					</select>
 				</div>
 			</div>
 
@@ -84,7 +172,7 @@ const Feed: React.FC = () => {
 								<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
 							</span>
 						</h2>
-						{userData.map((user: ProfileData) =>
+						{filteredUserData.map((user: ProfileData) =>
 							user.games
 								.filter((game: GameData) => game.title === selectedGame)
 								.map((game: GameData) => (
@@ -100,8 +188,12 @@ const Feed: React.FC = () => {
 														src={user.profilePicture}
 														alt="Profile"
 														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
+														onError={(e) => {
+															(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+															(e.target as HTMLImageElement).src = defaultProfileIcon;
+														}}
 													/>
-													<div className="flex-3">
+													<div className="flex-grow">
 														<h1 className="text-xl font-bold text-white">
 															{user.username}
 														</h1>
@@ -109,6 +201,10 @@ const Feed: React.FC = () => {
 														<p className="text-sm">
 															<span className="font-bold">Region:</span>{" "}
 															{user.region}
+														</p>
+														<p className = "text-sm">
+															<span className="font-bold">Rank:</span>{" "}
+															{game.rank || "N/A"}
 														</p>
 														<p className="text-sm">
 															<span className="font-bold">Language:</span>{" "}
@@ -120,14 +216,14 @@ const Feed: React.FC = () => {
 														</p>
 														<div className="mt-4">
 															<button
-																onClick={() => handleContactClick(user._id)}
+																onClick={() => handleContactClick(user.userId)}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Contact Me
 															</button>
 														</div>
 													</div>
-													<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
+													<div className="flex flex-wrap flex-none justify-end items-end mt-2">
 														{game.tags.map((tag, index) => (
 															<span
 																key={index}

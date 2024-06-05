@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import profileRoutes from "./src/routes/profileRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import ratingRoutes from './src/routes/ratingRoutes';
+import friendRoutes from "./src/routes/friendRoutes";
 
 //express app
 const app = express();
@@ -42,8 +43,13 @@ app.use("/api/user", userRoutes);
 // route /api/profiles to profileRoutes
 app.use("/api/profiles", profileRoutes);
 
+
 // route /api/ratings to ratingRoutes
 app.use('/api/ratings', ratingRoutes);
+
+// route /api/friends to friendRoutes
+app.use("/api/friends", friendRoutes);
+
 
 // log mongo uri
 console.log(process.env.MONGO_URI);

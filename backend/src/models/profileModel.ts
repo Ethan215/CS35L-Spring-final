@@ -4,8 +4,9 @@ import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface ProfileDocument extends ProfileData, Document {}
-
+export interface ProfileDocument extends Omit<ProfileData, '_id'>, mongoose.Document {
+	_id: mongoose.Types.ObjectId;
+}
 
 const profileSchema = new Schema<ProfileDocument>(
 	{
@@ -16,7 +17,6 @@ const profileSchema = new Schema<ProfileDocument>(
 		},
 		profilePicture: {
 			type: String,
-			required: true,
 		},
 		username: {
 			type: String,
@@ -25,19 +25,15 @@ const profileSchema = new Schema<ProfileDocument>(
 		},
 		bio: {
 			type: String,
-			required: true,
 		},
 		region: {
 			type: String,
-			required: true,
 		},
 		language: {
 			type: String,
-			required: true,
 		},
 		stars: {
 			type: Number,
-			required: true,
 		},
 		games: [
 			{

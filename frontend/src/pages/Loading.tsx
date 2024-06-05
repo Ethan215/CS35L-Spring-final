@@ -13,7 +13,7 @@ const Loading: React.FC = () => {
                     <h1 className="text-3xl font-bold mb-5">
                         This page is loading!
                     </h1>
-                    <p className="mx-auto text-xs">Please hold while we determine your login status...</p>
+                    <p className="mx-auto text-xs">Please hold...</p>
                 </div>
 			</div>
 		</>

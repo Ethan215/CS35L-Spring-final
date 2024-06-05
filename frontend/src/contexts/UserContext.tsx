@@ -5,7 +5,7 @@ import { UserContextType } from "src/types/user";
 export const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-	const [user, setUser] = useState<UserData | null>(null);
+	const [user, setUser] = useState<Partial<UserData> | null>(null);
 
 	// Fetch the user's information when they log in and update the user state
 
