@@ -3,10 +3,10 @@
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Setup](#setup)
-    - [Cloning the Repository](#cloning-the-repository)
-    - [Setting up Dependencies](#setting-up-dependencies)
-    - [Setting up Environment Variables](#setting-up-environment-variables)
-    - [Running the Application](#running-the-application)
+    - [Cloning the Repository]
+    - [Setting up Dependencies]
+    - [Setting up Environment Variables]
+    - [Running the Application]
 4. [Technologies](#technologies)
 5. [Authors](#authors)
 
