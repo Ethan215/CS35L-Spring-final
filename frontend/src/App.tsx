@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import LikeList from './pages/LikeList';
 // user context
-import { UserProvider } from './contexts/UserContext';
 
 // pages and components
 
@@ -90,10 +89,10 @@ function App() {
               <Route path="/about" element={userLoggedIn ? <About /> : <Navigate replace to="/home"/>} />
               <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/home" />} />
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
+              <Route path="/inbox/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/profile/:id" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/edit-profile" element={userLoggedIn ? <EditProfile /> : <Navigate replace to="/home" />} />
-              <Route path="/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
               <Route path="/like-list" element={userLoggedIn ? <LikeList /> : <Navigate replace to="/home" />} /> 
               <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
               <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
