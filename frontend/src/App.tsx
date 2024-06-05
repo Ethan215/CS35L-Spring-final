@@ -7,12 +7,10 @@ import LikeList from './pages/LikeList';
 import { UserProvider } from './contexts/UserContext';
 
 // pages and components
-<<<<<<< HEAD
-import About from './pages/About';
-=======
+
+
 import Navbar from './components/Navbar';
 
->>>>>>> e5c90ed6e8f4432073ecc4f405e013de42b28698
 import Home from './pages/Home';
 import Feed from './pages/Feed';
 import Inbox from './pages/Inbox';
@@ -23,6 +21,7 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
 import Loading from './pages/Loading';
 import SendMessage from './pages/SendMessage';
+import About from './pages/About';
 
 import UserContext from './contexts/UserContext';
 
