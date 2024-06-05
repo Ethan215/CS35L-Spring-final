@@ -74,9 +74,13 @@ const Feed: React.FC = () => {
 		setSelectedRank(null);
 	};
 
-	const handleContactClick = (userId: string) => {
+	const handleVisitProfileClick = (userId: string) => {
 		navigate(`/profile/${userId}`); // Redirect to the profile page of the selected user
 	};
+
+	const handleSendMsgClick = (userId: string) => {
+		navigate(`/inbox/send-message/${userId}`); // Redirect to the send message page with the selected user
+	}
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchUser(e.target.value);
@@ -301,12 +305,18 @@ const Feed: React.FC = () => {
 															<span className="font-bold">Stars:</span>{" "}
 															{user.stars}
 														</p>
-														<div className="mt-4">
+														<div className="flex flex-row space-x-4 mt-4">
 															<button
-																onClick={() => handleContactClick(user.userId)}
+																onClick={() => handleVisitProfileClick(user.userId)}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
-																Contact Me
+																Visit Profile
+															</button>
+															<button
+																onClick={() => handleSendMsgClick(user.userId)}
+																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
+															>
+																Message
 															</button>
 															<button
 																onClick={() => handleLikeClick(user.userId)}
@@ -314,7 +324,7 @@ const Feed: React.FC = () => {
 															>
 																<svg
 																	className={`
-																		w-6 h-6 transition-colors duration-200 ${
+																		w-10 h-10 transition-colors duration-200 ${
 																			likedProfiles.includes(user.userId)
 																				? "text-yellow-400"
 																				: "text-gray-400"
