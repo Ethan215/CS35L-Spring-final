@@ -21,7 +21,10 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
 							FINDUO
 						</Link>
 					</div>
-					<div className="flex space-x-4">
+					<div className="flex space-x-5">
+						<Link to="/about" className="text-white hover:text-gray-400">
+							About
+						</Link>
 						<Link to="/" className="text-white hover:text-gray-400">
 							Home
 						</Link>

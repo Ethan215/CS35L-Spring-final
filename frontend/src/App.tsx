@@ -7,6 +7,7 @@ import { useState, useEffect, useContext } from 'react';
 import { UserProvider } from './contexts/UserContext';
 
 // pages and components
+import About from './pages/About';
 import Home from './pages/Home';
 import Feed from './pages/Feed';
 import Inbox from './pages/Inbox';
@@ -81,7 +82,7 @@ function App() {
               <Route path="/login" element={userLoggedIn ? <Navigate replace to="/home" /> : <Login setUserLoggedIn={setUserLoggedIn} />} />
               <Route path="/signup" element={userLoggedIn ? <Navigate replace to="/home" /> : <Signup />} />
               <Route path="/forgot-password" element={userLoggedIn ? <Navigate replace to="/home" /> : <ForgotPassword />} />
-
+              <Route path="/about" element={userLoggedIn ? <About /> : <Navigate replace to="/home"/>} />
               <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/home" />} />
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />

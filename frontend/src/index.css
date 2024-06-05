@@ -22,6 +22,16 @@ nav.after\:border-gradient:after {
 	);
 }
 
+.about-image::after {
+	display: block;
+	position: relative;
+	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #111827 100%);
+	margin-top: -150px;
+	height: 150px;
+	width: 100%;
+	content: '';
+  }
+
 @keyframes marquee {
 	0% {
 		transform: translateX(0);
