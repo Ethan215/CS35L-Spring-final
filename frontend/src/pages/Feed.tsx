@@ -190,12 +190,12 @@ const Feed: React.FC = () => {
 	return (
 		<div className="flex flex-col min-h-screen w-full bg-gray-900">
 			<div className="p-4">
-				<div className="flex flex-row p-1 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-auto">
+				<div className="flex flex-row p-1 text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-auto">
 					{uniqueGameTitles.map((gameTitle: string, index: number) => (
 						<div
 							key={index}
 							onClick={() => handleGameClick(gameTitle)}
-							className={`relative p-10 cursor-pointer bg-gray-800 ${
+							className={`flex flex-col items-center justify-center relative p-10 cursor-pointer bg-gray-800 ${
 								selectedGame === gameTitle
 									? "overflow-hidden text-white"
 									: " text-gray-100"
@@ -206,13 +206,13 @@ const Feed: React.FC = () => {
 									selectedGame === gameTitle ? "opacity-30" : "opacity-0"
 								}`}
 							></div>
-							<div className="relative flex items-center">
+							<div className="relative flex items-center space-x-2">
 								<img
 									src={gameIconDictionary[gameTitle]}
 									alt={gameTitle}
-									className="w-8 h-8 mr-2"
+									className="w-8 h-8 justify-center items-center"
 								/>
-								<h4 className="font-bold">{gameTitle}</h4>
+								<h4 className="font-bold whitespace-nowrap">{gameTitle}</h4>
 							</div>
 						</div>
 					))}
