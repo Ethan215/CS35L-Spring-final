@@ -16,56 +16,53 @@ const Feed: React.FC = () => {
 	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
 	const navigate = useNavigate();
 
-	// 添加 handleLikeClick 方法
 	const handleLikeClick = async (userId: string) => {
 		if (likedProfiles.includes(userId)) {
-		  await unlikeProfile(userId);
-		  setLikedProfiles(likedProfiles.filter((id) => id !== userId));
+			await unlikeProfile(userId);
+			setLikedProfiles(likedProfiles.filter((id) => id !== userId));
 		} else {
-		  await likeProfile(userId);
-		  const newLikedProfiles = [...likedProfiles, userId];
-		  setLikedProfiles(newLikedProfiles);
-		  console.log("Updated liked profiles:", newLikedProfiles);    
-		}
-	  };
-
-	  // 添加 likeProfile 方法
-	const likeProfile = async (profileId: string): Promise<void> => {
-		try {
-		  const response = await fetch(`/api/user/like/${profileId}`, {
-			method: 'POST',
-			headers: {
-			  'Content-Type': 'application/json',
-			},
-		  });
-	  
-		  if (response.ok) {
-			console.log('Profile liked successfully');
-		  } else {
-			console.error('Failed to like profile');
-		  }
-		} catch (error) {
-		  console.error('Error liking profile:', error);
+			await likeProfile(userId);
+			const newLikedProfiles = [...likedProfiles, userId];
+			setLikedProfiles(newLikedProfiles);
+			console.log("Updated liked profiles:", newLikedProfiles);
 		}
 	};
-	  
-	  // 添加 unlikeProfile 方法
+
+	const likeProfile = async (profileId: string): Promise<void> => {
+		try {
+			const response = await fetch(`/api/user/like/${profileId}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (response.ok) {
+				console.log("Profile liked successfully");
+			} else {
+				console.error("Failed to like profile");
+			}
+		} catch (error) {
+			console.error("Error liking profile:", error);
+		}
+	};
+
 	const unlikeProfile = async (profileId: string): Promise<void> => {
 		try {
-		  const response = await fetch(`/api/user/unlike/${profileId}`, {
-			method: 'DELETE',
-			headers: {
-			  'Content-Type': 'application/json',
-			},
-		  });
-	  
-		  if (response.ok) {
-			console.log('Profile unliked successfully');
-		  } else {
-			console.error('Failed to unlike profile');
-		  }
+			const response = await fetch(`/api/user/unlike/${profileId}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (response.ok) {
+				console.log("Profile unliked successfully");
+			} else {
+				console.error("Failed to unlike profile");
+			}
 		} catch (error) {
-		  console.error('Error unliking profile:', error);
+			console.error("Error unliking profile:", error);
 		}
 	};
 	const handleGameClick = (gameTitle: string) => {
@@ -105,17 +102,22 @@ const Feed: React.FC = () => {
 				if (data.profiles.length > 0) {
 					// Extract unique game titles and set the first one as selected by default
 					const uniqueTitles = Array.from(
-						new Set(data.profiles.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
+						new Set(
+							data.profiles.flatMap((user: ProfileData) =>
+								user.games.map((game: GameData) => game.title)
+							)
+						)
 					);
 
 					if (uniqueTitles.length !== 0) {
 						setSelectedGame(uniqueTitles[0]);
 					}
 				}
-				// 获取用户已点赞的 profiles
 				const likedResponse = await fetch("/api/user/liked-profiles");
 				const likedData = await likedResponse.json();
-				setLikedProfiles(likedData.likedProfiles.map((profile: ProfileData) => profile._id));
+				setLikedProfiles(
+					likedData.likedProfiles.map((profile: ProfileData) => profile._id)
+				);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
@@ -126,35 +128,54 @@ const Feed: React.FC = () => {
 
 	useEffect(() => {
 		if (selectedGame) {
-			const gameSpecificProfiles = userData.filter(user =>
-				user.games.some(game => game.title === selectedGame)
+			const gameSpecificProfiles = userData.filter((user) =>
+				user.games.some((game) => game.title === selectedGame)
 			);
 
 			// Extract unique regions for the selected game
-			const uniqueRegions = Array.from(new Set(gameSpecificProfiles.map((user: ProfileData) => user.region)));
+			const uniqueRegions = Array.from(
+				new Set(gameSpecificProfiles.map((user: ProfileData) => user.region))
+			);
 			setRegions(uniqueRegions);
 
 			// Extract unique ranks for the selected game
-			const uniqueRanks = Array.from(new Set(gameSpecificProfiles.flatMap((user: ProfileData) =>
-				user.games
-					.filter(game => game.title === selectedGame && game.rank) 
-					.map((game: GameData) => game.rank)
-			)));
+			const uniqueRanks = Array.from(
+				new Set(
+					gameSpecificProfiles.flatMap((user: ProfileData) =>
+						user.games
+							.filter((game) => game.title === selectedGame && game.rank)
+							.map((game: GameData) => game.rank)
+					)
+				)
+			);
 			setRanks(uniqueRanks);
 		}
 	}, [selectedGame, userData]);
 
 	// Filter user data based on search query, selected region, and selected rank
-	const filteredUserData = userData.filter(user => {
-		const matchesSearch = user.username.toLowerCase().includes(searchUser.toLowerCase());
-		const matchesRegion = selectedRegion ? user.region === selectedRegion : true;
-		const matchesRank = selectedRank ? user.games.some((game: GameData) => game.rank === selectedRank && game.title === selectedGame) : true;
+	const filteredUserData = userData.filter((user) => {
+		const matchesSearch = user.username
+			.toLowerCase()
+			.includes(searchUser.toLowerCase());
+		const matchesRegion = selectedRegion
+			? user.region === selectedRegion
+			: true;
+		const matchesRank = selectedRank
+			? user.games.some(
+					(game: GameData) =>
+						game.rank === selectedRank && game.title === selectedGame
+			  )
+			: true;
 		return matchesSearch && matchesRegion && matchesRank;
 	});
 
 	// Extract unique game titles directly from userData
 	const uniqueGameTitles = Array.from(
-		new Set(userData.flatMap((user: ProfileData) => user.games.map((game: GameData) => game.title)))
+		new Set(
+			userData.flatMap((user: ProfileData) =>
+				user.games.map((game: GameData) => game.title)
+			)
+		)
 	);
 
 	return (
@@ -202,7 +223,9 @@ const Feed: React.FC = () => {
 					>
 						<option value="">All Regions</option>
 						{regions.map((region, index) => (
-							<option key={index} value={region}>{region}</option>
+							<option key={index} value={region}>
+								{region}
+							</option>
 						))}
 					</select>
 					<select
@@ -212,7 +235,9 @@ const Feed: React.FC = () => {
 					>
 						<option value="">All Ranks</option>
 						{ranks.map((rank, index) => (
-							<option key={index} value={rank}>{rank}</option>
+							<option key={index} value={rank}>
+								{rank}
+							</option>
 						))}
 					</select>
 				</div>
@@ -241,13 +266,14 @@ const Feed: React.FC = () => {
 											<div className="relative">
 												<div className="flex flex-row">
 													<img
-														src={user.profilePicture}
+														src={user.profilePicture || defaultProfileIcon}
 														alt="Profile"
-														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
 														onError={(e) => {
 															(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
-															(e.target as HTMLImageElement).src = defaultProfileIcon;
+															(e.target as HTMLImageElement).src =
+																defaultProfileIcon;
 														}}
+														className="w-24 h-24 rounded-full mr-4 bg-gray-300 flex-none"
 													/>
 													<div className="flex-grow">
 														<h1 className="text-xl font-bold text-white">
@@ -258,7 +284,7 @@ const Feed: React.FC = () => {
 															<span className="font-bold">Region:</span>{" "}
 															{user.region}
 														</p>
-														<p className = "text-sm">
+														<p className="text-sm">
 															<span className="font-bold">Rank:</span>{" "}
 															{game.rank || "N/A"}
 														</p>
@@ -277,11 +303,16 @@ const Feed: React.FC = () => {
 															>
 																Contact Me
 															</button>
-															<button onClick={() => handleLikeClick(user._id)} className="ml-2">
+															<button
+																onClick={() => handleLikeClick(user._id)}
+																className="ml-2"
+															>
 																<svg
 																	className={`
 																		w-6 h-6 transition-colors duration-200 ${
-																			likedProfiles.includes(user._id) ? "text-yellow-400" : "text-gray-400"
+																			likedProfiles.includes(user._id)
+																				? "text-yellow-400"
+																				: "text-gray-400"
 																		} hover:text-yellow-500`}
 																	fill="currentColor"
 																	viewBox="0 0 24 24"

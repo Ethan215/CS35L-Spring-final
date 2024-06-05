@@ -27,11 +27,7 @@ interface MessageBox {
 // left panel contains a list of messageBox components
 // displays pfp, message subject, brief message
 // when a messageBox component is clicked, onClick set to true and updates the selected message in Inbox component
-const MessageBox: React.FC<MessageBox> = ({
-	message,
-	onClick,
-	isSelected,
-}) => {
+const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
 	return (
 		<div
 			onClick={onClick}
@@ -46,13 +42,13 @@ const MessageBox: React.FC<MessageBox> = ({
 			></div>
 			<div className="relative">
 				<img
-					src={message.profilePic}
+					src={message.profilePic || defaultProfileIcon}
 					alt="Sender Profile Picture"
-					className="w-14 h-14 rounded-full mb-4 bg-gray-500"
 					onError={(e) => {
 						(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
 						(e.target as HTMLImageElement).src = defaultProfileIcon;
 					}}
+					className="w-14 h-14 rounded-full mb-4 bg-gray-500"
 				/>
 				<h4 className="font-bold">{message.title}</h4>
 				<p className="text-sm line-clamp-2 overflow-hidden">{message.body}</p>
@@ -65,7 +61,7 @@ const Inbox: React.FC = () => {
 	const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
 	const [friendRequests, setFriendRequests] = useState<ProfileData[]>([]);
-	
+
 	const fetchFriendRequests = async () => {
 		const response = await fetch("/api/friends/requests");
 		// get array of profiles from response
@@ -147,13 +143,13 @@ const Inbox: React.FC = () => {
 				<div className="w-2/3 p-5">
 					<h2 className="font-bold text-3xl">{selectedMessage.title}</h2>
 					<img
-						src={selectedMessage.profilePic}
+						src={selectedMessage.profilePic || defaultProfileIcon}
 						alt="Sender Profile Picture"
-						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
 						onError={(e) => {
 							(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
 							(e.target as HTMLImageElement).src = defaultProfileIcon;
 						}}
+						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
 					/>
 					<p>{selectedMessage.body}</p>
 					<div>
