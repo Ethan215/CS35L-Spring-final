@@ -44,7 +44,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/profiles", profileRoutes);
 
 // route /api/messages to messageRoutes
-app.use('/api/messages', authenticateUser, messageRoutes);
+app.use('/api/messages', messageRoutes);
 
 // route /api/friends to friendRoutes
 app.use("/api/friends", friendRoutes);
