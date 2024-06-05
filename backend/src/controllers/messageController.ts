@@ -1,75 +1,57 @@
-import { Request, Response } from "express";
-import { MessageDocument } from "@common/message";
-import Message from "../models/messageModel";
+import { Request, Response } from 'express';
+import Message from '../models/messageDocument';
 
-const getMessages = async (req: Request, res: Response): Promise<void> => {
-	try {
-		const messages: MessageDocument[] | null = await Message.find();
-		if (!messages) res.status(404).json({ error: "Messages not found" });
+export const sendMessage = async (req: Request, res: Response) => {
+  try {
+    const { receiverId, title, body } = req.body;
+    const senderId = req.user.id;
 
-		res.status(200).json({ messages });
-	} catch (error) {
-		res.status(500).json({ error: "Server error" });
-	}
+    const message = new Message({ senderId, receiverId, title, body, read: false });
+    await message.save();
+
+    res.status(201).json({ message: 'Message sent successfully', message });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
 
-const getMessage = async (req: Request, res: Response) => {
-	try {
-		const message: MessageDocument | null = await Message.findById(
-			req.params.id
-		);
-		if (!message) res.status(404).json({ error: "Message not found" });
+export const getMessages = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const messages = await Message.find({ receiverId: userId }).populate('senderId', 'username');
 
-		res.status(200).json({ message });
-	} catch (error) {
-		res.status(500).json({ error: "Server error" });
-	}
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
 
-const createMessage = async (req: Request, res: Response) => {
-	try {
-		const message: MessageDocument = new Message(req.body);
+export const deleteMessage = async (req: Request, res: Response) => {
+  try {
+    const { messageId } = req.params;
+    const message = await Message.findByIdAndDelete(messageId);
 
-		await message.save();
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
 
-		res.status(200).json({ message });
-	} catch (error) {
-		res.status(500).json({ error: "Server error" });
-	}
+    res.status(200).json({ message: 'Message deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
 
-const deleteMessage = async (req: Request, res: Response) => {
-	try {
-		const message: MessageDocument | null = await Message.findById(
-			req.params.id
-		);
-		if (!message) res.status(404).json({ error: "Message not found" });
+export const markAsRead = async (req: Request, res: Response) => {
+  try {
+    const { messageId } = req.params;
+    const message = await Message.findByIdAndUpdate(messageId, { read: true }, { new: true });
 
-		await Message.findByIdAndDelete(req.params.id);
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
 
-		res.status(200).json({ message: "Message deleted" });
-	} catch (error) {
-		res.status(500).json({ error: "Server error" });
-	}
-};
-
-const updateMessage = async (req: Request, res: Response) => {
-	try {
-		const newMessage : MessageDocument = req.body;
-		const updatedMessage: MessageDocument | null =
-			await Message.findByIdAndUpdate(req.params.id, req.body, { new: true });
-		if (!updatedMessage) res.status(404).json({ error: "Message not found" });
-
-		res.status(201).json({ message: updatedMessage });
-	} catch (error) {
-		res.status(500).json({ error: "Server error" });
-	}
-};
-
-export default {
-	getMessages,
-	getMessage,
-	createMessage,
-	deleteMessage,
-	updateMessage,
+    res.status(200).json({ message: 'Message marked as read', message });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 };
