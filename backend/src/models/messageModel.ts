@@ -1,21 +1,49 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document } from "mongoose";
+import { MessageData } from "@common/message";
 
-interface IInbox extends Document {
-  sender: string;
-  receiver: string;
-  subject: string;
-  message: string;
-  read: boolean;
-  sentDate: Date;
+const Schema = mongoose.Schema;
+
+export interface MessageDocument extends Omit<MessageData, "_id" | "senderId" | "receiverId">, Document {
+  _id: mongoose.Types.ObjectId;
+  senderId: mongoose.Types.ObjectId;
+  receiverId: mongoose.Types.ObjectId;
 }
 
-const InboxSchema: Schema = new Schema({
-  sender: { type: String, required: true },
-  receiver: { type: String, required: true },
-  subject: { type: String, required: true },
-  message: { type: String, required: true },
-  read: { type: Boolean, default: false },
-  sentDate: { type: Date, default: Date.now },
-});
+const messageSchema = new Schema<MessageDocument>(
+	{
+		senderId: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+      ref: "User",
+		},
+		receiverId: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: "User",
+		},
+		title: {
+			type: String,
+			required: true,
+		},
+		body: {
+			type: String,
+			required: true,
+		},
+		createdAt: {
+			type: Date,
+			default: Date.now,
+		},
+		read: {
+			type: Boolean,
+		},
+	},
+	{ timestamps: true }
+);
 
-export default mongoose.model<IInbox>('Inbox', InboxSchema);
+// create a model with the Schema
+export const Message = mongoose.model<MessageDocument>(
+	"Message",
+	messageSchema
+);
+
+export default Message;
