@@ -16,6 +16,8 @@ const Feed: React.FC = () => {
 	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
 	const navigate = useNavigate();
 
+
+	// Add the handleLikeClick method
 	const handleLikeClick = async (userId: string) => {
 		if (likedProfiles.includes(userId)) {
 			await unlikeProfile(userId);
@@ -27,7 +29,7 @@ const Feed: React.FC = () => {
 			console.log("Updated liked profiles:", newLikedProfiles);
 		}
 	};
-
+	  // Add the likeProfile method
 	const likeProfile = async (otherUserId: string): Promise<void> => {
 		try {
 			const response = await fetch(`/api/user/like/${otherUserId}`, {
@@ -46,7 +48,8 @@ const Feed: React.FC = () => {
 			console.error("Error liking profile:", error);
 		}
 	};
-
+	  
+	  // Add the unlikeProfile method
 	const unlikeProfile = async (otherUserId: string): Promise<void> => {
 		try {
 			const response = await fetch(`/api/user/unlike/${otherUserId}`, {
@@ -114,6 +117,8 @@ const Feed: React.FC = () => {
 						setSelectedGame(uniqueTitles[0]);
 					}
 				}
+
+				// Get profiles that users have liked
 				const likedResponse = await fetch("/api/user/liked-profiles");
 				const likedData = await likedResponse.json();
 				setLikedProfiles(
