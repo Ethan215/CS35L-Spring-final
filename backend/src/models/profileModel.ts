@@ -34,6 +34,7 @@ const profileSchema = new Schema<ProfileDocument>(
 		},
 		stars: {
 			type: Number,
+			default: 0,
 		},
 		games: [
 			{

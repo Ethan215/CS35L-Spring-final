@@ -29,6 +29,7 @@ export interface UserDocument extends Omit<UserData, '_id' | 'likedProfiles'>, m
       },
       likedProfiles: [{ 
         type: mongoose.Schema.Types.ObjectId,
+        default: [],
      }],
       
     },
