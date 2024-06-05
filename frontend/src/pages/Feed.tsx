@@ -75,7 +75,6 @@ const Feed: React.FC = () => {
 	};
 
 	const handleContactClick = (userId: string) => {
-		console.log(`Contacting user with ID ${userId}`);
 		navigate(`/profile/${userId}`); // Redirect to the profile page of the selected user
 	};
 
