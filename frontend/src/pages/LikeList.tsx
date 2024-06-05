@@ -79,7 +79,6 @@ const LikeList: React.FC = () => {
 										<div className="mt-4">
 											<button
 												onClick={() => handleLikeClick(profile.userId)}
-												className="ml-2"
 											>
 												<svg
 													className={`

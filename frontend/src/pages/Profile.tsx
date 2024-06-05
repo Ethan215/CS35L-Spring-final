@@ -27,8 +27,6 @@ const Profile: React.FC = () => {
 	let [friendStatus, setFriendStatus] = useState<string>("not sent");
 
 	const handleLikeClick = async (userId: string) => {
-		if (displayCurrentUser) return console.error("Cannot like own profile");
-
 		if (likedProfiles.includes(userId)) {
 			await fetch(`/api/user/unlike/${userId}`, { method: "DELETE" });
 			fetchLikedProfiles();
