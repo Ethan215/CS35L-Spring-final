@@ -57,6 +57,9 @@ const Profile: React.FC = () => {
 				);
 				navigate("/edit-profile");
 			}
+			else {
+				navigate("/");
+			}
 		}
 
 		const data = await response.json();
