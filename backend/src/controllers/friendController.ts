@@ -162,26 +162,27 @@ export const acceptRequest = async (
 	}
 };
 
-export const declineRequest = async (
-	req: Request,
-	res: Response
+export const removeFriend = async (
+    req: Request,
+    res: Response
 ): Promise<void> => {
-	const user = req.user!;
-	const otherUserId = req.params.otherUserId;
+    const user = req.user!;
+    const otherUserId = req.params.otherUserId;
 
-	const result = await Friend.deleteOne({
-		fromUserId: otherUserId,
-		toUserId: user.userId,
-		status: "pending",
+    const result = await Friend.deleteOne({
+		$or: [
+			{ fromUserId: otherUserId, toUserId: user.userId },
+			{ fromUserId: user.userId, toUserId: otherUserId }
+		],
+		status: { $in: ["pending", "accepted"] },
 	});
-
-	if (result.deletedCount > 0) {
-		res.json({ message: "Friend request declined" });
-	} else {
-		res
-			.status(400)
-			.json({ message: "No pending friend request from this user" });
-	}
+    if (result.deletedCount > 0) {
+        res.json({ message: "Friend request declined" });
+    } else {
+        res
+            .status(400)
+            .json({ message: "No pending or accepted friend request from this user" });
+    }
 };
 
 export default {
@@ -190,5 +191,5 @@ export default {
 	getFriendStatus,
 	sendRequest,
 	acceptRequest,
-	declineRequest,
+	removeFriend,
 };
