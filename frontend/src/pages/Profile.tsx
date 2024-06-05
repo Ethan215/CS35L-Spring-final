@@ -130,14 +130,11 @@ const Profile: React.FC = () => {
 								}}
 							/>
 						</div>
-						<div className="flex-grow">
-							<div className="text-left">
-								<h1 className="text-4xl mb-2">{profile.username}</h1>
-								<p className="text-md">Region: {profile.region}</p>
-								<p className="text-md">Language: {profile.language}</p>
-								<p className="text-md">Stars: {profile.stars}</p>
-								<p className="text-sm mt-4">{profile.bio}</p>
-							</div>
+						<div className="flex-grow text-left">
+							<h1 className="text-4xl mb-2">{profile.username}</h1>
+							<p className="text-md">Region: {profile.region}</p>
+							<p className="text-md">Language: {profile.language}</p>
+							<p className="text-md">Stars: {profile.stars}</p>
 						</div>
 						<div className="flex-none flex flex-col items-end">
 							{displayCurrentUser ? (
@@ -202,6 +199,9 @@ const Profile: React.FC = () => {
 							)}
 						</div>
 					</div>
+					<div className="text-left mb-5 p-5 bg-gray-800 rounded-lg">
+						<p className="text-sm">{profile.bio}</p>
+					</div>
 					<div className="flex flex-col bg-gray-800 rounded-lg p-5">
 						{profile.games.map((game) => (
 							<div
@@ -223,7 +223,7 @@ const Profile: React.FC = () => {
 												<img
 													src={gameIconDictionary[game.title]}
 													alt={`${game.title} icon`}
-													className="w-8 h-8"
+													className="w-8 h-8 ml-2"
 												/>
 											</div>
 											<p className="text-sm">
