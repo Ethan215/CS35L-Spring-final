@@ -28,9 +28,9 @@ const Feed: React.FC = () => {
 		}
 	};
 
-	const likeProfile = async (profileId: string): Promise<void> => {
+	const likeProfile = async (otherUserId: string): Promise<void> => {
 		try {
-			const response = await fetch(`/api/user/like/${profileId}`, {
+			const response = await fetch(`/api/user/like/${otherUserId}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -47,9 +47,9 @@ const Feed: React.FC = () => {
 		}
 	};
 
-	const unlikeProfile = async (profileId: string): Promise<void> => {
+	const unlikeProfile = async (otherUserId: string): Promise<void> => {
 		try {
-			const response = await fetch(`/api/user/unlike/${profileId}`, {
+			const response = await fetch(`/api/user/unlike/${otherUserId}`, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
@@ -65,6 +65,7 @@ const Feed: React.FC = () => {
 			console.error("Error unliking profile:", error);
 		}
 	};
+	
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
 		setSelectedRank(null);
@@ -116,7 +117,7 @@ const Feed: React.FC = () => {
 				const likedResponse = await fetch("/api/user/liked-profiles");
 				const likedData = await likedResponse.json();
 				setLikedProfiles(
-					likedData.likedProfiles.map((profile: ProfileData) => profile._id)
+					likedData.likedProfiles.map((profile: ProfileData) => profile.userId)
 				);
 			} catch (error) {
 				console.error("Error fetching data:", error);
@@ -304,13 +305,13 @@ const Feed: React.FC = () => {
 																Contact Me
 															</button>
 															<button
-																onClick={() => handleLikeClick(user._id)}
+																onClick={() => handleLikeClick(user.userId)}
 																className="ml-2"
 															>
 																<svg
 																	className={`
 																		w-6 h-6 transition-colors duration-200 ${
-																			likedProfiles.includes(user._id)
+																			likedProfiles.includes(user.userId)
 																				? "text-yellow-400"
 																				: "text-gray-400"
 																		} hover:text-yellow-500`}
@@ -321,7 +322,6 @@ const Feed: React.FC = () => {
 																	<path d="M12 .587l3.668 7.431L23 9.584l-5.668 5.533L18.9 23 12 19.412 5.1 23l1.568-7.883L1 9.584l7.332-1.566L12 .587z" />
 																</svg>
 															</button>
-															{/* 星星点赞按钮结束 */}
 														</div>
 													</div>
 													<div className="flex flex-wrap flex-none justify-end items-end mt-2">

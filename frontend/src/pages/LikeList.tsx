@@ -6,39 +6,32 @@ import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 
 const LikeList: React.FC = () => {
 	const [likedProfiles, setLikedProfiles] = useState<ProfileData[]>([]);
+	const [likedProfileIds, setLikedProfileIds] = useState<string[]>([]);
 
-	const handleUnlikeClick = async (userId: string) => {
+	const handleLikeClick = async (userId: string) => {
+		if (likedProfileIds.includes(userId)) {
+			await fetch(`/api/user/unlike/${userId}`, { method: "DELETE" });
+			fetchLikedProfiles();
+		} else {
+			await fetch(`/api/user/like/${userId}`, { method: "POST" });
+			fetchLikedProfiles();
+		}
+	};
+
+	const fetchLikedProfiles = async () => {
 		try {
-			const response = await fetch(`/api/user/unlike/${userId}`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (response.ok) {
-				setLikedProfiles(
-					likedProfiles.filter((profile) => profile._id !== userId)
-				);
-			} else {
-				console.error("Failed to unlike profile");
-			}
+			const response = await fetch("/api/user/liked-profiles");
+			const data = await response.json();
+			setLikedProfiles(data.likedProfiles);
+			setLikedProfileIds(
+				(data.likedProfiles as ProfileData[]).map((profile) => profile.userId)
+			);
 		} catch (error) {
-			console.error("Error unliking profile:", error);
+			console.error("Error fetching liked profiles:", error);
 		}
 	};
 
 	useEffect(() => {
-		const fetchLikedProfiles = async () => {
-			try {
-				const response = await fetch("/api/user/liked-profiles");
-				const data = await response.json();
-				setLikedProfiles(data.likedProfiles);
-			} catch (error) {
-				console.error("Error fetching liked profiles:", error);
-			}
-		};
-
 		fetchLikedProfiles();
 	}, []);
 
@@ -85,11 +78,16 @@ const LikeList: React.FC = () => {
 										</p>
 										<div className="mt-4">
 											<button
-												onClick={() => handleUnlikeClick(profile._id)}
+												onClick={() => handleLikeClick(profile.userId)}
 												className="ml-2"
 											>
 												<svg
-													className={`w-6 h-6 transition-colors duration-200 text-yellow-400 hover:text-yellow-500`}
+													className={`
+																		w-6 h-6 transition-colors duration-200 ${
+																			likedProfileIds.includes(profile.userId)
+																				? "text-yellow-400"
+																				: "text-gray-400"
+																		} hover:text-yellow-500`}
 													fill="currentColor"
 													viewBox="0 0 24 24"
 													xmlns="http://www.w3.org/2000/svg"

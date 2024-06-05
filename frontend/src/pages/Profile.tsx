@@ -22,7 +22,21 @@ const Profile: React.FC = () => {
 	// if id is provided, fetch that profile, otherwise get the current user's profile by requesting the id from the UserContext
 	const [profile, setProfile] = useState<ProfileData | null>(null);
 
+	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
+
 	let [friendStatus, setFriendStatus] = useState<string>("not sent");
+
+	const handleLikeClick = async (userId: string) => {
+		if (displayCurrentUser) return console.error("Cannot like own profile");
+
+		if (likedProfiles.includes(userId)) {
+			await fetch(`/api/user/unlike/${userId}`, { method: "DELETE" });
+			fetchLikedProfiles();
+		} else {
+			await fetch(`/api/user/like/${userId}`, { method: "POST" });
+			fetchLikedProfiles();
+		}
+	};
 
 	const fetchFriendStatus = async () => {
 		const response = await fetch(`/api/friends/status/${id}`);
@@ -32,37 +46,51 @@ const Profile: React.FC = () => {
 		}
 	};
 
+	const fetchProfile = async () => {
+		const profileEndpoint = !id ? "/api/profiles/me" : `/api/profiles/id/${id}`;
+		const response = await fetch(profileEndpoint);
+
+		if (!response.ok) {
+			if (!id) {
+				console.log(
+					"Profile potentially uncreated, redirecting to edit profile"
+				);
+				navigate("/edit-profile");
+			}
+		}
+
+		const data = await response.json();
+		setProfile(data.profile);
+	};
+
+	const fetchLikedProfiles = async () => {
+		const likedResponse = await fetch("/api/user/liked-profiles");
+		const likedData = await likedResponse.json();
+		setLikedProfiles(
+			likedData.likedProfiles.map((profile: ProfileData) => profile.userId)
+		);
+	};
+
 	useEffect(() => {
 		//check if both id and user are null, if so, navigate to home page
 		if (!id && !user) {
 			navigate("/");
 		}
-
-		const fetchProfile = async () => {
-			const profileEndpoint = !id
-				? "/api/profiles/me"
-				: `/api/profiles/id/${id}`;
-			const response = await fetch(profileEndpoint);
-
-			if (!response.ok) {
-				if (!id) {
-					console.log(
-						"Profile potentially uncreated, redirecting to edit profile"
-					);
-					navigate("/edit-profile");
-				}
-			}
-
-			const data = await response.json();
-			setProfile(data.profile);
-		};
-
 		fetchProfile();
 
 		if (!displayCurrentUser) {
 			fetchFriendStatus();
+			fetchLikedProfiles();
 		}
 	}, [id]);
+
+	useEffect(() => {
+		//check if both id and user are null, if so, navigate to home page
+		if (!id && !user) {
+			navigate("/");
+		}
+		fetchProfile();
+	}, [likedProfiles]);
 
 	if (!profile) {
 		return <Loading />;
@@ -91,7 +119,7 @@ const Profile: React.FC = () => {
 			<div className="flex flex-col w-1/2 mt-10">
 				<div className="h-1/3 flex flex-row items-center p-5 header-gradient-border relative overflow-hidden">
 					<img
-						src={profile.profilePicture}
+						src={profile.profilePicture || defaultProfileIcon}
 						alt={profile.username}
 						className="flex-none w-36 h-36 object-cover rounded-full mr-5 bg-slate-100 z-10"
 						onError={(e) => {
@@ -105,7 +133,27 @@ const Profile: React.FC = () => {
 								<h1 className="text-4xl mb-2">{profile.username}</h1>
 								<p className="text-md">Region: {profile.region}</p>
 								<p className="text-md">Language: {profile.language}</p>
-								<p className="text-md pb-5">Stars: {profile.stars}</p>
+								<div className="flex flex-row items-center mt-2 pb-5">
+									<p className="text-md">Stars: {profile.stars}</p>
+									<button
+										onClick={() => handleLikeClick(profile.userId)}
+										className="ml-2"
+									>
+										<svg
+											className={`
+                w-5 h-5 transition-colors duration-200 ${
+									likedProfiles.includes(profile.userId)
+										? "text-yellow-400"
+										: "text-gray-400"
+								} hover:text-yellow-500`}
+											fill="currentColor"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path d="M12 .587l3.668 7.431L23 9.584l-5.668 5.533L18.9 23 12 19.412 5.1 23l1.568-7.883L1 9.584l7.332-1.566L12 .587z" />
+										</svg>
+									</button>
+								</div>
 							</div>
 							<div className="flex-none flex flex-col justify-end pr-20">
 								<button
@@ -137,12 +185,14 @@ const Profile: React.FC = () => {
 												friendStatus !== "pending"
 											}
 										>
-											{{
-												"not sent": "Add Friend",
-												"pending": "Accept Friend Request",
-												"sent": "Request Sent",
-												"accepted": "Friends",
-										  	}[friendStatus]}
+											{
+												{
+													"not sent": "Add Friend",
+													pending: "Accept Friend Request",
+													sent: "Request Sent",
+													accepted: "Friends",
+												}[friendStatus]
+											}
 										</button>
 										{(friendStatus === "accepted" ||
 											friendStatus === "pending") && (

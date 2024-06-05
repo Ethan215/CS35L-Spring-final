@@ -22,10 +22,10 @@ router.get("/login", authenticateUser, checkLogin);
 router.post("/logout", logoutUser);
 
 // Like a profile
-router.post('/like/:profileId', authenticateUser, likeProfile);
+router.post('/like/:otherUserId', authenticateUser, likeProfile);
 
 // Unlike a profile
-router.delete('/unlike/:profileId', authenticateUser, unlikeProfile);
+router.delete('/unlike/:otherUserId', authenticateUser, unlikeProfile);
 
 // Get liked profiles
 router.get('/liked-profiles', authenticateUser, getLikedProfiles);
