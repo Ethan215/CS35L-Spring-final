@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserDocument, User } from "../models/userModel";
-
+import { Profile } from "../models/profileModel";
 import { sign } from "jsonwebtoken";
 import { config } from "dotenv";
 import bcrypt from "bcrypt";
@@ -75,21 +75,23 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
-export const checkLogin = async (req: Request, res: Response): Promise<void> => {
+export const checkLogin = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		// if somehow user is null then return 401 status code, this shouldn't happen
-		if (!(req.user)) {
+		if (!req.user) {
 			res.status(401).json({ error: "Authentication failed try Again" });
 			return;
 		}
 
 		// return decoded user information from the authenticateUser middleware
 		res.status(200).json(req.user);
-	}
-	catch (error) {
+	} catch (error) {
 		res.status(500).json({ error: "Authentication failed try Again" });
 	}
-}
+};
 
 export const logoutUser = async (
 	req: Request,
@@ -99,4 +101,122 @@ export const logoutUser = async (
 	res.status(200).json({ message: "Logged out" });
 };
 
-export default { signup, loginUser, logoutUser };
+export const likeProfile = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	if (!req.user) {
+		res.status(401).json({ message: "Unauthorized" });
+		return;
+	}
+	try {
+		const userId = req.user.userId;
+		const otherUserId = req.params.otherUserId;
+
+		const user = await User.findById(userId);
+		const profile = await Profile.findOne({ userId: otherUserId });
+
+		if (!user || !profile) {
+			res.status(404).json({ error: "User or profile not found" });
+			return;
+		}
+
+		if (
+			user.likedProfiles.includes(
+				otherUserId as unknown as mongoose.Types.ObjectId
+			)
+		) {
+			res.status(400).json({ error: "Profile already liked" });
+			return;
+		}
+
+		user.likedProfiles.push(otherUserId as unknown as mongoose.Types.ObjectId);
+		profile.stars += 1;
+
+		await user.save();
+		await profile.save();
+
+		res.status(200).json({ message: "Profile liked", user }); // Returns the latest user data
+	} catch (error) {
+		res.status(500).json({ error: "Server error" });
+	}
+};
+
+export const unlikeProfile = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	if (!req.user) {
+		res.status(401).json({ message: "Unauthorized" });
+		return;
+	}
+	try {
+		const userId = req.user.userId;
+		const otherUserId = req.params.otherUserId;
+
+		const user = await User.findById(userId);
+		const profile = await Profile.findOne({ userId: otherUserId });
+
+		if (!user || !profile) {
+			res.status(404).json({ error: "User or profile not found" });
+			return;
+		}
+
+		if (
+			!user.likedProfiles.includes(
+				otherUserId as unknown as mongoose.Types.ObjectId
+			)
+		) {
+			res.status(400).json({ error: "Profile not liked yet" });
+			return;
+		}
+
+		user.likedProfiles = user.likedProfiles.filter(
+			(id) => id.toString() !== otherUserId
+		);
+		profile.stars -= 1;
+
+		await user.save();
+		await profile.save();
+
+		res.status(200).json({ message: "Profile unliked" });
+	} catch (error) {
+		res.status(500).json({ error: "Server error" });
+	}
+};
+
+// Get liked profiles
+export const getLikedProfiles = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	if (!req.user) {
+		res.status(401).json({ message: "Unauthorized" });
+		return;
+	}
+	try {
+		const userId = req.user.userId;
+		const user = await User.findById(userId);
+
+		if (!user) {
+			res.status(404).json({ error: "User not found" });
+		}
+		
+		const likedProfiles = await Profile.find({
+			userId: { $in: user!.likedProfiles },
+		});
+
+		res.status(200).json({ likedProfiles });
+	} catch (error) {
+		res.status(500).json({ error: "Server error" });
+	}
+};
+
+export default {
+	signup,
+	loginUser,
+	logoutUser,
+	likeProfile,
+	unlikeProfile,
+	getLikedProfiles,
+};

@@ -3,7 +3,7 @@ import { Router } from "express";
 import friendController from "../controllers/friendController";
 import { authenticateUser } from "../middleware/authenticateUser";
 
-const { sendRequest, acceptRequest, declineRequest, getFriends, getFriendRequests } = friendController;
+const { sendRequest, acceptRequest, removeFriend, getFriends, getFriendRequests, getFriendStatus } = friendController;
 
 const router: Router = express.Router();
 
@@ -13,6 +13,9 @@ router.get("/", authenticateUser, getFriends);
 // get friend requests
 router.get("/requests", authenticateUser, getFriendRequests);
 
+// get friend status with other user
+router.get("/status/:otherUserId", authenticateUser, getFriendStatus);
+
 // send request to other user
 router.post("/send/:otherUserId", authenticateUser, sendRequest);
 
@@ -20,6 +23,6 @@ router.post("/send/:otherUserId", authenticateUser, sendRequest);
 router.patch("/accept/:otherUserId", authenticateUser, acceptRequest);
 
 // decline request from other user
-router.delete("/decline/:otherUserId", authenticateUser, declineRequest);
+router.delete("/decline/:otherUserId", authenticateUser, removeFriend);
 
 export default router;

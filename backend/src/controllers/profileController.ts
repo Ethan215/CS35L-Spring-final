@@ -17,13 +17,36 @@ const getProfiles = async (req: Request, res: Response): Promise<void> => {
 
 const getProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const profile: ProfileDocument | null = await Profile.findOne({
-			userId: req.params.id,
-		});
-		if (!profile) {
-			res.status(404).json({ error: "Profile not found" });
-			return;
+		const id = req.params.id;
+		const username = req.params.username;
+		let profile : ProfileDocument | null = null;
+		if(id) {
+			profile = await Profile.findOne({
+				userId: id,
+			});
+			if (!profile) {
+				res.status(404).json({ error: `Profile with id ${id} not found` });
+				return;
+			}
 		}
+		else if(username) {
+			profile = await Profile.findOne({
+				username: username,
+			});
+			if (!profile) {
+				res.status(404).json({ error: `Profile with username ${username} not found` });
+				return;
+			}
+		}
+		else {
+			profile = await Profile.findOne({
+				userId: req.user!.userId,
+			});
+			if (!profile) {
+				res.status(404).json({ error: "Profile not found" });
+				return;
+			}
+		}		
 
 		res.status(200).json({ profile });
 	} catch (error) {
@@ -40,7 +63,7 @@ const createProfile = async (req: Request, res: Response): Promise<void> => {
 			bio: req.body.bio,
 			region: req.body.region,
 			language: req.body.language,
-			stars: req.body.stars,
+			stars: 0,
 			games: req.body.games,
 		});
 
@@ -73,22 +96,27 @@ const deleteProfile = async (req: Request, res: Response): Promise<void> => {
 const updateProfile = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { username, userId, ...otherFields } = req.body;
+		const originalProfile: ProfileDocument | null = await Profile.findOne({
+			userId: req.user!.userId,
+		});
+		
 
+		if (!originalProfile) {
+			res.status(404).json({ error: "Profile not found" });
+			return;
+		}
+		
 		const updatedProfile: ProfileDocument | null =
 			await Profile.findOneAndUpdate(
 				{ userId: req.user!.userId },
 				{
 					username: req.user!.username,
 					userId: req.user!.userId,
+					stars: originalProfile.stars,
 					...otherFields,
 				},
 				{ new: true }
 			);
-
-		if (!updatedProfile) {
-			res.status(404).json({ error: "Profile not found" });
-			return;
-		}
 
 		res.status(201).json({ profile: updatedProfile });
 	} catch (error) {

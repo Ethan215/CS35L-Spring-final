@@ -2,21 +2,27 @@
 // it is responsible for routing and rendering the different pages and components
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
-
+import LikeList from './pages/LikeList';
 // user context
 import { UserProvider } from './contexts/UserContext';
 
 // pages and components
+<<<<<<< HEAD
 import About from './pages/About';
+=======
+import Navbar from './components/Navbar';
+
+>>>>>>> e5c90ed6e8f4432073ecc4f405e013de42b28698
 import Home from './pages/Home';
 import Feed from './pages/Feed';
 import Inbox from './pages/Inbox';
 import Profile from './pages/Profile';
-import Navbar from './components/Navbar';
+import EditProfile from './pages/EditProfiles';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
 import Loading from './pages/Loading';
+import SendMessage from './pages/SendMessage';
 
 import UserContext from './contexts/UserContext';
 
@@ -70,7 +76,7 @@ function App() {
   };
 
   if (isLoading) {
-    return <Loading></Loading>; // Or your loading spinner
+    return <Loading/>; // Or your loading spinner
   }
 
   return (
@@ -87,6 +93,9 @@ function App() {
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
               <Route path="/profile/:id" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
+              <Route path="/edit-profile" element={userLoggedIn ? <EditProfile /> : <Navigate replace to="/home" />} />
+              <Route path="/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
+              <Route path="/like-list" element={userLoggedIn ? <LikeList /> : <Navigate replace to="/home" />} /> 
               <Route path="/home" element={<Home userLoggedIn={userLoggedIn} />} />
               <Route path="/" element={userLoggedIn ? <Navigate replace to="/home" /> : <Navigate replace to="/home" />} />
             </Routes>

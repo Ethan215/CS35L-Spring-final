@@ -4,10 +4,10 @@ import { Document } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export interface UserDocument extends Omit<UserData, '_id' | 'friends'>, mongoose.Document {
-    _id: mongoose.Types.ObjectId;
-    friends: mongoose.Types.ObjectId[];
-  }
+export interface UserDocument extends Omit<UserData, '_id' | 'likedProfiles'>, mongoose.Document {
+  _id: mongoose.Types.ObjectId;
+  likedProfiles: mongoose.Types.ObjectId[];
+}
   
   const userSchema = new Schema<UserDocument>(
     {
@@ -27,11 +27,11 @@ export interface UserDocument extends Omit<UserData, '_id' | 'friends'>, mongoos
         type: String,
         required: true,
       },
-      friends: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+      likedProfiles: [{ 
+        type: mongoose.Schema.Types.ObjectId,
         default: [],
-      }],
+     }],
+      
     },
     { timestamps: true }
   );

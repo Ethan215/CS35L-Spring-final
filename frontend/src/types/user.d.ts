@@ -1,6 +1,6 @@
 import { UserData } from '@common/user'
 
 export type UserContextType = {
-    user: UserData | null;
-    setUser: (user: UserData | null) => void;
+    user: Partial<UserData> | null;
+    setUser: (user: Partial<UserData> | null) => void;
 };
