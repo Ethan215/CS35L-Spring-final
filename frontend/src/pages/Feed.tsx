@@ -16,7 +16,7 @@ const Feed: React.FC = () => {
 	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
 	const navigate = useNavigate();
 
-	// 添加 handleLikeClick 方法
+	// Add the handleLikeClick method
 	const handleLikeClick = async (userId: string) => {
 		if (likedProfiles.includes(userId)) {
 		  await unlikeProfile(userId);
@@ -29,7 +29,7 @@ const Feed: React.FC = () => {
 		}
 	  };
 
-	  // 添加 likeProfile 方法
+	  // Add the likeProfile method
 	const likeProfile = async (profileId: string): Promise<void> => {
 		try {
 		  const response = await fetch(`/api/user/like/${profileId}`, {
@@ -49,7 +49,7 @@ const Feed: React.FC = () => {
 		}
 	};
 	  
-	  // 添加 unlikeProfile 方法
+	  // Add the unlikeProfile method
 	const unlikeProfile = async (profileId: string): Promise<void> => {
 		try {
 		  const response = await fetch(`/api/user/unlike/${profileId}`, {
@@ -112,7 +112,7 @@ const Feed: React.FC = () => {
 						setSelectedGame(uniqueTitles[0]);
 					}
 				}
-				// 获取用户已点赞的 profiles
+				// Get profiles that users have liked
 				const likedResponse = await fetch("/api/user/liked-profiles");
 				const likedData = await likedResponse.json();
 				setLikedProfiles(likedData.likedProfiles.map((profile: ProfileData) => profile._id));
@@ -290,7 +290,6 @@ const Feed: React.FC = () => {
 																	<path d="M12 .587l3.668 7.431L23 9.584l-5.668 5.533L18.9 23 12 19.412 5.1 23l1.568-7.883L1 9.584l7.332-1.566L12 .587z" />
 																</svg>
 															</button>
-															{/* 星星点赞按钮结束 */}
 														</div>
 													</div>
 													<div className="flex flex-wrap flex-none justify-end items-end mt-2">
