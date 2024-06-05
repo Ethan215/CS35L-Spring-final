@@ -1,62 +1,71 @@
-import React from 'react';
-import { Friend } from '../../../common/friend';
-
-const friends: Friend[] = [
-  {
-    name: 'John',
-    avatar: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
-    bio: 'DM me if you want to game!'
-  },
-  {
-    name: 'Jane',
-    avatar: 'https://i.pinimg.com/originals/b5/91/2c/b5912c28fd86525fa96d03bb78e020af.jpg',
-    bio: 'LF duo in league, gold or above'
-  },
-  {
-    name: 'Bob',
-    avatar: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
-    bio: 'LF 1 more, valorant 5 stack.'
-  },
-  {
-    name: 'Joe',
-    avatar: 'https://static.vecteezy.com/system/resources/thumbnails/025/337/669/small_2x/default-male-avatar-profile-icon-social-media-chatting-online-user-free-vector.jpg',
-    bio: 'anyone want to play?'
-  },
-  {
-    name: 'Ava',
-    avatar: 'https://i.pinimg.com/originals/b5/91/2c/b5912c28fd86525fa96d03bb78e020af.jpg',
-    bio: 'chilling'
-  },
-];
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import defaultProfileIcon from '../assets/icons/defaultProfileIcon.jpg';
+import { ProfileData } from '@common/profile';
 
 interface FriendBoxProps {
-  friend: Friend;
+    friend: ProfileData;
 }
 
 const FriendBox: React.FC<FriendBoxProps> = ({ friend }) => {
-  return (
-    <div className="p-4 border-b cursor-pointer flex items-center">
-      <img
-        src={friend.avatar}
-        alt={`${friend.name} Profile Picture`}
-        className="w-12 h-12 rounded-full mr-4"
-      />
-      <div>
-        <h4 className="font-bold">{friend.name}</h4>
-        <p>{friend.bio}</p>
-      </div>
-    </div>
-  );
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/profile/${friend.userId}`);
+    };
+
+    return (
+        <div
+            className="p-4 border-b border-gray-600 cursor-pointer flex items-center"
+            onClick={handleClick}
+        >
+            <img
+                src={defaultProfileIcon}
+                alt={`${friend.username} Profile Picture`}
+                className="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+                <h4 className="text-white font-bold">{friend.username}</h4>
+            </div>
+        </div>
+    );
 };
 
 const FriendsList: React.FC = () => {
-  return (
-    <div className="w-full border-r border-gray-300">
-      {friends.map((friend) => (
-        <FriendBox friend={friend} />
-      ))}
-    </div>
-  );
+    const [friends, setFriends] = useState<ProfileData[]>([]);
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const response = await fetch('/api/friends', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const friendProfiles = await response.json();
+                console.log('Friends data:', friendProfiles); // Debugging line
+                setFriends(friendProfiles);
+            } catch (error) {
+                console.error('Error fetching friends:', error);
+            }
+        };
+
+        fetchFriends();
+    }, []);
+
+    return (
+        <div className="w-full border-l border-gray-600 bg-gray-800 p-4 rounded-lg text-white">
+            <h2 className="text-xl font-bold mb-4">Friends List</h2>
+            {friends.length > 0 ? (
+                friends.map((friend) => <FriendBox key={friend._id} friend={friend} />)
+            ) : (
+                <p>No friends found.</p>
+            )}
+        </div>
+    );
 };
 
 export default FriendsList;
