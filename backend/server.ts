@@ -11,6 +11,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import profileRoutes from "./src/routes/profileRoutes";
+import inviteRoutes from './src/routes/inviteRoutes';
 import userRoutes from "./src/routes/userRoutes";
 import friendRoutes from "./src/routes/friendRoutes";
 
@@ -41,6 +42,9 @@ app.use("/api/user", userRoutes);
 
 // route /api/profiles to profileRoutes
 app.use("/api/profiles", profileRoutes);
+
+// route /api/invites to inviteRoutes
+app.use('/api/invites', inviteRoutes);
 
 // route /api/friends to friendRoutes
 app.use("/api/friends", friendRoutes);
