@@ -99,6 +99,16 @@ const EditProfile: React.FC = () => {
 		return <Loading />;
 	}
 
+	const gameOptions = [
+	  'Minecraft',
+	  'Overwatch',
+	  'Rainbow Six',
+	  'League of Legends',
+	  'VALORANT',
+	  'Counter Strike',
+	  'Apex Legends',
+	];
+  
 	function handleAddGame() {
 		// Create a new game with default values
 		const newGame: Partial<GameData> = {
@@ -167,44 +177,50 @@ const EditProfile: React.FC = () => {
 										<div className="flex-3">
 											<div className="flex justify-between items-center pb-20">
 												<img
-													src={gameIconDictionary[game.title]}
-													alt={`${game.title} icon`}
-													className="w-8 h-8 mr-5"
-													onError={(e) => {
-														const imageElement = e.target as HTMLImageElement;
-														imageElement.src = "";
-														imageElement.onerror = null;
-													}}
-												/>
-												<div className="relative inline-block pb-1 mr-5">
-													<input
-														type="text"
-														name={`game-${gameIndex}-title`}
-														defaultValue={game.title || ""}
-														required={true}
-														className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
-														onChange={(e) => {
-															const newGames = [...games];
-															newGames[gameIndex].title = e.target.value;
-															setGames(newGames);
-														}}
-													/>
-												</div>
-												<div>
-													<button
-														type="button"
-														onClick={() => handleRemoveGame(gameIndex)}
-														className="px-2 py-1 w-10 h-10 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-													>
-														X
-													</button>
-												</div>
-											</div>
-											<div className="text-sm">
-												<span className="font-bold">Rank:</span>
-												<input
-													type="text"
-													name={`game-${gameIndex}-rank`}
+							src={game.title ? gameIconDictionary[game.title] : ''}
+							alt={`${game.title} icon`}
+							className={`w-8 h-8 mr-5 ${!game.title && 'hidden'}`}
+							onError={(e) => {
+								const imageElement = e.target as HTMLImageElement;
+								imageElement.src = '';
+							  	imageElement.onerror = null;
+							}}
+						  />
+						  <div className="relative inline-block pb-1 mr-5">
+								<select
+							  		name={`game-${gameIndex}-title`}
+							  		value={game.title || ''}
+							  		required={true}
+							  		className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
+							  		onChange={(e) => {
+											const newGames = [...games];
+											newGames[gameIndex].title = e.target.value;
+											setGames(newGames);
+							}}
+							>
+								<option value="">Select a game</option>
+									{gameOptions.map((option) => (
+									<option key={option} value={option}>
+								  	{option}
+								</option>
+							  	))}
+								</select>
+						  	</div>
+							<div>
+								<button
+							  		type="button"
+							  		onClick={() => handleRemoveGame(gameIndex)}
+							  		className="px-2 py-1 w-10 h-10 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+								>
+							  	X
+								</button>
+							</div>
+						</div>
+						<div className="text-sm">
+							<span className="font-bold">Rank:</span>
+						  	<input
+								type="text"
+								name={`game-${gameIndex}-rank`}
 													defaultValue={game.rank || ""}
 													className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 													onChange={(e) => {
