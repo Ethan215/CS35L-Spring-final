@@ -22,12 +22,10 @@ nav.after\:border-gradient:after {
 	);
 }
 
-.about-image::after {
+.about-image:after {
 	display: block;
 	position: relative;
 	background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #111827 100%);
-	margin-top: -150px;
-	height: 150px;
 	width: 100%;
 	content: '';
   }
@@ -41,8 +39,21 @@ nav.after\:border-gradient:after {
 	}
 }
 
+@keyframes marquee2 {
+	0% {
+		transform: translateX(50%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
 .animate-marquee {
 	animation: marquee 120s linear infinite;
+}
+
+.animate-marquee2 {
+	animation: marquee2 120s linear infinite;
 }
 
 .header-gradient-border {
