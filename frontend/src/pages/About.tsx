@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ProfileData, GameData } from "@common/profile";
 import { gameIconDictionary } from "../assets/gameIconDictionary";
 import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
@@ -6,6 +7,7 @@ import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 const About: React.FC = () => {
 
 	const [userData, setUserData] = useState<ProfileData[]>([]);
+	const navigate = useNavigate(); // useNavigate hooks to get navigation functions
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -29,8 +31,8 @@ const About: React.FC = () => {
 
 	return (
 		//background color
-		<div className="flex flex-col min-h-screen bg-gray-900 text-white py-10 px-5">
-			<div className="grow flex flex-nowrap items-center gap-5 justify-center py-12 flex-row">
+		<div className="flex flex-col min-h-screen bg-gray-900 text-white py-5 px-5">
+			<div className="grow flex flex-nowrap items-center gap-5 justify-center py-4 flex-row">
 			<div className="h-full p-6 text-center basis-1 grow">
 					<img
 						className="about-image h-auto max-w-full rounded-2xl"
@@ -55,13 +57,17 @@ const About: React.FC = () => {
 			</div>
 			</div>
 			
-			<div className="button-contaier relative">
-				<button className="start-button absolute">Find players</button>
+			<div className="grid h-16 place-items-center">
+			<button
+				className="flex-grow mb-4 px-8 py-6 rounded-3xl bg-slate-700 text-white text-xl hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+				onClick={() => { navigate("/feed"); }}>
+					Find Players →
+			</button>
 			</div>
-			<div className="flex-grow max-h-[50vh] flex overflow-x-hidden">
-				<div className="flex animate-marquee">
-				{userData.map((user: ProfileData, index) => (
-					<div key={index} className="min-w-[25vw] relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+			<div className="mt-4 flex-grow max-h-[50vh] flex overflow-x-hidden">
+				<div className="mt-4 flex animate-marquee">
+				{userData.map((user: ProfileData) => (
+					<div className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
@@ -96,8 +102,8 @@ const About: React.FC = () => {
 					</div>))}
 				</div>
 				<div className="flex animate-marquee2 whitespace-nowrap">
-				{userData.map((user: ProfileData, index) => (
-					<div key={index+userData.length} className="min-w-[25vw] relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+				{userData.map((user: ProfileData) => (
+					<div className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
