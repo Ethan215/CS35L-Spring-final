@@ -69,13 +69,16 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
     npm run dev
     ```
     
-5. Additional Note for Safari Users 
-Ignore this if using Chrome, etc
-Safari has some known issues with dealing with accepting cookies which has been known to break the functionality of websites.
-Safari, by default, is strict about blocking all cookies and has certain other barriers against cookies.
-The JWT token is sent over a secure HTTP-only cookie which should normally be set by the browser for authentication.
-Although Safari can receive the JWT cookie and receive the Set-Cookie header, some default settings may interfere with storing this cookie and therefore auth.
-It is therefore recommended to use Chrome instead.
+5. **Additional Note for Safari Users**
+
+
+    Ignore this if using Chrome, etc
+    
+    Safari has some known issues with dealing with accepting cookies which has been known to break the functionality of websites.
+    Safari, by default, is strict about blocking all cookies and has certain other barriers against cookies.
+    The JWT token is sent over a secure HTTP-only cookie which should normally be set by the browser for authentication.
+    Although Safari can receive the JWT cookie and receive the Set-Cookie header, some default settings may interfere with storing this cookie and therefore auth.
+    It is therefore recommended to use Chrome instead.
 
 ## Technologies <a name="technologies"></a>
 
