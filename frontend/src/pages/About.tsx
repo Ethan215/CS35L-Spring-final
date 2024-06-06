@@ -16,7 +16,6 @@ const About: React.FC = () => {
 					throw new Error("Failed to fetch data");
 				}
 
-				//FIX THIS IDK
 				const data: { profiles: ProfileData[] } = await response.json();
 				setUserData(data.profiles); // Setting only the profiles array to userData state
 
@@ -54,6 +53,10 @@ const About: React.FC = () => {
 						our messaging system, and don't forget to check your own inbox for invitations waiting on a response!
 					</p>
 			</div>
+			</div>
+			
+			<div className="button-contaier relative">
+				<button className="start-button absolute">Find players</button>
 			</div>
 			<div className="flex-grow max-h-[50vh] flex overflow-x-hidden">
 				<div className="flex animate-marquee">

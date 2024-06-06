@@ -44,7 +44,7 @@ const EditProfile: React.FC = () => {
 						username: user!.username,
 						profilePicture: "default_profile_icon.jpg",
 						bio: "This user has not yet created a bio",
-						region: "North America",
+						region: "US-West",
 						language: "English",
                         stars: 0,
 					};
@@ -126,13 +126,21 @@ const EditProfile: React.FC = () => {
 				<form onSubmit={handleSave} className="flex flex-col space-y-6 w-full">
 					<div className="flex flex-col flex-grow w-full space-y-2">
 						<label className="block text-gray-300">Region</label>
-						<input
-							type="text"
-							name="region"
-							defaultValue={fetchedProfile.current?.region || ""}
-							required={true}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
-						/>
+						<select name ="region"
+						defaultValue={fetchedProfile.current?.region || "US-West"}
+						className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600">
+						<option value="US-West">US-West</option>
+						<option value="US-Central">US-Central</option>
+						<option value="US-East">US-East</option>
+						<option value="Europe">Europe</option>
+						<option value="Asia-SE">Asia-SE</option>
+						<option value="Middle East">Middle East</option>
+						<option value="Asia-East">Asia-East</option>
+						<option value="India">India</option>
+						<option value="Oceania">Oceania</option>
+						<option value="Africa">Africa</option>
+						<option value="South America">South America</option>
+      					</select>
 					</div>
 					<div className="flex flex-col flex-grow space-y-2">
 						<label className="block text-gray-300">Language</label>
