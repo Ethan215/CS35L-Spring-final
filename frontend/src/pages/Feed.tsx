@@ -246,7 +246,11 @@ const Feed: React.FC = () => {
 														<h1 className="text-xl font-bold text-white">
 															{user.username}
 														</h1>
-														<p className="text-sm mb-1">{user.bio}</p>
+														<textarea
+															className="min-h-[11vh] w-full text-sm mb-1 overflow-hidden resize-none bg-transparent"
+															readOnly
+															value={user.bio}
+														/>
 														<p className="text-sm">
 															<span className="font-bold">Region:</span>{" "}
 															{user.region}
