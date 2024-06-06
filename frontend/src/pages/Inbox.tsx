@@ -103,7 +103,7 @@ const Inbox: React.FC = () => {
 	};
 
 	const handleReply = (senderId: string) => {
-		navigate(`/send-message/${senderId}`);
+		navigate(`/inbox/send-message/${senderId}`);
 	};
 
 	const handleDeleteMsg = async (messageId: string) => {
