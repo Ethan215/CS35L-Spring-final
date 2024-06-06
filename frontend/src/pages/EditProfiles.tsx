@@ -39,14 +39,16 @@ const EditProfile: React.FC = () => {
 					fetchedProfile.current = data.profile;
 					profileFoundRef.current = true;
 				} else {
-					console.error("Failed to fetch profile data, loading starter profile");
+					console.error(
+						"Failed to fetch profile data, loading starter profile"
+					);
 					const starterProfile: Partial<ProfileData> = {
 						username: user!.username,
 						profilePicture: "default_profile_icon.jpg",
 						bio: "This user has not yet created a bio",
 						region: "North America",
 						language: "English",
-                        stars: 0,
+						stars: 0,
 					};
 					fetchedProfile.current = starterProfile as ProfileData;
 				}
@@ -226,6 +228,12 @@ const EditProfile: React.FC = () => {
 															defaultValue={tag || ""}
 															className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 															required={true}
+															onChange={(e) => {
+																const newGames = [...games];
+																newGames[gameIndex].tags[tagIndex] =
+																	e.target.value;
+																setGames(newGames);
+															}}
 														/>
 														<button
 															type="button"
