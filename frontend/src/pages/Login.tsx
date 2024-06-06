@@ -121,13 +121,6 @@ const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
 				</form>
 				<div className="mt-6 text-sm text-center">
 					<Link
-						to="/forgot-password"
-						className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500  hover:from-pink-600 hover:to-blue-600"
-					>
-						Forgot Password?
-					</Link>
-					<br />
-					<Link
 						to="/signup"
 						className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500  hover:from-pink-600 hover:to-blue-600"
 					>

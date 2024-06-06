@@ -15,7 +15,6 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfiles';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import ForgotPassword from './pages/Forgotpassword';
 import Loading from './pages/Loading';
 import SendMessage from './pages/SendMessage';
 import PostFeed from './pages/PostFeed';
@@ -85,7 +84,6 @@ function App() {
             <Routes>
               <Route path="/login" element={userLoggedIn ? <Navigate replace to="/home" /> : <Login setUserLoggedIn={setUserLoggedIn} />} />
               <Route path="/signup" element={userLoggedIn ? <Navigate replace to="/home" /> : <Signup />} />
-              <Route path="/forgot-password" element={userLoggedIn ? <Navigate replace to="/home" /> : <ForgotPassword />} />
               <Route path="/about" element={userLoggedIn ? <About /> : <Navigate replace to="/home"/>} />
               <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/home" />} />
               <Route path="/posts" element={userLoggedIn ? <PostFeed /> : <Navigate replace to="/home" />} />
