@@ -44,6 +44,13 @@ const Navbar: React.FC<NavbarProps> = ({ handleLogout }) => {
 							Profile
 						</Link>
 						<Link
+							to="/posts"
+							className={`text-white hover:text-gray-400 ${isActive('/') ? 'border-b-2 border-pink-500' : ''
+								}`}
+						>
+							Posts
+						</Link>
+						<Link
 							to="/feed"
 							className={`text-white hover:text-gray-400 ${isActive('/feed') ? 'border-b-2 border-pink-500' : ''
 								}`}

@@ -14,6 +14,7 @@ import profileRoutes from "./src/routes/profileRoutes";
 import messageRoutes from './src/routes/messageRoutes';
 import userRoutes from "./src/routes/userRoutes";
 import friendRoutes from "./src/routes/friendRoutes";
+import postRoutes from "./src/routes/postRoutes";
 
 //express app
 const app = express();
@@ -48,6 +49,9 @@ app.use('/api/messages', messageRoutes);
 
 // route /api/friends to friendRoutes
 app.use("/api/friends", friendRoutes);
+
+// route /api/posts to postRoutes
+app.use("/api/posts", postRoutes);
 
 // log mongo uri
 console.log(process.env.MONGO_URI);
