@@ -28,6 +28,33 @@ const EditProfile: React.FC = () => {
 
 	const profileFoundRef = useRef<boolean>(false);
 
+	const gameOptions = [
+		"Minecraft",
+		"Overwatch",
+		"Rainbow Six",
+		"League of Legends",
+		"VALORANT",
+		"Counter Strike",
+		"Apex Legends",
+	];
+
+	const regions = [
+		"US-W", // US-West
+		"US-C", // US-Central
+		"US-E", // US-East
+		"EU", // Europe
+		"SEA", // Southeast Asia
+		"ME", // Middle East
+		"IN", // India
+		"OCE", // Oceania
+		"AF", // Africa
+		"LAT", // Latin America (South America)
+		"KR", // Korea
+		"CN", // China
+		"JP", // Japan
+		"RU", // Russia
+	];
+
 	useEffect(() => {
 		const fetchProfile = async () => {
 			setIsLoading(true);
@@ -46,7 +73,7 @@ const EditProfile: React.FC = () => {
 						username: user!.username,
 						profilePicture: "default_profile_icon.jpg",
 						bio: "This user has not yet created a bio",
-						region: "US-West",
+						region: "US-W",
 						language: "English",
 						stars: 0,
 					};
@@ -99,16 +126,6 @@ const EditProfile: React.FC = () => {
 		return <Loading />;
 	}
 
-	const gameOptions = [
-	  'Minecraft',
-	  'Overwatch',
-	  'Rainbow Six',
-	  'League of Legends',
-	  'VALORANT',
-	  'Counter Strike',
-	  'Apex Legends',
-	];
-  
 	function handleAddGame() {
 		// Create a new game with default values
 		const newGame: Partial<GameData> = {
@@ -138,21 +155,17 @@ const EditProfile: React.FC = () => {
 				<form onSubmit={handleSave} className="flex flex-col space-y-6 w-full">
 					<div className="flex flex-col flex-grow w-full space-y-2">
 						<label className="block text-gray-300">Region</label>
-						<select name ="region"
-						defaultValue={fetchedProfile.current?.region || "US-West"}
-						className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600">
-						<option value="US-West">US-West</option>
-						<option value="US-Central">US-Central</option>
-						<option value="US-East">US-East</option>
-						<option value="Europe">Europe</option>
-						<option value="Asia-SE">Asia-SE</option>
-						<option value="Middle East">Middle East</option>
-						<option value="Asia-East">Asia-East</option>
-						<option value="India">India</option>
-						<option value="Oceania">Oceania</option>
-						<option value="Africa">Africa</option>
-						<option value="South America">South America</option>
-      					</select>
+						<select
+							name="region"
+							defaultValue={fetchedProfile.current?.region || "US-West"}
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
+						>
+							{regions.map((region) => (
+								<option key={region} value={region}>
+									{region}
+								</option>
+							))}
+						</select>
 					</div>
 					<div className="flex flex-col flex-grow space-y-2">
 						<label className="block text-gray-300">Language</label>
@@ -185,50 +198,50 @@ const EditProfile: React.FC = () => {
 										<div className="flex-3">
 											<div className="flex justify-between items-center pb-20">
 												<img
-							src={game.title ? gameIconDictionary[game.title] : ''}
-							alt={`${game.title} icon`}
-							className={`w-8 h-8 mr-5 ${!game.title && 'hidden'}`}
-							onError={(e) => {
-								const imageElement = e.target as HTMLImageElement;
-								imageElement.src = '';
-							  	imageElement.onerror = null;
-							}}
-						  />
-						  <div className="relative inline-block pb-1 mr-5">
-								<select
-							  		name={`game-${gameIndex}-title`}
-							  		value={game.title || ''}
-							  		required={true}
-							  		className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
-							  		onChange={(e) => {
-											const newGames = [...games];
-											newGames[gameIndex].title = e.target.value;
-											setGames(newGames);
-							}}
-							>
-								<option value="">Select a game</option>
-									{gameOptions.map((option) => (
-									<option key={option} value={option}>
-								  	{option}
-								</option>
-							  	))}
-								</select>
-						  	</div>
-							<div>
-								<button
-							  		type="button"
-							  		onClick={() => handleRemoveGame(gameIndex)}
-							  		className="px-2 py-1 w-10 h-10 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-								>
-							  	X
-								</button>
-							</div>
-						</div>
-						<div className="text-sm">
-							<span className="font-bold">Rank:</span>
-						  	<input
-								type="text"
-								name={`game-${gameIndex}-rank`}
+													src={game.title ? gameIconDictionary[game.title] : ""}
+													alt={`${game.title} icon`}
+													className={`w-8 h-8 mr-5 ${!game.title && "hidden"}`}
+													onError={(e) => {
+														const imageElement = e.target as HTMLImageElement;
+														imageElement.src = "";
+														imageElement.onerror = null;
+													}}
+												/>
+												<div className="relative inline-block pb-1 mr-5">
+													<select
+														name={`game-${gameIndex}-title`}
+														value={game.title || ""}
+														required={true}
+														className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
+														onChange={(e) => {
+															const newGames = [...games];
+															newGames[gameIndex].title = e.target.value;
+															setGames(newGames);
+														}}
+													>
+														<option value="">Select a game</option>
+														{gameOptions.map((option) => (
+															<option key={option} value={option}>
+																{option}
+															</option>
+														))}
+													</select>
+												</div>
+												<div>
+													<button
+														type="button"
+														onClick={() => handleRemoveGame(gameIndex)}
+														className="px-2 py-1 w-10 h-10 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+													>
+														X
+													</button>
+												</div>
+											</div>
+											<div className="text-sm">
+												<span className="font-bold">Rank:</span>
+												<input
+													type="text"
+													name={`game-${gameIndex}-rank`}
 													defaultValue={game.rank || ""}
 													className="w-full px-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white focus:bg-gray-600"
 													onChange={(e) => {

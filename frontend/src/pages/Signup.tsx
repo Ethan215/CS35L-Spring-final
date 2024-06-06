@@ -1,5 +1,5 @@
 import { useRef, useState, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileData } from "@common/profile";
 
 import React from "react";
@@ -13,6 +13,8 @@ export const Signup: React.FC = () => {
 	// Declare the error and loading state using the useState hook
 	const [error, setError] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
+
+	const navigate = useNavigate();
 
 	// Function to handle form submission
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -66,7 +68,7 @@ export const Signup: React.FC = () => {
 			username: usernameRef.current!.value,
 			profilePicture: "default_profile_icon.jpg",
 			bio: "This user has not yet created a bio",
-			region: "US-West",
+			region: "US-W",
 			language: "English",
 		}
 		//post a empty profile page to the backend /api/profiles
@@ -83,9 +85,8 @@ export const Signup: React.FC = () => {
 			return;
 		}
 
-		// If the response is successful, redirect the user to the login page
 		setLoading(false);
-		window.location.href = "/login";
+		navigate("/edit-profile");
 	}
 
 	// Return the signup form
