@@ -22,8 +22,8 @@ const Profile: React.FC = () => {
 	const [profile, setProfile] = useState<ProfileData | null>(null);
 
 	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
-
-	let [friendStatus, setFriendStatus] = useState<string>("not sent");
+	const [friendStatus, setFriendStatus] = useState<string>("not sent");
+	const [refreshFriends, setRefreshFriends] = useState<boolean>(false);
 
 	const handleLikeClick = async (userId: string) => {
 		if (likedProfiles.includes(userId)) {
@@ -101,6 +101,7 @@ const Profile: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendStatus();
+		setRefreshFriends(prev => !prev); 
 	};
 
 	const handleDeclineFriend = async (otherUserId: string) => {
@@ -109,6 +110,16 @@ const Profile: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendStatus();
+		setRefreshFriends(prev => !prev); 
+	};
+
+	const handleRemoveFriend = async (otherUserId: string) => {
+		const response = await fetch(`/api/friends/remove/${otherUserId}`, {
+			method: "DELETE",
+		});
+		const data = await response.json();
+		fetchFriendStatus();
+		setRefreshFriends(prev => !prev); 
 	};
 
 	return (
@@ -262,7 +273,7 @@ const Profile: React.FC = () => {
 					</div>
 				</div>
 				<div className="flex w-1/3 ml-5">
-					<FriendsList />
+					<FriendsList refreshFriends={refreshFriends} setRefreshFriends={setRefreshFriends} />
 				</div>
 			</div>
 		</div>

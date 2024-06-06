@@ -31,7 +31,12 @@ const FriendBox: React.FC<FriendBoxProps> = ({ friend }) => {
     );
 };
 
-const FriendsList: React.FC = () => {
+interface FriendsListProps {
+    refreshFriends: boolean;
+    setRefreshFriends: (value: boolean) => void;
+}
+
+const FriendsList: React.FC<FriendsListProps> = ({ refreshFriends, setRefreshFriends }) => {
     const [friends, setFriends] = useState<ProfileData[]>([]);
 
     useEffect(() => {
@@ -54,7 +59,7 @@ const FriendsList: React.FC = () => {
         };
 
         fetchFriends();
-    }, []);
+    }, [refreshFriends]);
 
     return (
         <div className="w-full border-l border-gray-600 bg-gray-800 p-4 rounded-lg text-white">
