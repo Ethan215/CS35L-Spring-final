@@ -66,7 +66,7 @@ export const Signup: React.FC = () => {
 			username: usernameRef.current!.value,
 			profilePicture: "default_profile_icon.jpg",
 			bio: "This user has not yet created a bio",
-			region: "North America",
+			region: "US-West",
 			language: "English",
 		}
 		//post a empty profile page to the backend /api/profiles
