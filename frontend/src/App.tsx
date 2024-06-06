@@ -18,6 +18,9 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/Forgotpassword';
 import Loading from './pages/Loading';
 import SendMessage from './pages/SendMessage';
+import PostFeed from './pages/PostFeed';
+import MakePost from './pages/MakePost';
+import ViewPost from './pages/ViewPost'; 
 
 import UserContext from './contexts/UserContext';
 
@@ -78,13 +81,16 @@ function App() {
     <div className="App">
         <BrowserRouter>
           {userLoggedIn && <Navbar handleLogout={handleLogout} />}  {/* Show Navbar only after user login */}
-          <div className="pages">
+          <div className="pages bg-gray-900 text-white">
             <Routes>
               <Route path="/login" element={userLoggedIn ? <Navigate replace to="/home" /> : <Login setUserLoggedIn={setUserLoggedIn} />} />
               <Route path="/signup" element={userLoggedIn ? <Navigate replace to="/home" /> : <Signup />} />
               <Route path="/forgot-password" element={userLoggedIn ? <Navigate replace to="/home" /> : <ForgotPassword />} />
               <Route path="/about" element={userLoggedIn ? <About /> : <Navigate replace to="/home"/>} />
               <Route path="/feed" element={userLoggedIn ? <Feed /> : <Navigate replace to="/home" />} />
+              <Route path="/posts" element={userLoggedIn ? <PostFeed /> : <Navigate replace to="/home" />} />
+              <Route path="/posts/make" element={userLoggedIn ? <MakePost /> : <Navigate replace to="/home" />} />
+              <Route path="/posts/id/:id" element={userLoggedIn ? <ViewPost /> : <Navigate replace to="/home" />} />
               <Route path="/inbox" element={userLoggedIn ? <Inbox /> : <Navigate replace to="/home" />} />
               <Route path="/inbox/send-message/:username" element={userLoggedIn ? <SendMessage /> : <Navigate replace to="/home" />} /> 
               <Route path="/profile" element={userLoggedIn ? <Profile /> : <Navigate replace to="/home" />} />
