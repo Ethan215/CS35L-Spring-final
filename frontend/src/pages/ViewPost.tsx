@@ -49,13 +49,13 @@ export const ViewPost: React.FC = () => {
 	return (
 		<div className="flex flex-col items-center min-h-screen w-full bg-gray-900 text-white pt-10">
 			<div className="flex flex-col items-center w-1/2">
-				<div className="w-full relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+				<div className="w-full relative group p-5 m-1 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300">
 					<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 					<div className="relative">
 						<h2 className="text-2xl font-bold text-left text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">{post.title}</h2>
 					</div>
 				</div>
-				<div className="w-full relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+				<div className="w-full relative group p-5 m-1 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300">
 					<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 					<div className="relative">
 						<p className="text-gray-300 text-md">Posted by {post.username}</p>
@@ -66,7 +66,7 @@ export const ViewPost: React.FC = () => {
 						)}
 					</div>
 				</div>
-				<div className="w-full min-h-[25vh] relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+				<div className="w-full min-h-[25vh] relative group p-5 m-1 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300">
 					<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 					<div className="relative">
 						<textarea
@@ -104,7 +104,7 @@ export const ViewPost: React.FC = () => {
 				{post.comments.map((comment: CommentData, index: number) => (
 					<div
 						key={index}
-						className="w-full relative group p-4 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300"
+						className="w-full relative group p-4 m-1 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300"
 					>
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 						<div className="relative">
