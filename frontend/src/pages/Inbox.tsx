@@ -92,7 +92,6 @@ const Inbox: React.FC = () => {
 		const response = await fetch(`/api/friends/accept/${userId}`, {
 			method: "PATCH",
 		});
-		const data = await response.json();
 		fetchFriendRequests();
 	};
 
@@ -100,7 +99,6 @@ const Inbox: React.FC = () => {
 		const response = await fetch(`/api/friends/decline/${userId}`, {
 			method: "DELETE",
 		});
-		const data = await response.json();
 		fetchFriendRequests();
 	};
 
@@ -112,9 +110,7 @@ const Inbox: React.FC = () => {
 		const response = await fetch(`/api/messages/${messageId}`, {
 			method: "DELETE",
 		});
-		const data = await response.json();
 		fetchMessages();
-		console.log(data);
 	};
 
 	let unusedMessageIdx = 0;
@@ -216,7 +212,7 @@ const Inbox: React.FC = () => {
 							<button
 								key={action.name}
 								onClick={() => {
-									action.perform;
+									action.perform();
 									setSelectedMessage(null);
 								}}
 								className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
