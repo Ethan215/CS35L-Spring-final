@@ -78,8 +78,8 @@ const Feed: React.FC = () => {
 		navigate(`/profile/${userId}`); // Redirect to the profile page of the selected user
 	};
 
-	const handleSendMsgClick = (userId: string) => {
-		navigate(`/inbox/send-message/${userId}`); // Redirect to the send message page with the selected user
+	const handleSendMsgClick = (username: string) => {
+		navigate(`/inbox/send-message/${username}`); // Redirect to the send message page with the selected user
 	}
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -313,7 +313,7 @@ const Feed: React.FC = () => {
 																Visit Profile
 															</button>
 															<button
-																onClick={() => handleSendMsgClick(user.userId)}
+																onClick={() => handleSendMsgClick(user.username)}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Message

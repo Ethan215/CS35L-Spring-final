@@ -53,8 +53,7 @@ const Profile: React.FC = () => {
 					"Profile potentially uncreated, redirecting to edit profile"
 				);
 				navigate("/edit-profile");
-			}
-			else {
+			} else {
 				navigate("/");
 			}
 		}
@@ -102,7 +101,6 @@ const Profile: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendStatus();
-		console.log(data);
 	};
 
 	const handleDeclineFriend = async (otherUserId: string) => {
@@ -111,7 +109,6 @@ const Profile: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendStatus();
-		console.log(data);
 	};
 
 	return (
@@ -134,7 +131,27 @@ const Profile: React.FC = () => {
 							<h1 className="text-4xl mb-2">{profile.username}</h1>
 							<p className="text-md">Region: {profile.region}</p>
 							<p className="text-md">Language: {profile.language}</p>
-							<p className="text-md">Stars: {profile.stars}</p>
+							<div className="flex flex-row items-center mt-2 pb-5">
+								<p className="text-md">Stars: {profile.stars}</p>
+								<button
+									onClick={() => handleLikeClick(profile.userId)}
+									className="ml-2"
+								>
+									<svg
+										className={`
+                w-5 h-5 transition-colors duration-200 ${
+									likedProfiles.includes(profile.userId)
+										? "text-yellow-400"
+										: "text-gray-400"
+								} hover:text-yellow-500`}
+										fill="currentColor"
+										viewBox="0 0 24 24"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path d="M12 .587l3.668 7.431L23 9.584l-5.668 5.533L18.9 23 12 19.412 5.1 23l1.568-7.883L1 9.584l7.332-1.566L12 .587z" />
+									</svg>
+								</button>
+							</div>
 						</div>
 						<div className="flex-none flex flex-col items-end">
 							{displayCurrentUser ? (
@@ -144,7 +161,7 @@ const Profile: React.FC = () => {
 										if (displayCurrentUser) {
 											navigate("/edit-profile");
 										} else {
-											navigate(`/send-message/${profile.username}`); // Navigate to SendMessage page
+											navigate(`/inbox/send-message/${profile.username}`); // Navigate to SendMessage page
 										}
 									}}
 								>
@@ -153,42 +170,41 @@ const Profile: React.FC = () => {
 							) : (
 								<>
 									<button
-											className={`flex-grow mt-4 py-2 px-4 rounded text-white ${
-												!(
-													friendStatus !== "not sent" &&
-													friendStatus !== "pending"
-												)
-													? "bg-slate-700 hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
-													: "bg-gradient-to-r from-pink-500 to-blue-500"
-											}`}
-											onClick={() => handleAddFriend(profile.userId)}
-											disabled={
+										className={`flex-grow mt-4 py-2 px-4 rounded text-white ${
+											!(
 												friendStatus !== "not sent" &&
 												friendStatus !== "pending"
-											}
-										>
+											)
+												? "bg-slate-700 hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
+												: "bg-gradient-to-r from-pink-500 to-blue-500"
+										}`}
+										onClick={() => handleAddFriend(profile.userId)}
+										disabled={
+											friendStatus !== "not sent" && friendStatus !== "pending"
+										}
+									>
+										{
 											{
-												{
-													"not sent": "Add Friend",
-													pending: "Accept Friend Request",
-													sent: "Request Sent",
-													accepted: "Friends",
-												}[friendStatus]
-											}
+												"not sent": "Add Friend",
+												pending: "Accept Friend Request",
+												sent: "Request Sent",
+												accepted: "Friends",
+											}[friendStatus]
+										}
+									</button>
+									{(friendStatus === "accepted" ||
+										friendStatus === "pending") && (
+										<button
+											className="flex-grow mt-4 py-2 px-4 rounded bg-red-500 text-white hover:bg-red-700"
+											onClick={() => handleDeclineFriend(profile.userId)}
+										>
+											{friendStatus === "accepted"
+												? "Remove Friend"
+												: "Decline Request"}
 										</button>
-										{(friendStatus === "accepted" ||
-											friendStatus === "pending") && (
-											<button
-												className="flex-grow mt-4 py-2 px-4 rounded bg-red-500 text-white hover:bg-red-700"
-												onClick={() => handleDeclineFriend(profile.userId)}
-											>
-												{friendStatus === "accepted"
-													? "Remove Friend"
-													: "Decline Request"}
-											</button>
-										)}
-									</>
-								)}
+									)}
+								</>
+							)}
 							{!displayCurrentUser && (
 								<button
 									className="mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
@@ -208,43 +224,43 @@ const Profile: React.FC = () => {
 								key={game._id}
 								className="relative flex flex-col text-gray-300 mb-4"
 							>
-							<div className="relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
-								<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
-								<div className="relative">
-									<div className="flex flex-row">
-										<div className="flex-3">
-											<div className="flex justify-between items-center pb-2">
-												<div className="relative inline-block pb-1">
-													<h1 className="text-xl font-bold text-white">
-														{game.title}
-													</h1>
-													<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
+								<div className="relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+									<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
+									<div className="relative">
+										<div className="flex flex-row">
+											<div className="flex-3">
+												<div className="flex justify-between items-center pb-2">
+													<div className="relative inline-block pb-1">
+														<h1 className="text-xl font-bold text-white">
+															{game.title}
+														</h1>
+														<span className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 to-blue-500"></span>
+													</div>
+													<img
+														src={gameIconDictionary[game.title]}
+														alt={`${game.title} icon`}
+														className="w-8 h-8 ml-2"
+													/>
 												</div>
-												<img
-													src={gameIconDictionary[game.title]}
-													alt={`${game.title} icon`}
-													className="w-8 h-8 ml-2"
-												/>
+												<p className="text-sm">
+													<span className="font-bold">Rank:</span> {game.rank}
+												</p>
 											</div>
-											<p className="text-sm">
-												<span className="font-bold">Rank:</span> {game.rank}
-											</p>
-										</div>
-										<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
-											{game.tags.map((tag, index) => (
-												<span
-													key={index}
-													className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
-												>
-													{tag}
-												</span>
-											))}
+											<div className="flex flex-wrap justify-end items-end mt-2 flex-1">
+												{game.tags.map((tag, index) => (
+													<span
+														key={index}
+														className="inline-block bg-gradient-r from-slate-900 via-slate-700 to-slate-900 border-2 border-slate-400 rounded-full px-3 py-1 text-xs font-semibold text-slate-300 mr-2"
+													>
+														{tag}
+													</span>
+												))}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))}
 					</div>
 				</div>
 				<div className="flex w-1/3 ml-5">

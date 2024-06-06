@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ProfileData } from "@common/profile";
+import { MessageData } from "@common/message";
 import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
+import { useNavigate } from "react-router-dom";
 
 interface Action {
 	name: string;
@@ -61,6 +63,9 @@ const Inbox: React.FC = () => {
 	const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
 	const [friendRequests, setFriendRequests] = useState<ProfileData[]>([]);
+	const [messages, setMessages] = useState<MessageData[]>([]);
+
+	const navigate = useNavigate();
 
 	const fetchFriendRequests = async () => {
 		const response = await fetch("/api/friends/requests");
@@ -70,9 +75,17 @@ const Inbox: React.FC = () => {
 		setFriendRequests(data);
 	};
 
-	// get profiles of incoming Friend Requests
+	const fetchMessages = async () => {
+		const response = await fetch("/api/messages");
+		const data: MessageData[] = await response.json();
+
+		setMessages(data);
+	};
+
+	// get profiles of incoming Friend Requests and incoming Messages
 	useEffect(() => {
 		fetchFriendRequests();
+		fetchMessages();
 	}, []);
 
 	const handleAcceptRequest = async (userId: string) => {
@@ -81,7 +94,6 @@ const Inbox: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendRequests();
-		console.log(data);
 	};
 
 	const handleDeclineRequest = async (userId: string) => {
@@ -90,6 +102,18 @@ const Inbox: React.FC = () => {
 		});
 		const data = await response.json();
 		fetchFriendRequests();
+	};
+
+	const handleReply = (senderId: string) => {
+		navigate(`/send-message/${senderId}`);
+	};
+
+	const handleDeleteMsg = async (messageId: string) => {
+		const response = await fetch(`/api/messages/${messageId}`, {
+			method: "DELETE",
+		});
+		const data = await response.json();
+		fetchMessages();
 		console.log(data);
 	};
 
@@ -98,7 +122,7 @@ const Inbox: React.FC = () => {
 	return (
 		<div className="flex bg-gray-900 text-white min-h-screen">
 			<div className="w-3/12 border-r border-gray-700">
-				{friendRequests.length === 0 && (
+				{friendRequests.length === 0 && messages.length == 0 && (
 					<div className="pt-10">
 						<h1 className="text-3xl font-bold text-center">No New Messages</h1>
 					</div>
@@ -126,7 +150,42 @@ const Inbox: React.FC = () => {
 
 					return (
 						<MessageBox
-							key={friendRequest.username}
+							key={message.id}
+							message={message}
+							onClick={() => setSelectedMessage(message)}
+							isSelected={
+								selectedMessage !== null &&
+								selectedMessage !== undefined &&
+								selectedMessage!.id === message.id
+							}
+						/>
+					);
+				})}
+
+				{messages.map((messageData) => {
+					const message: Message = {
+						id: unusedMessageIdx,
+						senderId: messageData.senderId,
+						profilePic: defaultProfileIcon,
+						title: messageData.title,
+						body: messageData.body,
+						actions: [
+							{
+								name: "Reply",
+								perform: () => handleReply(messageData.senderId),
+							},
+							{
+								name: "Delete",
+								perform: () => handleDeleteMsg(messageData._id!),
+							},
+						],
+					};
+
+					unusedMessageIdx++;
+
+					return (
+						<MessageBox
+							key={message.id}
 							message={message}
 							onClick={() => setSelectedMessage(message)}
 							isSelected={

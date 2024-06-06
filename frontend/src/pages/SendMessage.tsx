@@ -1,5 +1,6 @@
 // src/pages/SendMessage.tsx
 
+import { ProfileData } from '@common/profile';
 import React, { useState, FormEvent, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -40,6 +41,23 @@ const SendMessage: React.FC = () => {
       return;
     }
 
+    const profileResponse = await fetch(`/api/profiles/username/${toUser}`);
+    if (!profileResponse.ok) {
+      setError('User not found');
+      setLoading(false);
+      return;
+    }
+    const profileJSON = await profileResponse.json();
+    const profileData = profileJSON.profile;
+    if (!profileData) {
+      setError('User not found');
+      setLoading(false);
+      return;
+    }
+    console.log(profileData);
+    console.log(profileData.userId)
+    const receiverId = profileData.userId;
+    console.log(receiverId);
     try {
       const response = await fetch('/api/messages/send', {
         method: 'POST',
@@ -47,7 +65,7 @@ const SendMessage: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: toUser,
+          receiverId: receiverId,
           title,
           body,
         }),
@@ -59,7 +77,6 @@ const SendMessage: React.FC = () => {
 
       setLoading(false);
       setSuccess(true);
-      alert('Message sent successfully!');
       navigate('/inbox');
     } catch (err: unknown) {
       setLoading(false);
