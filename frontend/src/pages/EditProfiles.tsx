@@ -36,6 +36,7 @@ const EditProfile: React.FC = () => {
 		"VALORANT",
 		"Counter Strike",
 		"Apex Legends",
+        "Fortnite",
 	];
 
 	const regions = [
@@ -188,7 +189,7 @@ const EditProfile: React.FC = () => {
 					</div>
 					{games.map((game, gameIndex) => (
 						<div
-							key={game._id}
+							key={gameIndex}
 							className="relative flex flex-col text-gray-300"
 						>
 							<div className="relative group p-5 m-1 rounded-lg overflow-hidden border-2 border-slate-600 hover:border-slate-300">
