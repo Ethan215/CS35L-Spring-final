@@ -1,7 +1,7 @@
 import MinecraftIcon from "./icons/Minecraft.png";
 import LeagueIcon from "./icons/League of Legends.png";
 import OverwatchIcon from "./icons/Overwatch.png";
-import ValorantIcon from "./icons/valorant.png";
+import ValorantIcon from "./icons/Valorant.png";
 import RainbowSixIcon from "./icons/Rainbow Six.png";
 import CounterStrikeIcon from "./icons/Counter Strike.png";
 import ApexIcon from "./icons/Apex Legends.png";
