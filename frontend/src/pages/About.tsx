@@ -58,7 +58,7 @@ const About: React.FC = () => {
 			<div className="flex-grow max-h-[50vh] flex overflow-x-hidden">
 				<div className="flex animate-marquee">
 				{userData.map((user: ProfileData, index) => (
-					<div key={index} className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+					<div key={index} className="min-w-[25vw] relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
@@ -94,7 +94,7 @@ const About: React.FC = () => {
 				</div>
 				<div className="flex animate-marquee2 whitespace-nowrap">
 				{userData.map((user: ProfileData, index) => (
-					<div key={index+userData.length} className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+					<div key={index+userData.length} className="min-w-[25vw] relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
