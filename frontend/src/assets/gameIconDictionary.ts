@@ -6,18 +6,20 @@ import ValorantIcon from "./icons/Valorant.png";
 import RainbowSixIcon from "./icons/Rainbow Six.png";
 import CounterStrikeIcon from "./icons/Counter Strike.png";
 import ApexIcon from "./icons/Apex Legends.png";
+import FortniteIcon from "./icons/Fortnite.png";
 
 interface GameIconDictionary {
 	[key: string]: string;
 }
 
 export const gameIconDictionary: GameIconDictionary = {
-	Minecraft: MinecraftIcon,
+	"Minecraft": MinecraftIcon,
 	"League of Legends": LeagueIcon,
-	Overwatch: OverwatchIcon,
-	About: AboutIcon,
-	VALORANT: ValorantIcon,
+	"Overwatch": OverwatchIcon,
+	"About": AboutIcon,
+	"VALORANT": ValorantIcon,
 	"Rainbow Six": RainbowSixIcon,
 	"Counter Strike": CounterStrikeIcon,
-	"Apex Legends": ApexIcon
+	"Apex Legends": ApexIcon,
+	"Fortnite": FortniteIcon,
 };
