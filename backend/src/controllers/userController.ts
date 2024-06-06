@@ -69,7 +69,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		res.cookie("token", token, { httpOnly: true, secure: true });
 		res
 			.status(200)
-			.json({ userId: user._id, username: user.username, token: token });
+			.json({ userId: user._id, username: user.username });
 	} catch (error) {
 		res.status(500).json({ error: "Authentication failed try Again" });
 	}
