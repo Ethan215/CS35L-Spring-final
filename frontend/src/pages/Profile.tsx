@@ -158,11 +158,7 @@ const Profile: React.FC = () => {
 								<button
 									className="flex-grow mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
 									onClick={() => {
-										if (displayCurrentUser) {
-											navigate("/edit-profile");
-										} else {
-											navigate(`/inbox/send-message/${profile.username}`); // Navigate to SendMessage page
-										}
+										navigate("/edit-profile");
 									}}
 								>
 									Edit Profile
@@ -208,7 +204,9 @@ const Profile: React.FC = () => {
 							{!displayCurrentUser && (
 								<button
 									className="mt-4 py-2 px-4 rounded bg-slate-700 text-white hover:bg-gradient-to-r hover:from-pink-500 hover:to-blue-500"
-									onClick={() => navigate(`/send-message/${profile.username}`)}
+									onClick={() =>
+										navigate(`/inbox/send-message/${profile.username}`)
+									}
 								>
 									Send Message
 								</button>
