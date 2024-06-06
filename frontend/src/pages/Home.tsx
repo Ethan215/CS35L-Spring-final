@@ -63,7 +63,7 @@ const Home: React.FC<HomeComponentProps> = ({ userLoggedIn }) => {
 					))}
 					{features.map((feature, index) => (
 						<div
-							key={index}
+							key={index+features.length}
 							className="max-h-[50vh] min-w-[25vw]  relative group bg-gray-800 p-x-40 p-20 m-5 rounded-lg shadow-lg overflow-hidden"
 						>
 							<div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-blue-500 opacity-10 group-hover:opacity-50 transition-opacity duration-500 ease-in-out"></div>
