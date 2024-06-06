@@ -18,18 +18,21 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
 
 ## Features <a name="features"></a>
 
-- **View and Create Profiles:** Users can customize their profiles, linking their gaming accounts and specifying their gaming preferences and availability.
+- **View and Create Profiles:** Users can create a detailed profile to help them find their ideal duo. They can specify their region, create a custom bio, and detail a list of games alongside their rank, and tags that specify further preferences (Competitive/Casual, In-game role, etc)
 - **Meaningful Search:** Users can search for teammates based on specific criteria such as game, skill level, playstyle (casual/competitive), interests, and availability. Advanced filters will allow for precise teammate searches.
-- **Friend System:** Users can send friend requests, create a friends list, and view mutual friends. This promotes a more connected gaming community.
+- **User Authentication and Security:** Secure login mechanisms will ensure user data privacy and security. Authentication will be required for profile customization, sending messages, liking profiles, and accessing friend lists. In general, users must first log in to view most content on the site.
+
+- **Friend System:** Users can send friend requests and view their friends list, allowing users to connect easily with each other.
 - **Messaging and Invites:** Users can send messages and game invites to potential teammates, facilitating easy communication and coordination for gaming sessions.
-- **User Authentication and Security:** Secure login mechanisms will ensure user data privacy and security. Authentication will be required for profile customization and accessing friend lists.
+- **Stars:** To support a positive and respectful community, users can star other users and keep track of users that they like. Authentication is used to prevent users from starring and unstarring profiles multiple times. Profiles will display a star count so users can identify reputable members of the community.
 
 ## Setup <a name="setup"></a>
 
 1. Clone the repository
     ```
-    git clone https://github.com/your-username/game-duos-finder.git
+    git clone https://github.com/Ethan215/CS35L-Spring-final.git
    ```
+    If you have a tarball of the repository, decompress it instead.
 2. Setup dependencies
 
     To setup dependencies for the backend, run the following commands:
@@ -48,10 +51,10 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
     ```
     PORT=4000
 
-    # MONGO_URI not included, you'll need to put your own 
+    # Replace this with the MONGO_URI from Atlas 
     MONGO_URI=
 
-    # Replace this with your generated secret key
+    # Replace this with the generated secret key
     SECRET_KEY=
     ```
 
@@ -65,7 +68,14 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
     ``` 
     npm run dev
     ```
-
+    
+5. Additional Note for Safari Users 
+Ignore this if using Chrome, etc
+Safari has some known issues with dealing with accepting cookies which has been known to break the functionality of websites.
+Safari, by default, is strict about blocking all cookies and has certain other barriers against cookies.
+The JWT token is sent over a secure HTTP-only cookie which should normally be set by the browser for authentication.
+Although Safari can receive the JWT cookie and receive the Set-Cookie header, some default settings may interfere with storing this cookie and therefore auth.
+It is therefore recommended to use Chrome instead.
 
 ## Technologies <a name="technologies"></a>
 
