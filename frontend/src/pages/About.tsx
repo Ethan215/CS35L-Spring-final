@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ProfileData, GameData } from "@common/profile";
 import { gameIconDictionary } from "../assets/gameIconDictionary";
+import playingImage from "../assets/playing.jpeg"
 import defaultProfileIcon from "../assets/icons/defaultProfileIcon.jpg";
 
 const About: React.FC = () => {
@@ -19,7 +20,7 @@ const About: React.FC = () => {
 				}
 
 				const data: { profiles: ProfileData[] } = await response.json();
-				setUserData(data.profiles); // Setting only the profiles array to userData state
+				setUserData(data.profiles); // Setting only the profiles array to userData stat
 
 			} catch (error) {
 				console.error("Error fetching data:", error);
@@ -29,6 +30,17 @@ const About: React.FC = () => {
 		fetchData();
 	}, []);
 
+	const gameNames: string[] = [
+		"Minecraft",
+		"League of Legends",
+		"Overwatch",
+		"VALORANT",
+		"Rainbow Six",
+		"Counter Strike",
+		"Apex Legends",
+		"Fortnite"
+	]
+
 	return (
 		//background color
 		<div className="flex flex-col min-h-screen bg-gray-900 text-white py-5 px-5">
@@ -36,7 +48,7 @@ const About: React.FC = () => {
 			<div className="h-full p-6 text-center basis-1 grow">
 					<img
 						className="about-image h-auto max-w-full rounded-2xl"
-						src={gameIconDictionary["About"]}
+						src={playingImage}
 						alt="Friends playing video games together."
 					/>
 			</div>
@@ -64,10 +76,10 @@ const About: React.FC = () => {
 					Find Players →
 			</button>
 			</div>
-			<div className="mt-4 flex-grow max-h-[50vh] flex overflow-x-hidden">
-				<div className="mt-4 flex animate-marquee">
+			<div className="mt-4 mx-8 flex-grow max-h-[50vh] flex overflow-x-hidden">
+				<div className="mt-4 mx-8 flex animate-marquee">
 				{userData.map((user: ProfileData) => (
-					<div className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+					<div className="relative group p-5 mx-8 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
@@ -103,7 +115,7 @@ const About: React.FC = () => {
 				</div>
 				<div className="flex animate-marquee2 whitespace-nowrap">
 				{userData.map((user: ProfileData) => (
-					<div className="relative group p-5 m-2 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+					<div className="relative group p-5 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
 						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
 							<div className="w-max overflow-x-visible">
 								<div className="flex flex-row">
@@ -133,6 +145,39 @@ const About: React.FC = () => {
 									{user.stars}
 									</p>
 								</div>
+							</div>
+						</div>
+					</div>))}
+				</div>
+			</div>
+
+			<div className="mt-4 flex-grow max-h-[50vh] flex overflow-hidden marquee-games">
+				<div className="mt-4 flex animate-marquee-games">
+				{gameNames.map((gameTitle: string) => (
+					<div className="relative group p-5 m-0 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
+							<div className="w-max overflow-hidden">
+								<div className="flex flex-row">
+									<img
+										src={gameIconDictionary[gameTitle]}
+										alt={gameTitle}
+										className="w-16 h-16 justify-center items-center"
+									/>
+							</div>
+						</div>
+					</div>))}
+				</div>
+				<div className="mt-4 flex animate-marquee-games">
+				{gameNames.map((gameTitle: string) => (
+					<div className="relative group p-5 m-0 rounded-xl overflow-hidden border-2 border-slate-600 hover:border-slate-300">
+						<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-slate-600 opacity-80 group-hover:opacity-40"></div>
+							<div className="w-max overflow-hidden">
+								<div className="flex flex-row">
+									<img
+										src={gameIconDictionary[gameTitle]}
+										alt={gameTitle}
+										className="w-16 h-16 justify-center items-center"
+									/>
 							</div>
 						</div>
 					</div>))}

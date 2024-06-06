@@ -48,12 +48,38 @@ nav.after\:border-gradient:after {
 	}
 }
 
+@keyframes marquee-games {
+	from {
+	  transform: translateX(0);
+	}
+	to {
+	  transform: translateX(calc(-100% - var(--gap)));
+	}
+  }
 .animate-marquee {
 	animation: marquee 120s linear infinite;
 }
 
 .animate-marquee2 {
 	animation: marquee2 120s linear infinite;
+}
+
+.animate-marquee-games {
+	animation: marquee-games 80s linear infinite;
+	flex-shrink: 0;
+  	display: flex;
+  	justify-content: space-around;
+  	gap: var(--gap);
+  	min-width: 100%;
+}
+
+.marquee-games {
+	--gap: 0.5rem;
+  	position: relative;
+  	display: flex;
+  	overflow: hidden;
+  	user-select: none;
+  	gap: var(--gap);
 }
 
 .header-gradient-border {
