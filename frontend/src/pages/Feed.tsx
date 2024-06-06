@@ -16,59 +16,17 @@ const Feed: React.FC = () => {
 	const [likedProfiles, setLikedProfiles] = useState<string[]>([]);
 	const navigate = useNavigate();
 
-
 	// Add the handleLikeClick method
 	const handleLikeClick = async (userId: string) => {
 		if (likedProfiles.includes(userId)) {
-			await unlikeProfile(userId);
-			setLikedProfiles(likedProfiles.filter((id) => id !== userId));
+			await fetch(`/api/user/unlike/${userId}`, { method: "DELETE" });
+			fetchData();
 		} else {
-			await likeProfile(userId);
-			const newLikedProfiles = [...likedProfiles, userId];
-			setLikedProfiles(newLikedProfiles);
-			console.log("Updated liked profiles:", newLikedProfiles);
+			await fetch(`/api/user/like/${userId}`, { method: "POST" });
+			fetchData();
 		}
 	};
-	  // Add the likeProfile method
-	const likeProfile = async (otherUserId: string): Promise<void> => {
-		try {
-			const response = await fetch(`/api/user/like/${otherUserId}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
 
-			if (response.ok) {
-				console.log("Profile liked successfully");
-			} else {
-				console.error("Failed to like profile");
-			}
-		} catch (error) {
-			console.error("Error liking profile:", error);
-		}
-	};
-	  
-	  // Add the unlikeProfile method
-	const unlikeProfile = async (otherUserId: string): Promise<void> => {
-		try {
-			const response = await fetch(`/api/user/unlike/${otherUserId}`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (response.ok) {
-				console.log("Profile unliked successfully");
-			} else {
-				console.error("Failed to unlike profile");
-			}
-		} catch (error) {
-			console.error("Error unliking profile:", error);
-		}
-	};
-	
 	const handleGameClick = (gameTitle: string) => {
 		setSelectedGame(gameTitle);
 		setSelectedRank(null);
@@ -80,7 +38,7 @@ const Feed: React.FC = () => {
 
 	const handleSendMsgClick = (username: string) => {
 		navigate(`/inbox/send-message/${username}`); // Redirect to the send message page with the selected user
-	}
+	};
 
 	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchUser(e.target.value);
@@ -94,44 +52,44 @@ const Feed: React.FC = () => {
 		setSelectedRank(e.target.value);
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await fetch("/api/profiles");
+	const fetchData = async () => {
+		try {
+			const response = await fetch("/api/profiles");
 
-				if (!response.ok) {
-					throw new Error("Failed to fetch data");
-				}
-
-				const data: { profiles: ProfileData[] } = await response.json();
-				setUserData(data.profiles); // Setting only the profiles array to userData state
-
-				if (data.profiles.length > 0) {
-					// Extract unique game titles and set the first one as selected by default
-					const uniqueTitles = Array.from(
-						new Set(
-							data.profiles.flatMap((user: ProfileData) =>
-								user.games.map((game: GameData) => game.title)
-							)
-						)
-					);
-
-					if (uniqueTitles.length !== 0) {
-						setSelectedGame(uniqueTitles[0]);
-					}
-				}
-
-				// Get profiles that users have liked
-				const likedResponse = await fetch("/api/user/liked-profiles");
-				const likedData = await likedResponse.json();
-				setLikedProfiles(
-					likedData.likedProfiles.map((profile: ProfileData) => profile.userId)
-				);
-			} catch (error) {
-				console.error("Error fetching data:", error);
+			if (!response.ok) {
+				throw new Error("Failed to fetch data");
 			}
-		};
 
+			const data: { profiles: ProfileData[] } = await response.json();
+			setUserData(data.profiles); // Setting only the profiles array to userData state
+
+			if (data.profiles.length > 0) {
+				// Extract unique game titles and set the first one as selected by default
+				const uniqueTitles = Array.from(
+					new Set(
+						data.profiles.flatMap((user: ProfileData) =>
+							user.games.map((game: GameData) => game.title)
+						)
+					)
+				);
+
+				if (uniqueTitles.length !== 0 && selectedGame === null) {
+					setSelectedGame(uniqueTitles[0]);
+				}
+			}
+
+			// Get profiles that users have liked
+			const likedResponse = await fetch("/api/user/liked-profiles");
+			const likedData = await likedResponse.json();
+			setLikedProfiles(
+				likedData.likedProfiles.map((profile: ProfileData) => profile.userId)
+			);
+		} catch (error) {
+			console.error("Error fetching data:", error);
+		}
+	};
+
+	useEffect(() => {
 		fetchData();
 	}, []);
 
@@ -307,13 +265,17 @@ const Feed: React.FC = () => {
 														</p>
 														<div className="flex flex-row space-x-4 mt-4">
 															<button
-																onClick={() => handleVisitProfileClick(user.userId)}
+																onClick={() =>
+																	handleVisitProfileClick(user.userId)
+																}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Visit Profile
 															</button>
 															<button
-																onClick={() => handleSendMsgClick(user.username)}
+																onClick={() =>
+																	handleSendMsgClick(user.username)
+																}
 																className="font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 															>
 																Message
@@ -324,7 +286,7 @@ const Feed: React.FC = () => {
 															>
 																<svg
 																	className={`
-																		w-10 h-10 transition-colors duration-200 ${
+																		w-10 h-10 transition-colors duration-100 ${
 																			likedProfiles.includes(user.userId)
 																				? "text-yellow-400"
 																				: "text-gray-400"
