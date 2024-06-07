@@ -41,15 +41,18 @@ const MessageBox: React.FC<MessageBox> = ({ message, onClick, isSelected }) => {
 				}`}
 			></div>
 			<div className="relative">
-				<img
-					src={message.profilePic || defaultProfileIcon}
-					alt="Sender Profile Picture"
-					onError={(e) => {
-						(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
-						(e.target as HTMLImageElement).src = defaultProfileIcon;
-					}}
-					className="w-14 h-14 rounded-full mb-4 bg-gray-500"
-				/>
+				<div className="flex flex-row items-center mb-4">
+					<img
+						src={message.profilePic || defaultProfileIcon}
+						alt="Sender Profile Picture"
+						onError={(e) => {
+							(e.target as HTMLImageElement).onerror = null; // Prevents infinite looping in case default image also fails to load
+							(e.target as HTMLImageElement).src = defaultProfileIcon;
+						}}
+						className="w-14 h-14 rounded-full bg-gray-500 mr-5"
+					/>
+					<p className="text-xl">{message.senderId} </p>
+				</div>
 				<h4 className="font-bold">{message.title}</h4>
 				<p className="text-sm line-clamp-2 overflow-hidden">{message.body}</p>
 			</div>
@@ -121,9 +124,7 @@ const Inbox: React.FC = () => {
 						<h1 className="text-3xl font-bold text-center">No New Messages</h1>
 					</div>
 				)}
-				{friendRequests.map((friendRequest) => {
-					//fetch the profile of the userId
-
+				{[...friendRequests].reverse().map((friendRequest) => {
 					const message: Message = {
 						id: unusedMessageIdx,
 						senderId: friendRequest.username,
@@ -158,7 +159,16 @@ const Inbox: React.FC = () => {
 					);
 				})}
 
-				{messages.map((messageData) => {
+				{(friendRequests && messages && friendRequests.length > 0 && messages.length > 0) && <div className={`relative p-2 border-y-2 border-slate-400 text-gray-200 bg-slate-900"}`}>
+					<div
+						className={`absolute inset-0 bg-gradient-to-r from-slate-900 via-gray-700 to-slate-900 transition-opacity duration-1000 ease-out`}
+					></div>
+					<div className="relative">
+						<h4 className="text-sm">Messages</h4>
+					</div>
+				</div>}
+
+				{[...messages].reverse().map((messageData) => {
 					const message: Message = {
 						id: unusedMessageIdx,
 						senderId: (messageData.senderId as any).username,
@@ -168,7 +178,8 @@ const Inbox: React.FC = () => {
 						actions: [
 							{
 								name: "Reply",
-								perform: () => handleReply((messageData.senderId as any).username),
+								perform: () =>
+									handleReply((messageData.senderId as any).username),
 							},
 							{
 								name: "Delete",
@@ -196,7 +207,7 @@ const Inbox: React.FC = () => {
 
 			{selectedMessage && (
 				<div className="w-2/3 p-5">
-					<h2 className="font-bold text-3xl">{selectedMessage.title}</h2>
+					<h2 className="font-bold text-3xl mb-10">{selectedMessage.title}</h2>
 					<img
 						src={selectedMessage.profilePic || defaultProfileIcon}
 						alt="Sender Profile Picture"
@@ -207,7 +218,9 @@ const Inbox: React.FC = () => {
 						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
 					/>
 					<p>From: {selectedMessage.senderId}</p>
-					<p>{selectedMessage.body}</p>
+
+					<p className="mt-10">{selectedMessage.body}</p>
+
 					<div className="flex flex-row space-x-4 mt-5">
 						{selectedMessage.actions.map((action) => (
 							<button
