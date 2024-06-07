@@ -30,7 +30,7 @@ app.use(express.json()); //sees if request body if so parses it as json
 //cookie parser
 app.use(cookieParser());
 
-// TODO: remove, log incoming requests
+// For monitoring, log incoming requests
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 	console.log(req.path, req.method);
 	next();
@@ -53,14 +53,14 @@ app.use("/api/friends", friendRoutes);
 // route /api/posts to postRoutes
 app.use("/api/posts", postRoutes);
 
-// log mongo uri
-console.log(process.env.MONGO_URI);
+// for debugging, log mongo uri
+// console.log(process.env.MONGO_URI);
 
 //connect to db
 mongoose
 	.connect(process.env.MONGO_URI!)
 	.then(() => {
-		console.log("connected to db");
+		console.log("Successfully connected to DB");
 
 		//listen for requests
 		app.listen(process.env.PORT, () => {
