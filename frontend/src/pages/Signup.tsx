@@ -44,7 +44,6 @@ export const Signup: React.FC = () => {
 			return;
 		}
 
-
 		// send a signup request to the backend /api/user/signup
 		const response = await fetch("/api/user/signup", {
 			method: "POST",
@@ -65,7 +64,7 @@ export const Signup: React.FC = () => {
 			setLoading(false);
 			return;
 		}
-		
+
 		// Log the user in
 		const loginResponse = await fetch("/api/user/login", {
 			method: "POST",
@@ -78,19 +77,19 @@ export const Signup: React.FC = () => {
 				password: passwordRef.current?.value,
 			}),
 		});
-		if(!loginResponse.ok){
+		if (!loginResponse.ok) {
 			setError("Failed to login");
 			setLoading(false);
 			return;
 		}
 
-		const starterProfile : Partial<ProfileData> = {
+		const starterProfile: Partial<ProfileData> = {
 			username: usernameRef.current!.value,
 			profilePicture: "default_profile_icon.jpg",
 			bio: "This user has not yet created a bio",
 			region: "US-W",
 			language: "English",
-		}
+		};
 		//post a empty profile page to the backend /api/profiles
 		const profileResponse = await fetch("/api/profiles", {
 			method: "POST",
@@ -99,7 +98,7 @@ export const Signup: React.FC = () => {
 			},
 			body: JSON.stringify(starterProfile),
 		});
-		if(!profileResponse.ok){
+		if (!profileResponse.ok) {
 			setError("Failed to create profile");
 			setLoading(false);
 			return;
@@ -202,6 +201,6 @@ export const Signup: React.FC = () => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Signup;
