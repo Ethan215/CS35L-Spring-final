@@ -23,13 +23,13 @@ export const PostFeed: React.FC = () => {
 			<div className="flex flex-col w-2/3">
 				<Link
 					to="/posts/make"
-					className="inline-block mb-4 px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded shadow ripple hover:shadow-lg hover:bg-blue-600 focus:outline-none"
+					className="mb-5 p-5 text-center font-bold py-2 px-4 rounded bg-gradient-to-r from-slate-600 via-gray-600 to-slate-600 text-white hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:ring-offset-slate-900 focus:ring-opacity-50"
 				>
 					Make a Post
 				</Link>
 				{[...posts].reverse().map((post) => (
 					<Link to={`/posts/id/${post._id}`} key={post._id}>
-						<div className="w-full relative group p-5 m-1 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300">
+						<div className="w-full relative group p-5 rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-slate-600 hover:border-slate-300">
 							<div className="absolute inset-0 transition-opacity duration-300 ease-out bg-gradient-to-r from-slate-900 via-fuchsia-900 to-cyan-500 opacity-0 group-hover:opacity-40"></div>
 							<div className="relative">
 								<h2 className="font-bold text-3xl text-white pb-6">
