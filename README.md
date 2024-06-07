@@ -14,6 +14,7 @@
 
 ## Introduction <a name="introduction"></a>
 
+A social platform for gamers.
 Finduo is a web application designed to help gamers in finding their ideal duo partners across a variety of games, enhancing their gaming experience.
 
 ## Features <a name="features"></a>
@@ -25,6 +26,7 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
 - **Friend System:** Users can send friend requests and view their friends list, allowing users to connect easily with each other.
 - **Messaging and Invites:** Users can send messages and game invites to potential teammates, facilitating easy communication and coordination for gaming sessions.
 - **Stars:** To support a positive and respectful community, users can star other users and keep track of users that they like. Authentication is used to prevent users from starring and unstarring profiles multiple times. Profiles will display a star count so users can identify reputable members of the community.
+- **Posts and Comments:** Users can create public posts that are visible to all such as a public game invite. Users can view a feed of these posts and leave comments on them for discussion. 
 
 ## Setup <a name="setup"></a>
 
