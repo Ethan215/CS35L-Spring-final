@@ -37,12 +37,12 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
     If you have a tarball of the repository, decompress it instead.
 2. Setup dependencies
 
-    To setup dependencies for the backend, run the following commands:
+    To setup dependencies for the backend, run the following commands (from the project's root directory):
     ```
     cd backend
     npm install
     ```
-    To setup dependencies for the frontend, run the following commands:
+    To setup dependencies for the frontend, run the following commands (from the project's root directory):
     ```
     cd frontend
     npm install
