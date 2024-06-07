@@ -20,7 +20,7 @@ Finduo is a web application designed to help gamers in finding their ideal duo p
 ## Features <a name="features"></a>
 
 - **View and Create Profiles:** Users can create a detailed profile to help them find their ideal duo. They can specify their region, create a custom bio, and detail a list of games alongside their rank, and tags that specify further preferences (Competitive/Casual, In-game role, etc)
-- **Meaningful Search:** Users can search for teammates based on specific criteria such as game, skill level, playstyle (casual/competitive), interests, and availability. Advanced filters will allow for precise teammate searches.
+- **Meaningful Search:** Users can search for teammates based on specific criteria such as username, specific game, region, and rank. Advanced filters will allow for precise teammate searches.
 - **User Authentication and Security:** Secure login mechanisms will ensure user data privacy and security. Authentication will be required for profile customization, sending messages, liking profiles, and accessing friend lists. In general, users must first log in to view most content on the site.
 
 - **Friend System:** Users can send friend requests and view their friends list, allowing users to connect easily with each other.
