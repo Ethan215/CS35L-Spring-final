@@ -24,8 +24,6 @@ interface MessageBox {
 	isSelected: boolean;
 }
 
-// dummy messages
-
 // left panel contains a list of messageBox components
 // displays pfp, message subject, brief message
 // when a messageBox component is clicked, onClick set to true and updates the selected message in Inbox component
@@ -124,9 +122,11 @@ const Inbox: React.FC = () => {
 					</div>
 				)}
 				{friendRequests.map((friendRequest) => {
+					//fetch the profile of the userId
+
 					const message: Message = {
 						id: unusedMessageIdx,
-						senderId: friendRequest.userId,
+						senderId: friendRequest.username,
 						profilePic: friendRequest.profilePicture,
 						title: `Friend Request from ${friendRequest.username}`,
 						body: `${friendRequest.username} wants to be your friend!`,
@@ -161,14 +161,14 @@ const Inbox: React.FC = () => {
 				{messages.map((messageData) => {
 					const message: Message = {
 						id: unusedMessageIdx,
-						senderId: messageData.senderId,
+						senderId: (messageData.senderId as any).username,
 						profilePic: defaultProfileIcon,
 						title: messageData.title,
 						body: messageData.body,
 						actions: [
 							{
 								name: "Reply",
-								perform: () => handleReply(messageData.senderId),
+								perform: () => handleReply((messageData.senderId as any).username),
 							},
 							{
 								name: "Delete",
@@ -206,6 +206,7 @@ const Inbox: React.FC = () => {
 						}}
 						className="w-24 h-24 rounded-full mb-5 mt-5, bg-gray-100"
 					/>
+					<p>From: {selectedMessage.senderId}</p>
 					<p>{selectedMessage.body}</p>
 					<div className="flex flex-row space-x-4 mt-5">
 						{selectedMessage.actions.map((action) => (
