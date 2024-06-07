@@ -25,6 +25,26 @@ export const Signup: React.FC = () => {
 			return;
 		}
 
+		// check strength of password
+		const password = passwordRef.current?.value;
+		if (password && password.length < 8) {
+			setError("Password must be at least 8 characters long");
+			return;
+		}
+		if (password && !/\d/.test(password)) {
+			setError("Password must contain a number");
+			return;
+		}
+		if (password && !/[a-z]/.test(password)) {
+			setError("Password must contain a lowercase letter");
+			return;
+		}
+		if (password && !/[A-Z]/.test(password)) {
+			setError("Password must contain an uppercase letter");
+			return;
+		}
+
+
 		// send a signup request to the backend /api/user/signup
 		const response = await fetch("/api/user/signup", {
 			method: "POST",
